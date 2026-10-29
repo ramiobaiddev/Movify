@@ -29,7 +29,7 @@ The application is built with scalability, clean architecture, and modern UI/UX 
 
 ## 📸 Screenshots
 
-*(Replace these placeholders with actual screenshots of your app)*
+
 
 | Home Screen | Discover | Details | Profile |
 | :---: | :---: | :---: | :---: |
