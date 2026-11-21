@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:movify/core/design_system/primitives/brand_colors.dart';
+import 'package:movify/core/design_system/theme/movify_text_theme.dart';
 import 'package:movify/core/design_system/tokens/app_colors.dart';
+import 'package:movify/core/design_system/tokens/app_text_styles.dart';
 
 /// Token-driven themes. They live next to the old `AppTheme`; nothing uses
 /// them until `CustomMaterialApp` is pointed at them.
 abstract final class MovifyTheme {
-  static ThemeData light() => _build(AppColors.light, Brightness.light);
-  static ThemeData dark() => _build(AppColors.dark, Brightness.dark);
+  /// [textScale] comes from `TextScale.of(context)`; 1.0 matches Figma.
+  static ThemeData light({double textScale = 1}) =>
+      _build(AppColors.light, Brightness.light, textScale);
+  static ThemeData dark({double textScale = 1}) =>
+      _build(AppColors.dark, Brightness.dark, textScale);
 
-  static ThemeData _build(AppColors c, Brightness brightness) {
+  static ThemeData _build(
+    AppColors c,
+    Brightness brightness,
+    double textScale,
+  ) {
     final scheme = ColorScheme(
       brightness: brightness,
       primary: c.primaryDefault,
@@ -51,11 +59,14 @@ abstract final class MovifyTheme {
         scrolledUnderElevation: 0,
       ),
       iconTheme: IconThemeData(color: c.iconPrimary),
-      textTheme: GoogleFonts.montserratTextTheme(base.textTheme).apply(
+      textTheme: MovifyTextTheme.build(scale: textScale).apply(
         bodyColor: c.textPrimary,
         displayColor: c.textPrimary,
       ),
-      extensions: <ThemeExtension<dynamic>>[c],
+      extensions: <ThemeExtension<dynamic>>[
+        c,
+        AppTextStyles.build(scale: textScale),
+      ],
     );
   }
 }
