@@ -1,22 +1,23 @@
-// Hand-maintained mirror of the Figma "tokens" collection (dark mode).
+// Semantic colours. Mirrors the Figma "tokens" collection (light, dark).
 // Source of truth: tokens.json next to this file. Edit both together.
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter/material.dart';
+import 'package:movify/core/design_system/primitives/brand_colors.dart';
 
 @immutable
 class AppColors extends ThemeExtension<AppColors> {
   const AppColors({
-    required this.primary900,
-    required this.primary800,
-    required this.primary700,
-    required this.primary600,
-    required this.primaryDefault,
-    required this.primary400,
-    required this.primary300,
-    required this.primary200,
-    required this.primary100,
     required this.primary50,
+    required this.primary100,
+    required this.primary200,
+    required this.primary300,
+    required this.primary400,
+    required this.primaryDefault,
+    required this.primary600,
+    required this.primary700,
+    required this.primary800,
+    required this.primary900,
     required this.textPrimary,
     required this.textSecondary,
     required this.textContrast,
@@ -48,24 +49,25 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.buttonDisabled,
     required this.buttonSecondary,
     required this.buttonSecondaryHover,
-    required this.buttonSecondaryFocused,
     required this.buttonSecondaryPressed,
+    required this.buttonSecondaryFocused,
     required this.buttonAccent,
-    required this.buttonAccentHovered,
     required this.buttonAccentPressed,
+    required this.buttonAccentHovered,
     required this.statusWarning,
+    required this.statusWarningText,
   });
 
-  final Color primary900;
-  final Color primary800;
-  final Color primary700;
-  final Color primary600;
-  final Color primaryDefault;
-  final Color primary400;
-  final Color primary300;
-  final Color primary200;
-  final Color primary100;
   final Color primary50;
+  final Color primary100;
+  final Color primary200;
+  final Color primary300;
+  final Color primary400;
+  final Color primaryDefault;
+  final Color primary600;
+  final Color primary700;
+  final Color primary800;
+  final Color primary900;
   final Color textPrimary;
   final Color textSecondary;
   final Color textContrast;
@@ -97,75 +99,128 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color buttonDisabled;
   final Color buttonSecondary;
   final Color buttonSecondaryHover;
-  final Color buttonSecondaryFocused;
   final Color buttonSecondaryPressed;
+  final Color buttonSecondaryFocused;
   final Color buttonAccent;
-  final Color buttonAccentHovered;
   final Color buttonAccentPressed;
+  final Color buttonAccentHovered;
   final Color statusWarning;
+  final Color statusWarningText;
+
+  static const AppColors light = AppColors(
+    primary50: BrandColors.blue50,
+    primary100: BrandColors.blue100,
+    primary200: BrandColors.blue200,
+    primary300: BrandColors.blue300,
+    primary400: BrandColors.blue400,
+    primaryDefault: BrandColors.blue500,
+    primary600: BrandColors.blue600,
+    primary700: BrandColors.blue700,
+    primary800: BrandColors.blue800,
+    primary900: BrandColors.blue900,
+    textPrimary: BrandColors.neutral800,
+    textSecondary: BrandColors.blue500,
+    textContrast: BrandColors.neutral650,
+    textInvert: BrandColors.neutral0,
+    surfacePrimary: BrandColors.neutral0,
+    surfaceSuccess: BrandColors.green300,
+    surfaceError: BrandColors.red500,
+    surfaceCommentCard: BrandColors.neutral500,
+    surfaceEpisodeNumber: Color(0x80000000),
+    surfaceBottomSheet: BrandColors.neutral300,
+    surfaceGenre: BrandColors.neutral500,
+    surfaceGenreSelected: BrandColors.blue500,
+    surfaceDivider: BrandColors.neutral400,
+    surfaceProfileRow: BrandColors.neutral300,
+    surfaceProfileRowPressed: BrandColors.neutral500,
+    surfaceBlurBackground: Color(0x80000000),
+    surfaceReminderButton: BrandColors.blue50,
+    surfaceContainerTonal: BrandColors.neutral300,
+    surfacePlaceholderImage: BrandColors.neutral700,
+    iconPrimary: BrandColors.neutral750,
+    iconSecondary: BrandColors.blue500,
+    iconDefault: BrandColors.neutral0,
+    iconInvert: BrandColors.neutral200,
+    iconContrast: BrandColors.neutral650,
+    buttonPrimary: BrandColors.blue500,
+    buttonPrimaryHover: BrandColors.blue700,
+    buttonPrimaryFocused: BrandColors.blue700,
+    buttonPrimaryPressed: BrandColors.blue600,
+    buttonDisabled: BrandColors.neutral300,
+    buttonSecondary: BrandColors.neutral600,
+    buttonSecondaryHover: BrandColors.neutral300,
+    buttonSecondaryPressed: BrandColors.neutral500,
+    buttonSecondaryFocused: BrandColors.neutral300,
+    buttonAccent: BrandColors.orangeDefault,
+    buttonAccentPressed: BrandColors.orange600,
+    buttonAccentHovered: BrandColors.orange700,
+    statusWarning: BrandColors.amber500,
+    statusWarningText: BrandColors.amber700,
+  );
 
   static const AppColors dark = AppColors(
-    primary900: Color(0xFF001133),
-    primary800: Color(0xFF012266),
-    primary700: Color(0xFF013499),
-    primary600: Color(0xFF0145CC),
-    primaryDefault: Color(0xFF0156FF),
-    primary400: Color(0xFF3478FF),
-    primary300: Color(0xFF679AFF),
-    primary200: Color(0xFF9ABBFF),
-    primary100: Color(0xFFCCDDFF),
-    primary50: Color(0xFFE6EFFF),
-    textPrimary: Color(0xFFFFFFFF),
-    textSecondary: Color(0xFF679AFF),
-    textContrast: Color(0xFFA8A9B2),
-    textInvert: Color(0xFF000000),
-    surfacePrimary: Color(0xFF000000),
-    surfaceSuccess: Color(0xFF29E682),
-    surfaceError: Color(0xFFFF2B01),
-    surfaceCommentCard: Color(0xFF323241),
+    primary50: BrandColors.blue50,
+    primary100: BrandColors.blue100,
+    primary200: BrandColors.blue200,
+    primary300: BrandColors.blue300,
+    primary400: BrandColors.blue400,
+    primaryDefault: BrandColors.blue500,
+    primary600: BrandColors.blue600,
+    primary700: BrandColors.blue700,
+    primary800: BrandColors.blue800,
+    primary900: BrandColors.blue900,
+    textPrimary: BrandColors.neutral0,
+    textSecondary: BrandColors.blue300,
+    textContrast: BrandColors.neutral500,
+    textInvert: BrandColors.neutral800,
+    surfacePrimary: BrandColors.neutral800,
+    surfaceSuccess: BrandColors.green300,
+    surfaceError: BrandColors.red500,
+    surfaceCommentCard: BrandColors.neutral700,
     surfaceEpisodeNumber: Color(0x99FFFFFF),
-    surfaceBottomSheet: Color(0xFF14151A),
-    surfaceGenre: Color(0xFF1E2029),
-    surfaceGenreSelected: Color(0xFF0156FF),
-    surfaceDivider: Color(0xFF323241),
-    surfaceProfileRow: Color(0xFF14151A),
-    surfaceProfileRowPressed: Color(0xFF012266),
+    surfaceBottomSheet: BrandColors.blue950,
+    surfaceGenre: BrandColors.neutral750,
+    surfaceGenreSelected: BrandColors.blue500,
+    surfaceDivider: BrandColors.neutral700,
+    surfaceProfileRow: BrandColors.blue950,
+    surfaceProfileRowPressed: BrandColors.blue800,
     surfaceBlurBackground: Color(0x80000000),
-    surfaceReminderButton: Color(0xFF101A36),
-    surfaceContainerTonal: Color(0xFF1E2029),
-    surfacePlaceholderImage: Color(0xFFA8A9B2),
-    iconPrimary: Color(0xFFFFFFFF),
-    iconSecondary: Color(0xFF679AFF),
-    iconDefault: Color(0xFFFFFFFF),
-    iconInvert: Color(0xFF1E2029),
-    iconContrast: Color(0xFFA8A9B2),
-    buttonPrimary: Color(0xFF0156FF),
-    buttonPrimaryHover: Color(0xFF3478FF),
-    buttonPrimaryFocused: Color(0xFF0145CC),
-    buttonPrimaryPressed: Color(0xFF679AFF),
-    buttonDisabled: Color(0xFF1E2029),
-    buttonSecondary: Color(0xFF323241),
-    buttonSecondaryHover: Color(0xFF717188),
-    buttonSecondaryFocused: Color(0xFF717188),
-    buttonSecondaryPressed: Color(0xFF717188),
-    buttonAccent: Color(0xFF664401),
-    buttonAccentHovered: Color(0xFFFFBB34),
-    buttonAccentPressed: Color(0xFFFFCC67),
-    statusWarning: Color(0xFFF5C451),
+    surfaceReminderButton: BrandColors.blueTint,
+    surfaceContainerTonal: BrandColors.neutral750,
+    surfacePlaceholderImage: BrandColors.neutral500,
+    iconPrimary: BrandColors.neutral0,
+    iconSecondary: BrandColors.blue300,
+    iconDefault: BrandColors.neutral0,
+    iconInvert: BrandColors.neutral750,
+    iconContrast: BrandColors.neutral500,
+    buttonPrimary: BrandColors.blue500,
+    buttonPrimaryHover: BrandColors.blue400,
+    buttonPrimaryFocused: BrandColors.blue600,
+    buttonPrimaryPressed: BrandColors.blue300,
+    buttonDisabled: BrandColors.neutral750,
+    buttonSecondary: BrandColors.neutral700,
+    buttonSecondaryHover: BrandColors.neutral600,
+    buttonSecondaryPressed: BrandColors.neutral600,
+    buttonSecondaryFocused: BrandColors.neutral600,
+    buttonAccent: BrandColors.orange800,
+    buttonAccentPressed: BrandColors.orange300,
+    buttonAccentHovered: BrandColors.orange400,
+    statusWarning: BrandColors.amber500,
+    statusWarningText: BrandColors.amber500,
   );
 
   @override
   AppColors copyWith({
-    Color? primary900,
-    Color? primary800,
-    Color? primary700,
-    Color? primary600,
-    Color? primaryDefault,
-    Color? primary400,
-    Color? primary300,
-    Color? primary200,
-    Color? primary100,
     Color? primary50,
+    Color? primary100,
+    Color? primary200,
+    Color? primary300,
+    Color? primary400,
+    Color? primaryDefault,
+    Color? primary600,
+    Color? primary700,
+    Color? primary800,
+    Color? primary900,
     Color? textPrimary,
     Color? textSecondary,
     Color? textContrast,
@@ -197,24 +252,25 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? buttonDisabled,
     Color? buttonSecondary,
     Color? buttonSecondaryHover,
-    Color? buttonSecondaryFocused,
     Color? buttonSecondaryPressed,
+    Color? buttonSecondaryFocused,
     Color? buttonAccent,
-    Color? buttonAccentHovered,
     Color? buttonAccentPressed,
+    Color? buttonAccentHovered,
     Color? statusWarning,
+    Color? statusWarningText,
   }) {
     return AppColors(
-      primary900: primary900 ?? this.primary900,
-      primary800: primary800 ?? this.primary800,
-      primary700: primary700 ?? this.primary700,
-      primary600: primary600 ?? this.primary600,
-      primaryDefault: primaryDefault ?? this.primaryDefault,
-      primary400: primary400 ?? this.primary400,
-      primary300: primary300 ?? this.primary300,
-      primary200: primary200 ?? this.primary200,
-      primary100: primary100 ?? this.primary100,
       primary50: primary50 ?? this.primary50,
+      primary100: primary100 ?? this.primary100,
+      primary200: primary200 ?? this.primary200,
+      primary300: primary300 ?? this.primary300,
+      primary400: primary400 ?? this.primary400,
+      primaryDefault: primaryDefault ?? this.primaryDefault,
+      primary600: primary600 ?? this.primary600,
+      primary700: primary700 ?? this.primary700,
+      primary800: primary800 ?? this.primary800,
+      primary900: primary900 ?? this.primary900,
       textPrimary: textPrimary ?? this.textPrimary,
       textSecondary: textSecondary ?? this.textSecondary,
       textContrast: textContrast ?? this.textContrast,
@@ -246,12 +302,13 @@ class AppColors extends ThemeExtension<AppColors> {
       buttonDisabled: buttonDisabled ?? this.buttonDisabled,
       buttonSecondary: buttonSecondary ?? this.buttonSecondary,
       buttonSecondaryHover: buttonSecondaryHover ?? this.buttonSecondaryHover,
-      buttonSecondaryFocused: buttonSecondaryFocused ?? this.buttonSecondaryFocused,
       buttonSecondaryPressed: buttonSecondaryPressed ?? this.buttonSecondaryPressed,
+      buttonSecondaryFocused: buttonSecondaryFocused ?? this.buttonSecondaryFocused,
       buttonAccent: buttonAccent ?? this.buttonAccent,
-      buttonAccentHovered: buttonAccentHovered ?? this.buttonAccentHovered,
       buttonAccentPressed: buttonAccentPressed ?? this.buttonAccentPressed,
+      buttonAccentHovered: buttonAccentHovered ?? this.buttonAccentHovered,
       statusWarning: statusWarning ?? this.statusWarning,
+      statusWarningText: statusWarningText ?? this.statusWarningText,
     );
   }
 
@@ -259,16 +316,16 @@ class AppColors extends ThemeExtension<AppColors> {
   AppColors lerp(ThemeExtension<AppColors>? other, double t) {
     if (other is! AppColors) return this;
     return AppColors(
-      primary900: Color.lerp(primary900, other.primary900, t)!,
-      primary800: Color.lerp(primary800, other.primary800, t)!,
-      primary700: Color.lerp(primary700, other.primary700, t)!,
-      primary600: Color.lerp(primary600, other.primary600, t)!,
-      primaryDefault: Color.lerp(primaryDefault, other.primaryDefault, t)!,
-      primary400: Color.lerp(primary400, other.primary400, t)!,
-      primary300: Color.lerp(primary300, other.primary300, t)!,
-      primary200: Color.lerp(primary200, other.primary200, t)!,
-      primary100: Color.lerp(primary100, other.primary100, t)!,
       primary50: Color.lerp(primary50, other.primary50, t)!,
+      primary100: Color.lerp(primary100, other.primary100, t)!,
+      primary200: Color.lerp(primary200, other.primary200, t)!,
+      primary300: Color.lerp(primary300, other.primary300, t)!,
+      primary400: Color.lerp(primary400, other.primary400, t)!,
+      primaryDefault: Color.lerp(primaryDefault, other.primaryDefault, t)!,
+      primary600: Color.lerp(primary600, other.primary600, t)!,
+      primary700: Color.lerp(primary700, other.primary700, t)!,
+      primary800: Color.lerp(primary800, other.primary800, t)!,
+      primary900: Color.lerp(primary900, other.primary900, t)!,
       textPrimary: Color.lerp(textPrimary, other.textPrimary, t)!,
       textSecondary: Color.lerp(textSecondary, other.textSecondary, t)!,
       textContrast: Color.lerp(textContrast, other.textContrast, t)!,
@@ -300,60 +357,17 @@ class AppColors extends ThemeExtension<AppColors> {
       buttonDisabled: Color.lerp(buttonDisabled, other.buttonDisabled, t)!,
       buttonSecondary: Color.lerp(buttonSecondary, other.buttonSecondary, t)!,
       buttonSecondaryHover: Color.lerp(buttonSecondaryHover, other.buttonSecondaryHover, t)!,
-      buttonSecondaryFocused: Color.lerp(buttonSecondaryFocused, other.buttonSecondaryFocused, t)!,
       buttonSecondaryPressed: Color.lerp(buttonSecondaryPressed, other.buttonSecondaryPressed, t)!,
+      buttonSecondaryFocused: Color.lerp(buttonSecondaryFocused, other.buttonSecondaryFocused, t)!,
       buttonAccent: Color.lerp(buttonAccent, other.buttonAccent, t)!,
-      buttonAccentHovered: Color.lerp(buttonAccentHovered, other.buttonAccentHovered, t)!,
       buttonAccentPressed: Color.lerp(buttonAccentPressed, other.buttonAccentPressed, t)!,
+      buttonAccentHovered: Color.lerp(buttonAccentHovered, other.buttonAccentHovered, t)!,
       statusWarning: Color.lerp(statusWarning, other.statusWarning, t)!,
+      statusWarningText: Color.lerp(statusWarningText, other.statusWarningText, t)!,
     );
   }
 }
 
 extension AppColorsContext on BuildContext {
   AppColors get colors => Theme.of(this).extension<AppColors>()!;
-}
-
-abstract final class Space {
-  static const double none = 0;
-  static const double xsm = 4;
-  static const double sm = 8;
-  static const double md = 12;
-  static const double lg = 16;
-  static const double xl = 20;
-  static const double x2xl = 24;
-  static const double x3xl = 32;
-  static const double x4xl = 40;
-  static const double x5xl = 48;
-  static const double x6xl = 56;
-  static const double x7xl = 64;
-  static const double x8xl = 72;
-  static const double x9xl = 80;
-  static const double x10xl = 96;
-}
-
-abstract final class Borders {
-  static const double none = 0;
-  static const double xsm = 4;
-  static const double sm = 8;
-  static const double md = 12;
-  static const double lg = 16;
-}
-
-abstract final class Radii {
-  static const double sm = 8;
-  static const double md = 12;
-  static const double lg = 16;
-  static const double xl = 24;
-  static const double full = 999;
-}
-
-abstract final class Sizes {
-  static const double navHeight = 64;
-}
-
-abstract final class Motion {
-  static const Duration durationFast = Duration(milliseconds: 150);
-  static const Duration durationBase = Duration(milliseconds: 250);
-  static const Duration durationSlow = Duration(milliseconds: 400);
 }

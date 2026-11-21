@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:movify/core/design_system/tokens/app_tokens.dart';
+import 'package:movify/core/design_system/primitives/brand_colors.dart';
+import 'package:movify/core/design_system/tokens/app_colors.dart';
 
-/// Token-driven theme. Lives next to the old `AppTheme`; nothing uses it
-/// until `CustomMaterialApp` is pointed at it.
+/// Token-driven themes. They live next to the old `AppTheme`; nothing uses
+/// them until `CustomMaterialApp` is pointed at them.
 abstract final class MovifyTheme {
-  static ThemeData dark() {
-    const c = AppColors.dark;
+  static ThemeData light() => _build(AppColors.light, Brightness.light);
+  static ThemeData dark() => _build(AppColors.dark, Brightness.dark);
 
-    final scheme = ColorScheme.dark(
+  static ThemeData _build(AppColors c, Brightness brightness) {
+    final scheme = ColorScheme(
+      brightness: brightness,
       primary: c.primaryDefault,
-      onPrimary: c.textPrimary,
+      onPrimary: BrandColors.neutral0,
       primaryContainer: c.primaryDefault,
-      onPrimaryContainer: c.textPrimary,
+      onPrimaryContainer: BrandColors.neutral0,
       secondary: c.buttonSecondary,
-      onSecondary: c.textPrimary,
+      onSecondary: BrandColors.neutral0,
       surface: c.surfacePrimary,
       onSurface: c.textPrimary,
       onSurfaceVariant: c.textContrast,
@@ -22,18 +25,18 @@ abstract final class MovifyTheme {
       outline: c.surfaceDivider,
       outlineVariant: c.surfaceDivider,
       error: c.surfaceError,
-      onError: c.textPrimary,
+      onError: BrandColors.neutral0,
       inverseSurface: c.textPrimary,
       onInverseSurface: c.textInvert,
     );
 
-    final base = ThemeData(brightness: Brightness.dark, useMaterial3: true);
+    final base = ThemeData(brightness: brightness, useMaterial3: true);
 
     return base.copyWith(
       colorScheme: scheme,
       scaffoldBackgroundColor: c.surfacePrimary,
       canvasColor: c.surfacePrimary,
-      cardColor: c.surfaceGenre,
+      cardColor: c.surfaceContainerTonal,
       dividerColor: c.surfaceDivider,
       dividerTheme: DividerThemeData(color: c.surfaceDivider, thickness: 1),
       dialogTheme: DialogThemeData(backgroundColor: c.surfaceBottomSheet),
@@ -52,7 +55,7 @@ abstract final class MovifyTheme {
         bodyColor: c.textPrimary,
         displayColor: c.textPrimary,
       ),
-      extensions: const <ThemeExtension<dynamic>>[AppColors.dark],
+      extensions: <ThemeExtension<dynamic>>[c],
     );
   }
 }
