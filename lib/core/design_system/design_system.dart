@@ -1,6 +1,6 @@
 // Public surface of the design system. Primitives are intentionally not
 // exported: widgets use semantic tokens only.
-export 'components/poster_card.dart';
+export 'components/components.dart';
 export 'theme/movify_text_theme.dart';
 export 'theme/movify_theme.dart';
 export 'tokens/app_colors.dart';

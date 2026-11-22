@@ -25,10 +25,7 @@ class PosterMetadata extends StatelessWidget {
           title,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: textTheme.labelLarge?.copyWith(
-            color: colors.textPrimary,
-            fontWeight: FontWeight.bold,
-          ),
+          style: textTheme.labelLarge?.copyWith(color: colors.textPrimary),
         ),
         if (subtitle != null && subtitle!.isNotEmpty) ...[
           const SizedBox(height: 2),

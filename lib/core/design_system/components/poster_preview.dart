@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
-import 'package:movify/core/design_system/components/poster_card.dart';
+import 'package:movify/core/design_system/components/components.dart';
 import 'package:movify/core/design_system/theme/movify_theme.dart';
-import 'package:movify/features/favorite/presentation/widgets/particle_heart_button.dart';
 
 // ── Widget Previews ──────────────────────────────────────────
 
@@ -14,7 +13,6 @@ Widget single150pxCardPreview() => MaterialApp(
   debugShowCheckedModeBanner: false,
   theme: MovifyTheme.dark(),
   home: Scaffold(
-    backgroundColor: const Color(0xFF000000),
     body: Center(
       child: PosterCard(
         width: 150,
@@ -23,11 +21,7 @@ Widget single150pxCardPreview() => MaterialApp(
         title: 'Spider-Man: Brand New Day',
         subtitle: 'Movie',
         rating: 8.3,
-        actionButton: ParticleHeartButton(
-          isFavorited: false,
-          size: 16,
-          onTap: () {},
-        ),
+        actionButton: _PreviewHeart(isFavorited: false, onTap: () {}),
         onTap: () {},
       ),
     ),
@@ -39,7 +33,6 @@ Widget compact104pxCardPreview() => MaterialApp(
   debugShowCheckedModeBanner: false,
   theme: MovifyTheme.dark(),
   home: Scaffold(
-    backgroundColor: const Color(0xFF000000),
     body: Center(
       child: PosterCard(
         width: 104,
@@ -48,11 +41,7 @@ Widget compact104pxCardPreview() => MaterialApp(
         title: 'Deadpool & Wolverine',
         subtitle: 'Movie',
         rating: 7.9,
-        actionButton: ParticleHeartButton(
-          isFavorited: true,
-          size: 16,
-          onTap: () {},
-        ),
+        actionButton: _PreviewHeart(isFavorited: true, onTap: () {}),
         onTap: () {},
       ),
     ),
@@ -77,7 +66,6 @@ class PosterCardPreviewAppState extends State<PosterCardPreviewApp> {
     debugShowCheckedModeBanner: false,
     theme: MovifyTheme.dark(),
     home: Scaffold(
-      backgroundColor: const Color(0xFF000000),
       appBar: AppBar(
         title: const Text('MovifyPosterCard Preview'),
         centerTitle: true,
@@ -90,9 +78,9 @@ class PosterCardPreviewAppState extends State<PosterCardPreviewApp> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
+              Text(
                 'Figma Spec (150px) vs Feed Row (104px)',
-                style: TextStyle(color: Colors.grey, fontSize: 13),
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(height: 24),
               Row(
@@ -107,9 +95,8 @@ class PosterCardPreviewAppState extends State<PosterCardPreviewApp> {
                     title: 'Fast X',
                     subtitle: 'Movie',
                     rating: 8.3,
-                    actionButton: ParticleHeartButton(
+                    actionButton: _PreviewHeart(
                       isFavorited: _fav1,
-                      size: 16,
                       onTap: () => setState(() => _fav1 = !_fav1),
                     ),
                     onTap: () {},
@@ -123,9 +110,8 @@ class PosterCardPreviewAppState extends State<PosterCardPreviewApp> {
                     title: 'Deadpool & Wolverine',
                     subtitle: 'Movie',
                     rating: 7.9,
-                    actionButton: ParticleHeartButton(
+                    actionButton: _PreviewHeart(
                       isFavorited: _fav2,
-                      size: 16,
                       onTap: () => setState(() => _fav2 = !_fav2),
                     ),
                     onTap: () {},
@@ -136,6 +122,25 @@ class PosterCardPreviewAppState extends State<PosterCardPreviewApp> {
           ),
         ),
       ),
+    ),
+  );
+}
+
+/// Stand-in for the real favorite button, so this file does not depend on
+/// `features/`. Swap for the design-system `FavoriteButton` once it exists.
+class _PreviewHeart extends StatelessWidget {
+  const _PreviewHeart({required this.isFavorited, required this.onTap});
+
+  final bool isFavorited;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+    onTap: onTap,
+    child: Icon(
+      isFavorited ? Icons.favorite : Icons.favorite_border,
+      size: 20,
+      color: Theme.of(context).colorScheme.onSurface,
     ),
   );
 }

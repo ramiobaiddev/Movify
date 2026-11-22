@@ -72,7 +72,6 @@ class _CarouselPreviewApp extends StatelessWidget {
     ],
     supportedLocales: AppLocalizations.supportedLocales,
     home: Scaffold(
-      backgroundColor: const Color(0xFF000000),
       appBar: AppBar(
         title: const Text('Hero Carousel Preview'),
         centerTitle: true,

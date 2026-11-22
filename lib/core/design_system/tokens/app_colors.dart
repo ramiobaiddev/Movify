@@ -22,6 +22,7 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.textSecondary,
     required this.textContrast,
     required this.textInvert,
+    required this.textOnImage,
     required this.surfacePrimary,
     required this.surfaceSuccess,
     required this.surfaceError,
@@ -72,6 +73,7 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color textSecondary;
   final Color textContrast;
   final Color textInvert;
+  final Color textOnImage;
   final Color surfacePrimary;
   final Color surfaceSuccess;
   final Color surfaceError;
@@ -122,6 +124,7 @@ class AppColors extends ThemeExtension<AppColors> {
     textSecondary: BrandColors.blue500,
     textContrast: BrandColors.neutral650,
     textInvert: BrandColors.neutral0,
+    textOnImage: BrandColors.neutral0,
     surfacePrimary: BrandColors.neutral0,
     surfaceSuccess: BrandColors.green300,
     surfaceError: BrandColors.red500,
@@ -173,6 +176,7 @@ class AppColors extends ThemeExtension<AppColors> {
     textSecondary: BrandColors.blue300,
     textContrast: BrandColors.neutral500,
     textInvert: BrandColors.neutral800,
+    textOnImage: BrandColors.neutral0,
     surfacePrimary: BrandColors.neutral800,
     surfaceSuccess: BrandColors.green300,
     surfaceError: BrandColors.red500,
@@ -225,6 +229,7 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? textSecondary,
     Color? textContrast,
     Color? textInvert,
+    Color? textOnImage,
     Color? surfacePrimary,
     Color? surfaceSuccess,
     Color? surfaceError,
@@ -274,6 +279,7 @@ class AppColors extends ThemeExtension<AppColors> {
     textSecondary: textSecondary ?? this.textSecondary,
     textContrast: textContrast ?? this.textContrast,
     textInvert: textInvert ?? this.textInvert,
+    textOnImage: textOnImage ?? this.textOnImage,
     surfacePrimary: surfacePrimary ?? this.surfacePrimary,
     surfaceSuccess: surfaceSuccess ?? this.surfaceSuccess,
     surfaceError: surfaceError ?? this.surfaceError,
@@ -334,6 +340,7 @@ class AppColors extends ThemeExtension<AppColors> {
       textSecondary: Color.lerp(textSecondary, other.textSecondary, t)!,
       textContrast: Color.lerp(textContrast, other.textContrast, t)!,
       textInvert: Color.lerp(textInvert, other.textInvert, t)!,
+      textOnImage: Color.lerp(textOnImage, other.textOnImage, t)!,
       surfacePrimary: Color.lerp(surfacePrimary, other.surfacePrimary, t)!,
       surfaceSuccess: Color.lerp(surfaceSuccess, other.surfaceSuccess, t)!,
       surfaceError: Color.lerp(surfaceError, other.surfaceError, t)!,

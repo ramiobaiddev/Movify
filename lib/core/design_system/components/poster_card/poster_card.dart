@@ -11,7 +11,7 @@ import 'package:movify/core/design_system/tokens/spacing.dart';
 /// Features:
 /// - Pure widget composition (no private helper builder methods)
 /// - Sub-widgets separated into their own dedicated files
-/// - Exact Figma 183/275 poster aspect ratio (~0.665)
+/// - 2:3 poster aspect ratio (TMDB posters)
 /// - Top-left rating chip with frosted background
 /// - Top-right slot for any action button (e.g. `FavoriteButton`)
 /// - Title & media type subtitle with single-line ellipsis
@@ -27,10 +27,10 @@ class PosterCard extends StatefulWidget {
     this.onTap,
     this.width,
     this.borderRadius = Radii.lg,
-    this.aspectRatio = 183 / 275,
+    this.aspectRatio = 2 / 3,
     this.enableHero = false,
     this.heroTag,
-  });
+  }) : assert(!enableHero || heroTag != null, 'enableHero needs a heroTag');
 
   final String imageUrl;
   final String title;
@@ -45,7 +45,7 @@ class PosterCard extends StatefulWidget {
   final double borderRadius;
   final double aspectRatio;
   final bool enableHero;
-  final String? heroTag;
+  final Object? heroTag;
 
   @override
   State<PosterCard> createState() => _PosterCardState();
@@ -95,17 +95,21 @@ class _PosterCardState extends State<PosterCard> {
       card = SizedBox(width: widget.width, child: card);
     }
 
-    return GestureDetector(
+    return Semantics(
+      button: widget.onTap != null,
       onTap: widget.onTap,
-      onTapDown: (_) => setState(() => _isPressed = true),
-      onTapUp: (_) => setState(() => _isPressed = false),
-      onTapCancel: () => setState(() => _isPressed = false),
-      behavior: HitTestBehavior.opaque,
-      child: AnimatedScale(
-        scale: _isPressed ? 0.96 : 1.0,
-        duration: Motion.durationFast,
-        curve: Curves.easeInOut,
-        child: card,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        onTapDown: (_) => setState(() => _isPressed = true),
+        onTapUp: (_) => setState(() => _isPressed = false),
+        onTapCancel: () => setState(() => _isPressed = false),
+        behavior: HitTestBehavior.opaque,
+        child: AnimatedScale(
+          scale: _isPressed ? 0.96 : 1.0,
+          duration: Motion.durationFast,
+          curve: Curves.easeInOut,
+          child: card,
+        ),
       ),
     );
   }

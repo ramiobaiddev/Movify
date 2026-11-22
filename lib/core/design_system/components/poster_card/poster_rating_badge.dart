@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:movify/core/design_system/primitives/brand_colors.dart';
 import 'package:movify/core/design_system/tokens/app_colors.dart';
 import 'package:movify/core/design_system/tokens/radii.dart';
 
@@ -19,9 +18,8 @@ class PosterRatingBadge extends StatelessWidget {
     child: Text(
       rating.toStringAsFixed(1),
       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-        color: BrandColors.neutral0,
+        color: context.colors.textOnImage,
         fontWeight: FontWeight.w600,
-        fontSize: 10,
         height: 1.1,
       ),
     ),
