@@ -13,9 +13,8 @@ import 'package:movify/core/pagination/domain/entites/page_result.dart';
 ///
 /// To change filters, create a new cubit (e.g. give the BlocProvider a new
 /// key) instead of mutating this one.
-typedef PageFetcher<T> = Future<Either<Failure, PageResult<T>>> Function(
-  int page,
-);
+typedef PageFetcher<T> =
+    Future<Either<Failure, PageResult<T>>> Function(int page);
 
 class PagedCubit<T> extends Cubit<PagedState<T>> {
   PagedCubit(this._fetch) : super(const PagedState());
@@ -29,7 +28,9 @@ class PagedCubit<T> extends Cubit<PagedState<T>> {
 
   /// Safe to call from `initState`/`build` repeatedly: loads only once.
   Future<void> load() async {
-    if (state.status != PagedStatus.initial) return;
+    if (state.status != PagedStatus.initial) {
+      return;
+    }
     await _loadFirstPage();
   }
 
@@ -48,7 +49,9 @@ class PagedCubit<T> extends Cubit<PagedState<T>> {
     );
 
     final result = await _fetch(1);
-    if (isClosed || generation != _generation) return;
+    if (isClosed || generation != _generation) {
+      return;
+    }
 
     result.fold(
       (failure) => emit(
@@ -72,14 +75,18 @@ class PagedCubit<T> extends Cubit<PagedState<T>> {
   /// loading, when there are no more pages, and after a load-more error
   /// (use [retryLoadMore] so a failing request is not hammered by scrolling).
   Future<void> loadMore() async {
-    if (!state.canLoadMore) return;
+    if (!state.canLoadMore) {
+      return;
+    }
 
     final generation = _generation;
     final nextPage = state.page + 1;
     emit(state.copyWith(isLoadingMore: true, clearError: true));
 
     final result = await _fetch(nextPage);
-    if (isClosed || generation != _generation) return;
+    if (isClosed || generation != _generation) {
+      return;
+    }
 
     result.fold(
       (failure) => emit(
@@ -98,7 +105,9 @@ class PagedCubit<T> extends Cubit<PagedState<T>> {
 
   /// Retry button at the end of the list after a load-more error.
   Future<void> retryLoadMore() async {
-    if (!state.hasLoadMoreError) return;
+    if (!state.hasLoadMoreError) {
+      return;
+    }
     emit(state.copyWith(clearError: true));
     await loadMore();
   }

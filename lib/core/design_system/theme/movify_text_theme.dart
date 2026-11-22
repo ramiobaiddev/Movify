@@ -28,7 +28,9 @@ abstract final class MovifyTextTheme {
     fontSize: size * scale,
     fontWeight: weight,
     height: lineHeight / size,
-    leadingDistribution: TextLeadingDistribution.even,
+    textStyle: const TextStyle(
+      leadingDistribution: TextLeadingDistribution.even,
+    ),
   );
 
   static TextTheme build({double scale = 1}) {

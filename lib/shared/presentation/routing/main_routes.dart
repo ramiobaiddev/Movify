@@ -6,7 +6,7 @@ import 'package:movify/core/routing/screens/force_update_screen.dart';
 import 'package:movify/core/routing/screens/maintenance_screen.dart';
 import 'package:movify/features/discover/presentation/views/discover_view.dart';
 import 'package:movify/features/favorite/presentation/views/favorite_view.dart';
-import 'package:movify/features/home/presentation/views/home_view.dart';
+import 'package:movify/features/home/presentation/views/home_feed_view.dart';
 import 'package:movify/features/profile/presentation/views/profile_view.dart';
 import 'package:movify/shared/presentation/widgets/navigation_views.dart';
 
@@ -39,7 +39,7 @@ class MainRoutes {
             GoRoute(
               path: RoutePaths.home,
               name: RouteName.home,
-              builder: (context, state) => const HomeView(),
+              builder: (context, state) => const HomeFeedView(),
             ),
           ],
         ),

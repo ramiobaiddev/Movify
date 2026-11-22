@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/di/service_locator.dart';
 import 'package:movify/core/language/presentation/cubits/language_cubit.dart';
 import 'package:movify/core/network/connectivity/network_status_banner.dart';
-import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/theme/cubit/theme_cubit.dart';
 import 'package:movify/l10n/app_localizations.dart';
 

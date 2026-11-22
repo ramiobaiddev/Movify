@@ -67,3 +67,5 @@ secrets.json
 # If you wish to exclude them, uncomment the below lines:
 # **/google-services.json
 # **/GoogleService-Info.plist
+# Widget Preview related
+.widget_preview/

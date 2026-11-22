@@ -37,7 +37,9 @@ class AppTextStyles extends ThemeExtension<AppTextStyles> {
 
   @override
   AppTextStyles lerp(ThemeExtension<AppTextStyles>? other, double t) {
-    if (other is! AppTextStyles) return this;
+    if (other is! AppTextStyles) {
+      return this;
+    }
     return AppTextStyles(
       bodyLg: TextStyle.lerp(bodyLg, other.bodyLg, t)!,
       bodyMd: TextStyle.lerp(bodyMd, other.bodyMd, t)!,

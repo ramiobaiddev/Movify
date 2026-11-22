@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:movify/core/errors/failure.dart';
-import 'package:movify/core/paging/paged_cubit.dart';
 import 'package:movify/core/pagination/domain/entites/page_result.dart';
+import 'package:movify/core/paging/paged_cubit.dart';
 import 'package:movify/features/home/domian/use_cases/get_movies_use_case.dart';
 import 'package:movify/features/home/domian/use_cases/get_series_use_case.dart';
 import 'package:movify/shared/domain/entites/media_card.dart';
@@ -58,10 +58,7 @@ class MediaFeeds {
     final fetchSeries = series(seriesEndPoint);
 
     return (page) async {
-      final results = await Future.wait([
-        fetchMovies(page),
-        fetchSeries(page),
-      ]);
+      final results = await Future.wait([fetchMovies(page), fetchSeries(page)]);
       final movieSide = results[0];
       final seriesSide = results[1];
 

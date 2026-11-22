@@ -1,83 +1,67 @@
-// ignore_for_file: deprecated_member_use
-
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:movify/features/home/presentation/widgets/stacked_cards_carousel/orbit_model.dart';
-import 'package:movify/features/home/presentation/widgets/stacked_cards_carousel/orbit_utlis.dart';
 
-// orbit_flow_delegate.dart
+/// FlowDelegate implementing Option 1: "Cinematic Depth Glide"
+///
+/// Features:
+/// - Smooth [Curves.easeOutCubic] glide transition between slots
+/// - Continuous linear Z-order sorting for flicker-free layer blending
+/// - Seamless tilt (0° <-> ±10° <-> ±12°) and scale interpolation
+/// - No artificial elliptical orbit bounce
 class OrbitFlowDelegate extends FlowDelegate {
   final AnimationController controller;
   final List<OrbitSlot> slots;
   final int direction;
-  final double arcBaseY;
 
   OrbitFlowDelegate({
     required this.controller,
     required this.slots,
     required this.direction,
-    required this.arcBaseY,
-  }) : super(repaint: controller); // ← key: only repaints, no rebuild
+  }) : super(repaint: controller);
 
   @override
   void paintChildren(FlowPaintingContext context) {
     final tRaw = controller.value;
-    final t = const OvershootCurve().transform(tRaw);
-    final arc = math.sin(t.clamp(0, 1) * math.pi) * (arcBaseY * 1.55);
-    final arcSign = direction == 1 ? 1.0 : -1.0;
+    final eased = Curves.easeOutCubic.transform(tRaw);
 
-    // Sort by z before painting
+    // Sort cards by calculated z-index so top cards paint over deeper cards
     final indices = List.generate(slots.length, (i) => i);
-    indices.sort((a, b) => _zOf(a, tRaw).compareTo(_zOf(b, tRaw)));
+    indices.sort((a, b) => _zOf(a, eased).compareTo(_zOf(b, eased)));
+
+    final cx = context.size.width / 2;
+    // Y-anchor: Top alignment with slight breathing room
+    final cy = 150.0;
 
     for (final i in indices) {
       final from = slots[i];
       final to = _targetSlotFor(from);
 
-      final dist = from.offset.abs();
-      final delay = (dist * 0.03).clamp(0.0, 0.18);
-      final tt = ((tRaw - delay) / (1 - delay)).clamp(0.0, 1.0);
-      final eased = Curves.easeOutCubic.transform(tt);
-
       final x = _lerp(from.x, to.x, eased);
-      final y =
-          _lerp(from.y, to.y, eased) +
-          arc * arcSign * _orbitFactor(from.offset);
+      final y = _lerp(from.y, to.y, eased);
       final rot = _lerp(from.rotation, to.rotation, eased);
       final scale = _lerp(from.scale, to.scale, eased);
+      final opacity = _lerp(from.opacity, to.opacity, eased).clamp(0.0, 1.0);
 
-      // Center of the Flow widget
-      final cx = context.size.width / 2;
-      final cy = context.size.height / 2;
+      final childSize = context.getChildSize(i);
+      final childW = childSize?.width ?? 196.0;
+      final childH = childSize?.height ?? 295.0;
 
       final matrix = Matrix4.identity()
         ..translate(cx + x, cy + y)
         ..rotateZ(rot)
         ..scale(scale)
-        // offset back by half child size to center it
-        ..translate(
-          -context.getChildSize(i)!.width / 2,
-          -context.getChildSize(i)!.height / 2,
-        );
+        ..translate(-childW / 2, -childH / 2);
 
-      context.paintChild(i, transform: matrix);
+      context.paintChild(i, transform: matrix, opacity: opacity);
     }
   }
 
-  double _orbitFactor(int offset) =>
-      offset == 0 ? 0.22 : (0.45 + offset.abs() * 0.10);
-
   double _lerp(double a, double b, double t) => a + (b - a) * t;
 
-  double _zOf(int i, double tRaw) {
+  double _zOf(int i, double eased) {
     final from = slots[i];
     final to = _targetSlotFor(from);
-    final delay = (from.offset.abs() * 0.03).clamp(0.0, 0.18);
-    final tt = ((tRaw - delay) / (1 - delay)).clamp(0.0, 1.0);
-    final eased = Curves.easeOutCubic.transform(tt);
-    final jumpZ = (to.offset == 0 && eased > 0.5) ? 50.0 : 0.0;
-    return from.z + jumpZ;
+    return _lerp(from.z, to.z, eased);
   }
 
   OrbitSlot _targetSlotFor(OrbitSlot from) {
@@ -97,9 +81,5 @@ class OrbitFlowDelegate extends FlowDelegate {
       old.slots != slots;
 
   @override
-  Size getSize(BoxConstraints constraints) => Size(constraints.maxWidth, 420);
-
-  @override
-  BoxConstraints getConstraintsForChild(int i, BoxConstraints constraints) =>
-      const BoxConstraints(); // children size themselves
+  Size getSize(BoxConstraints constraints) => Size(constraints.maxWidth, 310);
 }

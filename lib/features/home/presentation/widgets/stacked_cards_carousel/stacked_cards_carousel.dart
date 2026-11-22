@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:movify/core/design_system/tokens/spacing.dart';
 import 'package:movify/core/routing/route_name.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/home/presentation/extensions/main_vertical_card_extention.dart';
-import 'package:movify/features/home/presentation/widgets/stacked_cards_carousel/main_card.dart';
-import 'package:movify/features/home/presentation/widgets/stacked_cards_carousel/mini_card.dart';
+import 'package:movify/features/home/presentation/widgets/stacked_cards_carousel/hero_metadata_view.dart';
 import 'package:movify/features/home/presentation/widgets/stacked_cards_carousel/stacked_cards_orbit_view.dart';
 import 'package:movify/shared/presentation/models/card_display_model.dart';
 
@@ -31,7 +32,7 @@ class _StackedCardsCarouselState extends State<StackedCardsCarousel>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 580),
+      duration: const Duration(milliseconds: 400),
     );
   }
 
@@ -46,12 +47,11 @@ class _StackedCardsCarouselState extends State<StackedCardsCarousel>
       return;
     }
 
+    HapticFeedback.selectionClick();
     setState(() => _direction = direction);
 
     _controller.forward(from: 0).whenComplete(() {
-      if (!mounted) {
-        return;
-      }
+      if (!mounted) return;
 
       setState(() {
         _controller.value = 0;
@@ -68,7 +68,6 @@ class _StackedCardsCarouselState extends State<StackedCardsCarousel>
 
   void _openDetails() {
     final center = widget.cardModel[current];
-
     final routeName = center.contentType == ContentType.movies
         ? RouteName.movieDetail
         : RouteName.tvDetail;
@@ -86,32 +85,38 @@ class _StackedCardsCarouselState extends State<StackedCardsCarousel>
       return const SizedBox.shrink();
     }
 
-    // fallback
-    if (widget.cardModel.length < 3) {
-      return SizedBox(
-        height: 420,
-        child: Center(child: MainCard(cardModel: widget.cardModel[current])),
-      );
-    }
+    final activeCard = widget.cardModel[current];
 
     return GestureDetector(
       onTap: _openDetails,
       onHorizontalDragEnd: (details) {
         final v = details.primaryVelocity ?? 0;
-        if (v < 0) {
-          _startSwipe(1);
-        }
-        if (v > 0) {
-          _startSwipe(-1);
+        if (v < -100) {
+          _startSwipe(1); // Swipe left -> show next
+        } else if (v > 100) {
+          _startSwipe(-1); // Swipe right -> show prev
         }
       },
-      child: StackedCardsOrbitView(
-        cards: widget.cardModel,
-        current: current,
-        direction: _direction,
-        controller: _controller,
-        buildMainCard: (model) => MainCard(cardModel: model),
-        buildMiniCard: (img) => MiniCard(image: img),
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // ── Stacked 3D Poster Deck ──
+          SizedBox(
+            height: 310,
+            child: StackedCardsOrbitView(
+              cards: widget.cardModel,
+              current: current,
+              direction: _direction,
+              controller: _controller,
+            ),
+          ),
+
+          const SizedBox(height: Space.md),
+
+          // ── Title & 3 Pill Badges ──
+          HeroMetadataView(cardModel: activeCard),
+        ],
       ),
     );
   }
