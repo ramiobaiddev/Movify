@@ -70,8 +70,6 @@ void main() {
     ),
   ).thenAnswer((_) async => result);
 
-  const failure = ServerFailure(errorMessage: 'down');
-
   group('MediaCard mapping', () {
     test('movie maps title and release date', () {
       final card = _movie(1).toMediaCard();
@@ -121,59 +119,7 @@ void main() {
       expect(page.results.single.type, MediaType.series);
     });
 
-    test('mixed interleaves movie, series, movie, series', () async {
-      stubMovies(Right(_page([_movie(1), _movie(2)], totalPages: 3)));
-      stubSeries(Right(_page([_show(10), _show(20)], totalPages: 8)));
-
-      final result = await feeds.mixed(
-        movieEndPoint: 'movie/popular',
-        seriesEndPoint: 'tv/popular',
-      )(1);
-
-      final page = result.getOrElse(() => throw StateError('expected Right'));
-      expect(page.results.map((c) => c.id), [1, 10, 2, 20]);
-      expect(page.totalPages, 8);
-    });
-
-    test('mixed keeps the leftover items when one side is longer', () async {
-      stubMovies(Right(_page([_movie(1), _movie(2), _movie(3)])));
-      stubSeries(Right(_page([_show(10)])));
-
-      final result = await feeds.mixed(
-        movieEndPoint: 'movie/popular',
-        seriesEndPoint: 'tv/popular',
-      )(1);
-
-      final page = result.getOrElse(() => throw StateError('expected Right'));
-      expect(page.results.map((c) => c.id), [1, 10, 2, 3]);
-    });
-
-    test('mixed still returns the series when movies fail', () async {
-      stubMovies(const Left(failure));
-      stubSeries(Right(_page([_show(10)])));
-
-      final result = await feeds.mixed(
-        movieEndPoint: 'movie/popular',
-        seriesEndPoint: 'tv/popular',
-      )(1);
-
-      final page = result.getOrElse(() => throw StateError('expected Right'));
-      expect(page.results.map((c) => c.id), [10]);
-    });
-
-    test('mixed fails only when both sides fail', () async {
-      stubMovies(const Left(failure));
-      stubSeries(const Left(failure));
-
-      final result = await feeds.mixed(
-        movieEndPoint: 'movie/popular',
-        seriesEndPoint: 'tv/popular',
-      )(1);
-
-      expect(result.isLeft(), isTrue);
-    });
-
-    test('byType(null) mixes, byType(series) uses only series', () async {
+    test('byType(series) calls only the series use case', () async {
       stubMovies(Right(_page([_movie(1)])));
       stubSeries(Right(_page([_show(10)])));
 
