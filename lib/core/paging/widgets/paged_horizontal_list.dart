@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/paging/paged_cubit.dart';
 import 'package:movify/core/paging/paged_state.dart';
-import 'package:movify/l10n/app_localizations.dart';
+import 'package:movify/core/paging/widgets/paged_error_view.dart';
 
 /// Horizontal list that shows whatever the nearest [PagedCubit]<T> holds and
 /// asks it for more when the user scrolls near the end.
@@ -88,7 +88,7 @@ class _PagedHorizontalListState<T> extends State<PagedHorizontalList<T>> {
             height: widget.height,
             child:
                 widget.errorBuilder?.call(context, message, cubit.refresh) ??
-                _DefaultError(message: message, onRetry: cubit.refresh),
+                PagedErrorView(message: message, onRetry: cubit.refresh),
           );
         }
         if (state.isEmpty) {
@@ -127,27 +127,4 @@ class _PagedHorizontalListState<T> extends State<PagedHorizontalList<T>> {
       },
     );
   }
-}
-
-class _DefaultError extends StatelessWidget {
-  const _DefaultError({required this.message, required this.onRetry});
-
-  final String message;
-  final VoidCallback onRetry;
-
-  @override
-  Widget build(BuildContext context) => Center(
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          message,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-        const SizedBox(height: Space.sm),
-        TextButton(onPressed: onRetry, child: Text(AppLocalizations.of(context)!.retry)),
-      ],
-    ),
-  );
 }
