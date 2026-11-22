@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:movify/core/di/service_locator.dart';
 import 'package:movify/core/language/presentation/cubits/language_cubit.dart';
 import 'package:movify/core/network/connectivity/network_status_banner.dart';
-import 'package:movify/core/theme/config/app_theme.dart';
+import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/theme/cubit/theme_cubit.dart';
 import 'package:movify/l10n/app_localizations.dart';
 
@@ -16,6 +16,7 @@ class CustomMaterialApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final localeState = context.watch<LanguageCubit>().state;
     final themeState = context.watch<ThemeCubit>().state;
+    final textScale = TextScale.of(context);
     return MaterialApp.router(
       routerConfig: getIt<GoRouter>(),
       debugShowCheckedModeBanner: false,
@@ -35,8 +36,8 @@ class CustomMaterialApp extends StatelessWidget {
         ],
       ),
 
-      theme: AppTheme.light(themeState.accentColor),
-      darkTheme: AppTheme.dark(themeState.accentColor),
+      theme: MovifyTheme.light(textScale: textScale),
+      darkTheme: MovifyTheme.dark(textScale: textScale),
       themeMode: themeState.mode,
       locale: localeState.locale,
       themeAnimationCurve: Curves.easeInOut,
