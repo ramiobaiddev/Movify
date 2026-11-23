@@ -68,6 +68,19 @@ class TmdbContentApi {
         : CachePolicy.noCache,
   );
 
+  /// `discover/{type}` with a ready-made query (see DiscoverQuery).
+  ApiResponse discover({
+    required String type,
+    required Map<String, String> queryParams,
+    required int page,
+  }) => client.get(
+    'discover/$type',
+    queryParams: queryParams,
+    overridePolicy: page <= pageCacheCount
+        ? CachePolicy.request
+        : CachePolicy.noCache,
+  );
+
   ApiResponse getMovies({
     int page = 1,
     CancelToken? cancelToken,

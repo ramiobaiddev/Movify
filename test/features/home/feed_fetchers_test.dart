@@ -7,6 +7,8 @@ import 'package:movify/features/home/presentation/feeds/feed_fetchers.dart';
 import 'package:movify/shared/domain/entites/media_item.dart';
 import 'package:movify/shared/domain/entites/movie_entity.dart';
 import 'package:movify/shared/domain/entites/series_entity.dart';
+import 'package:movify/shared/domain/entites/discover_filters.dart';
+import 'package:movify/shared/domain/use_cases/discover_media_use_case.dart';
 import 'package:movify/shared/domain/use_cases/get_movie_feed_use_case.dart';
 import 'package:movify/shared/domain/use_cases/get_series_feed_use_case.dart';
 import 'package:movify/shared/domain/use_cases/get_trending_use_case.dart';
@@ -17,6 +19,8 @@ class _MockMovies extends Mock implements GetMovieFeedUseCase {}
 class _MockSeries extends Mock implements GetSeriesFeedUseCase {}
 
 class _MockTrending extends Mock implements GetTrendingUseCase {}
+
+class _MockDiscover extends Mock implements DiscoverMediaUseCase {}
 
 MovieEntity _movie(int id) => MovieEntity(
   id: id,
@@ -49,16 +53,19 @@ void main() {
   late _MockMovies movies;
   late _MockSeries series;
   late _MockTrending trending;
+  late _MockDiscover discover;
   late FeedFetchers fetchers;
 
   setUp(() {
     movies = _MockMovies();
     series = _MockSeries();
     trending = _MockTrending();
+    discover = _MockDiscover();
     fetchers = FeedFetchers(
       getMovies: movies,
       getSeries: series,
       getTrending: trending,
+      discoverMedia: discover,
     );
   });
 
@@ -121,5 +128,22 @@ void main() {
 
     final page = r.getOrElse(() => throw StateError('expected Right'));
     expect(page.results.single.contentType, ContentType.series);
+  });
+
+  test('discover passes kind, filters and page through', () async {
+    const filters = DiscoverFilters(genreIds: {28});
+    when(
+      () => discover(
+        kind: any(named: 'kind'),
+        filters: any(named: 'filters'),
+        page: any(named: 'page'),
+      ),
+    ).thenAnswer((_) async => Right(_page(<MediaItem>[])));
+
+    await fetchers.discover(ContentType.series, filters)(4);
+
+    verify(
+      () => discover(kind: ContentType.series, filters: filters, page: 4),
+    ).called(1);
   });
 }

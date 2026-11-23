@@ -1,5 +1,7 @@
 import 'package:movify/core/paging/paged_cubit.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
+import 'package:movify/shared/domain/entites/discover_filters.dart';
+import 'package:movify/shared/domain/use_cases/discover_media_use_case.dart';
 import 'package:movify/shared/domain/use_cases/get_movie_feed_use_case.dart';
 import 'package:movify/shared/domain/use_cases/get_series_feed_use_case.dart';
 import 'package:movify/shared/domain/use_cases/get_trending_use_case.dart';
@@ -23,13 +25,16 @@ class FeedFetchers {
     required GetMovieFeedUseCase getMovies,
     required GetSeriesFeedUseCase getSeries,
     required GetTrendingUseCase getTrending,
+    required DiscoverMediaUseCase discoverMedia,
   }) : _getMovies = getMovies,
        _getSeries = getSeries,
-       _getTrending = getTrending;
+       _getTrending = getTrending,
+       _discover = discoverMedia;
 
   final GetMovieFeedUseCase _getMovies;
   final GetSeriesFeedUseCase _getSeries;
   final GetTrendingUseCase _getTrending;
+  final DiscoverMediaUseCase _discover;
 
   /// A fixed endpoint for one kind ([ContentType.movies] or
   /// [ContentType.series]).
@@ -49,4 +54,16 @@ class FeedFetchers {
       (page) async => (await _getTrending(page: page)).map(
         (r) => r.map((item) => item.toCardDisplay()),
       );
+
+  /// Filtered list. "For you" is `discover(movies, DiscoverFilters())`
+  /// (popularity); "All-time favorites" sorts by rating.
+  PageFetcher<CardDisplayModel> discover(
+    ContentType kind,
+    DiscoverFilters filters,
+  ) =>
+      (page) async => (await _discover(
+        kind: kind,
+        filters: filters,
+        page: page,
+      )).map((r) => r.map((item) => item.toCardDisplay()));
 }

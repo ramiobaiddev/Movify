@@ -1,10 +1,13 @@
 import 'package:movify/core/network/api/services/api_service.dart';
+import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/core/pagination/domain/entites/page_result.dart';
 import 'package:movify/features/home/data/models/movie_model.dart';
 import 'package:movify/features/home/data/models/series_model.dart';
 import 'package:movify/shared/data/data_sources/remote_media_data_source.dart';
 import 'package:movify/shared/data/mappers/map_paged_response.dart';
+import 'package:movify/shared/data/models/discover_query.dart';
 import 'package:movify/shared/data/models/media_item_model.dart';
+import 'package:movify/shared/domain/entites/discover_filters.dart';
 import 'package:movify/shared/domain/enums/trending_window.dart';
 
 /// No cancel tokens here: [PagedCubit] already drops responses that belong to
@@ -57,4 +60,31 @@ class RemoteMediaDataSourceImpl implements RemoteMediaDataSource {
     ),
     fromJson: SeriesModel.fromJson,
   );
+
+  @override
+  Future<PageResult<MediaItemModel>> discover({
+    required ContentType kind,
+    required DiscoverFilters filters,
+    required int page,
+  }) async {
+    final data = await apiService.tmdb.content.discover(
+      type: kind.text,
+      queryParams: DiscoverQuery.build(kind: kind, filters: filters, page: page),
+      page: page,
+    );
+    return PageResult<MediaItemModel>(
+      page: data['page'] as int,
+      totalPages: data['total_pages'] as int,
+      totalResults: data['total_results'] as int,
+      results: (data['results'] as List)
+          .map(
+            (e) => MediaItemModel.tryFromJson(
+              e as Map<String, dynamic>,
+              kind: kind,
+            ),
+          )
+          .whereType<MediaItemModel>()
+          .toList(),
+    );
+  }
 }

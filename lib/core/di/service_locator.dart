@@ -13,6 +13,7 @@ import 'package:movify/shared/data/data_sources/remote_media_data_source.dart';
 import 'package:movify/shared/data/data_sources/remote_media_data_source_impl.dart';
 import 'package:movify/shared/data/repos/media_repo_impl.dart';
 import 'package:movify/shared/domain/repos/media_repo.dart';
+import 'package:movify/shared/domain/use_cases/discover_media_use_case.dart';
 import 'package:movify/shared/domain/use_cases/get_movie_feed_use_case.dart';
 import 'package:movify/shared/domain/use_cases/get_series_feed_use_case.dart';
 import 'package:movify/shared/domain/use_cases/get_trending_use_case.dart';
@@ -317,6 +318,9 @@ void _registerAuthUseCases() {
 }
 
 void _registerHomeUseCases() {
+  getIt.registerLazySingleton<DiscoverMediaUseCase>(
+    () => DiscoverMediaUseCase(getIt<MediaRepo>()),
+  );
   getIt.registerLazySingleton<GetTrendingUseCase>(
     () => GetTrendingUseCase(getIt<MediaRepo>()),
   );

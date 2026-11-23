@@ -26,8 +26,13 @@ class MediaItemModel {
 
   /// Reads one entry of a mixed TMDB list. Returns null for anything that is
   /// not a movie or a series (people), or that has no poster or id.
-  static MediaItemModel? tryFromJson(Map<String, dynamic> json) {
-    final kind = switch (json['media_type']) {
+  static MediaItemModel? tryFromJson(
+    Map<String, dynamic> json, {
+    ContentType? kind,
+  }) {
+    // Mixed lists carry `media_type`; discover/movie and discover/tv do not,
+    // so the caller passes [kind].
+    kind ??= switch (json['media_type']) {
       'movie' => ContentType.movies,
       'tv' => ContentType.series,
       _ => null,
