@@ -9,6 +9,13 @@ import 'package:movify/config/env/app_config.dart';
 import 'package:movify/core/ads/cubits/interstitial_ad_cubit.dart';
 import 'package:movify/core/ads/cubits/privacy_options_cubit.dart';
 import 'package:movify/core/language/presentation/cubits/language_cubit.dart';
+import 'package:movify/shared/data/data_sources/remote_media_data_source.dart';
+import 'package:movify/shared/data/data_sources/remote_media_data_source_impl.dart';
+import 'package:movify/shared/data/repos/media_repo_impl.dart';
+import 'package:movify/shared/domain/repos/media_repo.dart';
+import 'package:movify/shared/domain/use_cases/get_movie_feed_use_case.dart';
+import 'package:movify/shared/domain/use_cases/get_series_feed_use_case.dart';
+import 'package:movify/shared/domain/use_cases/get_trending_use_case.dart';
 import 'package:movify/core/network/api/services/api_service.dart';
 import 'package:movify/core/network/client/dio_client.dart';
 import 'package:movify/core/network/client/dio_factory.dart';
@@ -181,6 +188,9 @@ void _registerExternalDependencies() {
 // ── 4. Data sources ───────────────────────────────────────────────────────
 
 void _registerDataSources() {
+  getIt.registerLazySingleton<RemoteMediaDataSource>(
+    () => RemoteMediaDataSourceImpl(apiService: getIt<ApiService>()),
+  );
   getIt.registerLazySingleton<RemoteHomeDataSource>(
     () => RemoteHomeDataSourceImpl(apiService: getIt<ApiService>()),
   );
@@ -226,6 +236,9 @@ void _registerDataSources() {
 // ── 5. Repositories ───────────────────────────────────────────────────────
 
 void _registerRepositories() {
+  getIt.registerLazySingleton<MediaRepo>(
+    () => MediaRepoImpl(remote: getIt<RemoteMediaDataSource>()),
+  );
   getIt.registerLazySingleton<HomeRepo>(
     () => HomeRepoImpl(remoteHomeDataSource: getIt<RemoteHomeDataSource>()),
   );
@@ -304,6 +317,15 @@ void _registerAuthUseCases() {
 }
 
 void _registerHomeUseCases() {
+  getIt.registerLazySingleton<GetTrendingUseCase>(
+    () => GetTrendingUseCase(getIt<MediaRepo>()),
+  );
+  getIt.registerLazySingleton<GetMovieFeedUseCase>(
+    () => GetMovieFeedUseCase(getIt<MediaRepo>()),
+  );
+  getIt.registerLazySingleton<GetSeriesFeedUseCase>(
+    () => GetSeriesFeedUseCase(getIt<MediaRepo>()),
+  );
   getIt.registerLazySingleton<GetMoviesUseCase>(
     () => GetMoviesUseCase(homeRepo: getIt<HomeRepo>()),
   );
