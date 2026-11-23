@@ -9,7 +9,9 @@ abstract final class TextScale {
   static const double max = 1.3;
 
   static double forWidth(double width) {
-    if (width <= phoneMaxWidth) return 1;
+    if (width <= phoneMaxWidth) {
+      return 1;
+    }
     final t = (width - phoneMaxWidth) / (tabletFullWidth - phoneMaxWidth);
     return 1 + (max - 1) * t.clamp(0.0, 1.0);
   }

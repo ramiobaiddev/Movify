@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:movify/features/home/presentation/widgets/stacked_cards_carousel/orbit_model.dart';
+import 'package:movify/features/home/presentation/widgets/stacked_cards_carousel/orbit_utlis.dart';
 
-/// FlowDelegate implementing Option 1: "Cinematic Depth Glide"
-///
-/// Features:
-/// - Smooth [Curves.easeOutCubic] glide transition between slots
-/// - Continuous linear Z-order sorting for flicker-free layer blending
-/// - Seamless tilt (0° <-> ±10° <-> ±12°) and scale interpolation
-/// - No artificial elliptical orbit bounce
+/// FlowDelegate implementing Option 1: "Cinematic Depth Glide" with Tablet Adaptive Scaling
 class OrbitFlowDelegate extends FlowDelegate {
   final AnimationController controller;
   final List<OrbitSlot> slots;
@@ -23,14 +18,15 @@ class OrbitFlowDelegate extends FlowDelegate {
   void paintChildren(FlowPaintingContext context) {
     final tRaw = controller.value;
     final eased = Curves.easeOutCubic.transform(tRaw);
+    final s = deckScale(context.size.width);
 
     // Sort cards by calculated z-index so top cards paint over deeper cards
     final indices = List.generate(slots.length, (i) => i);
     indices.sort((a, b) => _zOf(a, eased).compareTo(_zOf(b, eased)));
 
     final cx = context.size.width / 2;
-    // Y-anchor: Top alignment with slight breathing room
-    final cy = 150.0;
+    // Responsive Y-anchor
+    final cy = 150.0 * s;
 
     for (final i in indices) {
       final from = slots[i];
@@ -81,5 +77,8 @@ class OrbitFlowDelegate extends FlowDelegate {
       old.slots != slots;
 
   @override
-  Size getSize(BoxConstraints constraints) => Size(constraints.maxWidth, 310);
+  Size getSize(BoxConstraints constraints) {
+    final s = deckScale(constraints.maxWidth);
+    return Size(constraints.maxWidth, 310 * s);
+  }
 }

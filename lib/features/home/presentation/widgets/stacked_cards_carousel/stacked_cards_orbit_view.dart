@@ -30,9 +30,9 @@ class StackedCardsOrbitView extends StatelessWidget {
         OrbitSlot(
           offset: o,
           x: slotX(o, w),
-          y: slotY(o),
+          y: slotY(o, w),
           rotation: slotRotation(o),
-          scale: slotScale(o),
+          scale: slotScale(o, w),
           opacity: slotOpacity(o),
           z: (half - dist + 1).toDouble(),
         ),

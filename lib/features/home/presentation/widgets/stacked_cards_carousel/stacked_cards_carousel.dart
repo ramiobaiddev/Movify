@@ -6,6 +6,7 @@ import 'package:movify/core/routing/route_name.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/home/presentation/extensions/main_vertical_card_extention.dart';
 import 'package:movify/features/home/presentation/widgets/stacked_cards_carousel/hero_metadata_view.dart';
+import 'package:movify/features/home/presentation/widgets/stacked_cards_carousel/orbit_utlis.dart';
 import 'package:movify/features/home/presentation/widgets/stacked_cards_carousel/stacked_cards_orbit_view.dart';
 import 'package:movify/shared/presentation/models/card_display_model.dart';
 
@@ -98,25 +99,30 @@ class _StackedCardsCarouselState extends State<StackedCardsCarousel>
         }
       },
       behavior: HitTestBehavior.opaque,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // ── Stacked 3D Poster Deck ──
-          SizedBox(
-            height: 310,
-            child: StackedCardsOrbitView(
-              cards: widget.cardModel,
-              current: current,
-              direction: _direction,
-              controller: _controller,
-            ),
-          ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final s = deckScale(constraints.maxWidth);
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // ── Stacked 3D Poster Deck ──
+              SizedBox(
+                height: 310 * s,
+                child: StackedCardsOrbitView(
+                  cards: widget.cardModel,
+                  current: current,
+                  direction: _direction,
+                  controller: _controller,
+                ),
+              ),
 
-          const SizedBox(height: Space.md),
+              SizedBox(height: Space.md * s),
 
-          // ── Title & 3 Pill Badges ──
-          HeroMetadataView(cardModel: activeCard),
-        ],
+              // ── Title & 3 Pill Badges ──
+              HeroMetadataView(cardModel: activeCard),
+            ],
+          );
+        },
       ),
     );
   }
