@@ -13,19 +13,24 @@ class SeeAllArgs extends Equatable {
   const SeeAllArgs.discover({
     required this.kind,
     this.filters = const DiscoverFilters(),
+    this.title,
   }) : fixedEndPoint = null;
 
-  const SeeAllArgs.fixed({required this.kind, required String endPoint})
-    : fixedEndPoint = endPoint,
-      filters = const DiscoverFilters();
+  const SeeAllArgs.fixed({
+    required this.kind,
+    required String endPoint,
+    this.title,
+  })  : fixedEndPoint = endPoint,
+        filters = const DiscoverFilters();
 
   /// [ContentType.movies] or [ContentType.series].
   final ContentType kind;
   final DiscoverFilters filters;
   final String? fixedEndPoint;
+  final String? title;
 
   bool get isFixed => fixedEndPoint != null;
 
   @override
-  List<Object?> get props => [kind, filters, fixedEndPoint];
+  List<Object?> get props => [kind, filters, fixedEndPoint, title];
 }

@@ -48,7 +48,9 @@ class HomeChipRow extends StatelessWidget {
           onKindTap: () async {
             final cubit = context.read<RowKindCubit>();
             final picked = await showMediaKindSheet(context, selected: kind);
-            if (picked != null) cubit.select(picked);
+            if (picked != null) {
+              cubit.select(picked);
+            }
           },
           onSeeAll: () => onSeeAll(kind),
           onItemTap: onItemTap,

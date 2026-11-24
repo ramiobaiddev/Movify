@@ -1,6 +1,6 @@
 import 'package:movify/core/network/api/services/api_service.dart';
-import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/core/pagination/domain/entites/page_result.dart';
+import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/home/data/models/movie_model.dart';
 import 'package:movify/features/home/data/models/series_model.dart';
 import 'package:movify/shared/data/data_sources/remote_media_data_source.dart';
@@ -69,7 +69,11 @@ class RemoteMediaDataSourceImpl implements RemoteMediaDataSource {
   }) async {
     final data = await apiService.tmdb.content.discover(
       type: kind.text,
-      queryParams: DiscoverQuery.build(kind: kind, filters: filters, page: page),
+      queryParams: DiscoverQuery.build(
+        kind: kind,
+        filters: filters,
+        page: page,
+      ),
       page: page,
     );
     return PageResult<MediaItemModel>(

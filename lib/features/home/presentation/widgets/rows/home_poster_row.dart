@@ -9,6 +9,7 @@ import 'package:movify/features/home/presentation/widgets/rows/poster_row_metric
 import 'package:movify/features/home/presentation/widgets/rows/poster_row_skeleton.dart';
 import 'package:movify/shared/presentation/models/card_display_mappers.dart';
 import 'package:movify/shared/presentation/models/card_display_model.dart';
+import 'package:movify/shared/presentation/widgets/keep_alive_wrapper.dart';
 
 /// One home row: header + horizontal list of poster cards.
 ///
@@ -36,8 +37,8 @@ class HomePosterRow extends StatelessWidget {
   final VoidCallback? onKindTap;
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider<PagedCubit<CardDisplayModel>>(
+  Widget build(BuildContext context) => KeepAliveWrapper(
+    child: BlocProvider<PagedCubit<CardDisplayModel>>(
       key: ValueKey(queryKey),
       create: (_) => PagedCubit<CardDisplayModel>(fetcher)..load(),
       child: Column(
@@ -64,6 +65,6 @@ class HomePosterRow extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
 }

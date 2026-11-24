@@ -20,7 +20,8 @@ abstract final class DiscoverQuery {
     return {
       'page': '$page',
       'sort_by': _sort(f.sort, dateField),
-      if (f.sort == DiscoverSort.rating)
+      if (f.sort == DiscoverSort.ratingDesc ||
+          f.sort == DiscoverSort.ratingAsc)
         'vote_count.gte': '$ratingVoteFloor',
       if (f.genreIds.isNotEmpty) 'with_genres': f.genreIds.join(','),
       if (f.minRating != null) 'vote_average.gte': '${f.minRating}',
@@ -29,14 +30,19 @@ abstract final class DiscoverQuery {
       if (f.languageCode != null) 'with_original_language': f.languageCode!,
       if (f.minRuntime != null) 'with_runtime.gte': '${f.minRuntime}',
       if (f.maxRuntime != null) 'with_runtime.lte': '${f.maxRuntime}',
-      if (f.studioIds.isNotEmpty) 'with_companies': f.studioIds.join(','),
+      if (f.studioIds.isNotEmpty)
+        isMovie ? 'with_companies' : 'with_networks': f.studioIds.join('|'),
     };
   }
 
   static String _sort(DiscoverSort sort, String dateField) => switch (sort) {
-    DiscoverSort.popularity => 'popularity.desc',
-    DiscoverSort.rating => 'vote_average.desc',
-    DiscoverSort.newest => '$dateField.desc',
-    DiscoverSort.oldest => '$dateField.asc',
+    DiscoverSort.popularityDesc => 'popularity.desc',
+    DiscoverSort.popularityAsc => 'popularity.asc',
+    DiscoverSort.ratingDesc => 'vote_average.desc',
+    DiscoverSort.ratingAsc => 'vote_average.asc',
+    DiscoverSort.releaseDateDesc => '$dateField.desc',
+    DiscoverSort.releaseDateAsc => '$dateField.asc',
+    DiscoverSort.revenueDesc => 'revenue.desc',
+    DiscoverSort.revenueAsc => 'revenue.asc',
   };
 }

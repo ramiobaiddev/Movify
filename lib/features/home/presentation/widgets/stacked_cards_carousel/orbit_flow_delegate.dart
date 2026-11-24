@@ -25,8 +25,8 @@ class OrbitFlowDelegate extends FlowDelegate {
     indices.sort((a, b) => _zOf(a, eased).compareTo(_zOf(b, eased)));
 
     final cx = context.size.width / 2;
-    // Responsive Y-anchor
-    final cy = 150.0 * s;
+    // Responsive Y-anchor: centered inside deckHeight
+    final cy = 155.0 * s;
 
     for (final i in indices) {
       final from = slots[i];
@@ -77,8 +77,6 @@ class OrbitFlowDelegate extends FlowDelegate {
       old.slots != slots;
 
   @override
-  Size getSize(BoxConstraints constraints) {
-    final s = deckScale(constraints.maxWidth);
-    return Size(constraints.maxWidth, 310 * s);
-  }
+  Size getSize(BoxConstraints constraints) =>
+      Size(constraints.maxWidth, deckHeight(constraints.maxWidth));
 }

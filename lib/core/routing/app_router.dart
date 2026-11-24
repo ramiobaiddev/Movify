@@ -115,6 +115,7 @@ class AppRouters {
     RoutePaths.profile,
     RoutePaths.search,
     RoutePaths.discover,
+    RoutePaths.seeAll,
   };
 
   static const _blockedWhenGuest = {RoutePaths.root, RoutePaths.boardingZero};

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:movify/core/design_system/tokens/spacing.dart';
 import 'package:movify/core/routing/route_name.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/home/presentation/extensions/main_vertical_card_extention.dart';
@@ -52,7 +51,9 @@ class _StackedCardsCarouselState extends State<StackedCardsCarousel>
     setState(() => _direction = direction);
 
     _controller.forward(from: 0).whenComplete(() {
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       setState(() {
         _controller.value = 0;
@@ -101,13 +102,16 @@ class _StackedCardsCarouselState extends State<StackedCardsCarousel>
       behavior: HitTestBehavior.opaque,
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final s = deckScale(constraints.maxWidth);
+          final w = constraints.maxWidth;
+          final h = deckHeight(w);
+          final spacing = deckSpacing(w);
+
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               // ── Stacked 3D Poster Deck ──
               SizedBox(
-                height: 310 * s,
+                height: h,
                 child: StackedCardsOrbitView(
                   cards: widget.cardModel,
                   current: current,
@@ -116,7 +120,7 @@ class _StackedCardsCarouselState extends State<StackedCardsCarousel>
                 ),
               ),
 
-              SizedBox(height: Space.md * s),
+              SizedBox(height: spacing),
 
               // ── Title & 3 Pill Badges ──
               HeroMetadataView(cardModel: activeCard),

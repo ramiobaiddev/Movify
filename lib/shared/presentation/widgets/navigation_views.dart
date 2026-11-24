@@ -1,11 +1,10 @@
-// Use your ORIGINAL NavigationViews (the one that worked!)
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:movify/core/ads/consent_manager.dart';
-import 'package:movify/core/utils/app_colors.dart';
 import 'package:movify/l10n/app_localizations.dart';
+import 'package:movify/shared/presentation/widgets/floating_bottom_bar/floating_bottom_bar.dart';
 
 class NavigationViews extends HookWidget {
   const NavigationViews({super.key, required this.navigationShell});
@@ -32,24 +31,20 @@ class NavigationViews extends HookWidget {
         }
       },
       child: Scaffold(
+        extendBody: true,
         body: navigationShell,
-        bottomNavigationBar: NavigationBar(
-          indicatorColor: Colors.transparent,
-          backgroundColor: Theme.of(context).colorScheme.primary,
-
-          onDestinationSelected: (value) {
-            _onItemTapped(value, context);
-          },
-          selectedIndex: navigationShell.currentIndex,
-          destinations: [
-            ...NavigationItems.values.map(
-              (item) => NavigationDestination(
-                selectedIcon: Icon(item.icon, color: item.selectedColor),
-                icon: Icon(item.icon),
-                label: item.localizedLabel(context),
-              ),
-            ),
-          ],
+        bottomNavigationBar: FloatingBottomBar(
+          currentIndex: navigationShell.currentIndex,
+          onTap: (index) => _onItemTapped(index, context),
+          destinations: NavigationItems.values
+              .map(
+                (item) => FloatingBottomBarDestination(
+                  label: item.localizedLabel(context),
+                  selectedIcon: item.selectedIcon,
+                  unselectedIcon: item.unselectedIcon,
+                ),
+              )
+              .toList(),
         ),
       ),
     );
@@ -76,16 +71,17 @@ extension NavigationItemsExtension on NavigationItems {
     };
   }
 
-  IconData get icon => switch (this) {
-    NavigationItems.home => Icons.home,
-    NavigationItems.discover => Icons.search,
-    NavigationItems.favorite => Icons.favorite,
-    NavigationItems.profile => Icons.person,
+  IconData get selectedIcon => switch (this) {
+    NavigationItems.home => Icons.home_rounded,
+    NavigationItems.discover => Icons.search_rounded,
+    NavigationItems.favorite => Icons.favorite_rounded,
+    NavigationItems.profile => Icons.person_rounded,
   };
-  Color get selectedColor => switch (this) {
-    NavigationItems.home => AppPrimaryColors.blueAccent,
-    NavigationItems.discover => AppPrimaryColors.blueAccent,
-    NavigationItems.favorite => Colors.redAccent,
-    NavigationItems.profile => AppPrimaryColors.blueAccent,
+
+  IconData get unselectedIcon => switch (this) {
+    NavigationItems.home => Icons.home_outlined,
+    NavigationItems.discover => Icons.search_rounded,
+    NavigationItems.favorite => Icons.favorite_border_rounded,
+    NavigationItems.profile => Icons.person_outline_rounded,
   };
 }

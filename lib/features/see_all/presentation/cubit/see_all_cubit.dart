@@ -5,6 +5,7 @@ import 'package:movify/features/home/presentation/feeds/feed_fetchers.dart';
 import 'package:movify/features/see_all/presentation/cubit/see_all_state.dart';
 import 'package:movify/features/see_all/presentation/models/see_all_args.dart';
 import 'package:movify/shared/domain/entites/discover_filters.dart';
+import 'package:movify/shared/domain/enums/discover_sort.dart';
 import 'package:movify/shared/domain/genre_mapping.dart';
 import 'package:movify/shared/presentation/models/card_display_model.dart';
 
@@ -60,15 +61,24 @@ class SeeAllCubit extends Cubit<SeeAllState> {
   /// dropped and reported in [SeeAllState.droppedGenreIds]); studios are
   /// cleared; rating, years, language and runtime are kept.
   void setKind(ContentType kind) {
-    if (_args.isFixed || kind == state.kind) return;
+    if (_args.isFixed || kind == state.kind) {
+      return;
+    }
     final genres = GenreMapping.convert(
       state.filters.genreIds,
       from: state.kind,
       to: kind,
     );
+    final sort =
+        (kind == ContentType.series &&
+            (state.filters.sort == DiscoverSort.revenueDesc ||
+                state.filters.sort == DiscoverSort.revenueAsc))
+        ? DiscoverSort.popularityDesc
+        : state.filters.sort;
     _replace(
       kind: kind,
       filters: state.filters.copyWith(
+        sort: sort,
         genreIds: genres.mapped,
         studioIds: const {},
       ),
@@ -77,18 +87,24 @@ class SeeAllCubit extends Cubit<SeeAllState> {
   }
 
   void applyFilters(DiscoverFilters filters) {
-    if (_args.isFixed || filters == state.filters) return;
+    if (_args.isFixed || filters == state.filters) {
+      return;
+    }
     _replace(kind: state.kind, filters: filters);
   }
 
   /// Clears every filter and the sort, keeps the media type.
   void reset() {
-    if (_args.isFixed) return;
+    if (_args.isFixed) {
+      return;
+    }
     _replace(kind: state.kind, filters: const DiscoverFilters());
   }
 
   void clearNotice() {
-    if (state.droppedGenreIds.isEmpty) return;
+    if (state.droppedGenreIds.isEmpty) {
+      return;
+    }
     emit(
       SeeAllState(
         kind: state.kind,

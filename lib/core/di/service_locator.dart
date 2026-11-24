@@ -9,14 +9,6 @@ import 'package:movify/config/env/app_config.dart';
 import 'package:movify/core/ads/cubits/interstitial_ad_cubit.dart';
 import 'package:movify/core/ads/cubits/privacy_options_cubit.dart';
 import 'package:movify/core/language/presentation/cubits/language_cubit.dart';
-import 'package:movify/shared/data/data_sources/remote_media_data_source.dart';
-import 'package:movify/shared/data/data_sources/remote_media_data_source_impl.dart';
-import 'package:movify/shared/data/repos/media_repo_impl.dart';
-import 'package:movify/shared/domain/repos/media_repo.dart';
-import 'package:movify/shared/domain/use_cases/discover_media_use_case.dart';
-import 'package:movify/shared/domain/use_cases/get_movie_feed_use_case.dart';
-import 'package:movify/shared/domain/use_cases/get_series_feed_use_case.dart';
-import 'package:movify/shared/domain/use_cases/get_trending_use_case.dart';
 import 'package:movify/core/network/api/services/api_service.dart';
 import 'package:movify/core/network/client/dio_client.dart';
 import 'package:movify/core/network/client/dio_factory.dart';
@@ -92,6 +84,7 @@ import 'package:movify/features/home/domian/use_cases/get_movies_use_case.dart';
 import 'package:movify/features/home/domian/use_cases/get_series_use_case.dart';
 import 'package:movify/features/home/presentation/blocs/movie_bloc.dart';
 import 'package:movify/features/home/presentation/blocs/series_bloc.dart';
+import 'package:movify/features/home/presentation/feeds/feed_fetchers.dart';
 import 'package:movify/features/search/data/data_sources/local/local_search_history_data_source.dart';
 import 'package:movify/features/search/data/data_sources/local/local_search_history_data_source_impl.dart';
 import 'package:movify/features/search/data/data_sources/remote/remote_search_data_source.dart';
@@ -115,6 +108,14 @@ import 'package:movify/features/settings/domain/repos/settings_repo.dart';
 import 'package:movify/features/settings/domain/use_cases/get_is_first_time_use_case.dart';
 import 'package:movify/features/settings/domain/use_cases/set_is_first_time_use_case.dart';
 import 'package:movify/features/settings/presentation/cubits/settings_cubit.dart';
+import 'package:movify/shared/data/data_sources/remote_media_data_source.dart';
+import 'package:movify/shared/data/data_sources/remote_media_data_source_impl.dart';
+import 'package:movify/shared/data/repos/media_repo_impl.dart';
+import 'package:movify/shared/domain/repos/media_repo.dart';
+import 'package:movify/shared/domain/use_cases/discover_media_use_case.dart';
+import 'package:movify/shared/domain/use_cases/get_movie_feed_use_case.dart';
+import 'package:movify/shared/domain/use_cases/get_series_feed_use_case.dart';
+import 'package:movify/shared/domain/use_cases/get_trending_use_case.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -329,6 +330,14 @@ void _registerHomeUseCases() {
   );
   getIt.registerLazySingleton<GetSeriesFeedUseCase>(
     () => GetSeriesFeedUseCase(getIt<MediaRepo>()),
+  );
+  getIt.registerLazySingleton<FeedFetchers>(
+    () => FeedFetchers(
+      getMovies: getIt<GetMovieFeedUseCase>(),
+      getSeries: getIt<GetSeriesFeedUseCase>(),
+      getTrending: getIt<GetTrendingUseCase>(),
+      discoverMedia: getIt<DiscoverMediaUseCase>(),
+    ),
   );
   getIt.registerLazySingleton<GetMoviesUseCase>(
     () => GetMoviesUseCase(homeRepo: getIt<HomeRepo>()),

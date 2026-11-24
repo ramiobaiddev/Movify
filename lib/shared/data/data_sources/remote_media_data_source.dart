@@ -1,5 +1,5 @@
-import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/core/pagination/domain/entites/page_result.dart';
+import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/home/data/models/movie_model.dart';
 import 'package:movify/features/home/data/models/series_model.dart';
 import 'package:movify/shared/data/models/media_item_model.dart';

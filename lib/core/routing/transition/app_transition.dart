@@ -158,20 +158,9 @@ class AppTransitions {
         end: end,
       ).chain(CurveTween(curve: curve));
 
-      // Parallax effect on secondary animation (previous page)
-      final secondarySlideTween = Tween(
-        begin: Offset.zero,
-        end: const Offset(-0.3, 0.0),
-      ).chain(CurveTween(curve: curve));
-
-      return Stack(
-        children: [
-          SlideTransition(
-            position: secondaryAnimation.drive(secondarySlideTween),
-            child: child,
-          ),
-          SlideTransition(position: animation.drive(slideTween), child: child),
-        ],
+      return SlideTransition(
+        position: animation.drive(slideTween),
+        child: child,
       );
     },
   );

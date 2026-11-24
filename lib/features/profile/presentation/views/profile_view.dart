@@ -13,7 +13,7 @@ class ProfileView extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.profile, style: AppStyles.textStyle24(context)),
       ),
-      body: const SafeArea(child: ProfileViewBody()),
+      body: const SafeArea(bottom: false, child: ProfileViewBody()),
     );
   }
 }
