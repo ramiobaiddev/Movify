@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
-import 'package:movify/features/see_all/presentation/widgets/filter/filter_action_buttons.dart';
+import 'package:movify/features/see_all/presentation/widgets/sheets/shared/filter_action_buttons.dart';
 import 'package:movify/features/see_all/presentation/widgets/sheets/studio/studio_chip_item.dart';
 import 'package:movify/shared/presentation/widgets/bottom_sheet/app_bottom_sheet.dart';
 

@@ -3,7 +3,7 @@ import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/discover/core/enum/movie_genre.dart';
 import 'package:movify/features/discover/core/enum/tv_genre.dart';
-import 'package:movify/features/see_all/presentation/widgets/filter/filter_genre_chip.dart';
+import 'package:movify/features/see_all/presentation/widgets/sheets/shared/filter_genre_chip.dart';
 
 /// Wrap collection of genre chips based on selected media kind.
 class FilterGenreChips extends StatelessWidget {
