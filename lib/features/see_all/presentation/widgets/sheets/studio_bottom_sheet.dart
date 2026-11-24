@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/see_all/presentation/widgets/sheets/shared/filter_action_buttons.dart';
-import 'package:movify/features/see_all/presentation/widgets/sheets/studio/studio_chip_item.dart';
 import 'package:movify/shared/presentation/widgets/bottom_sheet/app_bottom_sheet.dart';
 
 /// Dedicated Studios (Movies) and Networks (Series) Bottom Sheet.
@@ -114,9 +113,10 @@ class _StudioBottomSheetState extends State<StudioBottomSheet> {
                 runSpacing: Space.sm,
                 children: [
                   for (final item in list)
-                    StudioChipItem(
-                      name: item.$1,
-                      isSelected: _selectedIds.contains(item.$2),
+                    AppChip(
+                      label: item.$1,
+                      selected: _selectedIds.contains(item.$2),
+                      showCheck: true,
                       onTap: () => _toggle(item.$2),
                     ),
                 ],

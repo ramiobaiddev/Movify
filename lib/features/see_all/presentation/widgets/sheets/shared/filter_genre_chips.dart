@@ -3,7 +3,6 @@ import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/discover/core/enum/movie_genre.dart';
 import 'package:movify/features/discover/core/enum/tv_genre.dart';
-import 'package:movify/features/see_all/presentation/widgets/sheets/shared/filter_genre_chip.dart';
 
 /// Wrap collection of genre chips based on selected media kind.
 class FilterGenreChips extends StatelessWidget {
@@ -26,9 +25,10 @@ class FilterGenreChips extends StatelessWidget {
         runSpacing: Space.sm,
         children: [
           for (final genre in MovieGenre.values)
-            FilterGenreChip(
+            AppChip(
               label: genre.localizedText(context),
-              isSelected: selectedGenreIds.contains(genre.id),
+              selected: selectedGenreIds.contains(genre.id),
+              showCheck: true,
               onTap: () => onToggleGenre(genre.id),
             ),
         ],
@@ -40,9 +40,10 @@ class FilterGenreChips extends StatelessWidget {
       runSpacing: Space.sm,
       children: [
         for (final genre in TvGenre.values)
-          FilterGenreChip(
+          AppChip(
             label: genre.localizedText(context),
-            isSelected: selectedGenreIds.contains(genre.id),
+            selected: selectedGenreIds.contains(genre.id),
+            showCheck: true,
             onTap: () => onToggleGenre(genre.id),
           ),
       ],
