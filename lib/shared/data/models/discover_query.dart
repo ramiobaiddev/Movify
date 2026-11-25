@@ -19,7 +19,7 @@ abstract final class DiscoverQuery {
 
     return {
       'page': '$page',
-      'sort_by': _sort(f.sort, dateField),
+      'sort_by': _sort(f.sort, dateField, isMovie),
       if (f.sort == DiscoverSort.ratingDesc ||
           f.sort == DiscoverSort.ratingAsc)
         'vote_count.gte': '$ratingVoteFloor',
@@ -35,14 +35,16 @@ abstract final class DiscoverQuery {
     };
   }
 
-  static String _sort(DiscoverSort sort, String dateField) => switch (sort) {
+  /// `discover/tv` has no revenue sort; fall back to popularity.
+  static String _sort(DiscoverSort sort, String dateField, bool isMovie) =>
+      switch (sort) {
     DiscoverSort.popularityDesc => 'popularity.desc',
     DiscoverSort.popularityAsc => 'popularity.asc',
     DiscoverSort.ratingDesc => 'vote_average.desc',
     DiscoverSort.ratingAsc => 'vote_average.asc',
     DiscoverSort.releaseDateDesc => '$dateField.desc',
     DiscoverSort.releaseDateAsc => '$dateField.asc',
-    DiscoverSort.revenueDesc => 'revenue.desc',
-    DiscoverSort.revenueAsc => 'revenue.asc',
+    DiscoverSort.revenueDesc => isMovie ? 'revenue.desc' : 'popularity.desc',
+    DiscoverSort.revenueAsc => isMovie ? 'revenue.asc' : 'popularity.desc',
   };
 }

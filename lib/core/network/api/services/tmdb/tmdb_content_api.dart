@@ -1,7 +1,5 @@
 // lib/core/network/api/services/tmdb/tmdb_content_api.dart
 
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:movify/constant.dart';
@@ -87,17 +85,14 @@ class TmdbContentApi {
     int page = 1,
     CancelToken? cancelToken,
     String endPoint = 'popular',
-  }) {
-    log(endPoint);
-    return client.get(
-      endPoint,
-      queryParams: {'page': page.toString()},
-      cancelToken: cancelToken,
-      overridePolicy: page <= pageCacheCount
-          ? CachePolicy.request
-          : CachePolicy.noCache,
-    );
-  }
+  }) => client.get(
+    endPoint,
+    queryParams: {'page': page.toString()},
+    cancelToken: cancelToken,
+    overridePolicy: page <= pageCacheCount
+        ? CachePolicy.request
+        : CachePolicy.noCache,
+  );
 
   ApiResponse getTvShows({
     int page = 1,

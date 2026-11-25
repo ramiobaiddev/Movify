@@ -22,7 +22,10 @@ class SeeAllViewBody extends StatelessWidget {
   final SeeAllArgs args;
 
   String _resolveTitle(BuildContext context, SeeAllState state) {
-    if (args.title != null) {
+    // The row's own title only fits the query it opened with; once the kind
+    // or any filter changes (including Reset) fall back to a neutral title.
+    final unchanged = state.kind == args.kind && state.filters == args.filters;
+    if (args.title != null && unchanged) {
       return args.title!;
     }
     if (state.filters.genreIds.isNotEmpty) {

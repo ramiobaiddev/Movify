@@ -29,7 +29,7 @@ class HomeHeroSection extends StatelessWidget {
             if (state.isFirstError) {
               return _HeroErrorView(
                 onRetry: () =>
-                    context.read<PagedCubit<CardDisplayModel>>().load(),
+                    context.read<PagedCubit<CardDisplayModel>>().refresh(),
               );
             }
 
