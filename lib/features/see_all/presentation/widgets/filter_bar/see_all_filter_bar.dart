@@ -5,129 +5,91 @@ import 'package:movify/features/discover/core/enum/movie_genre.dart';
 import 'package:movify/features/discover/core/enum/tv_genre.dart';
 import 'package:movify/features/see_all/presentation/widgets/filter_bar/see_all_filter_chip.dart';
 import 'package:movify/features/see_all/presentation/widgets/filter_bar/see_all_media_switcher.dart';
+import 'package:movify/features/see_all/presentation/widgets/sheets/genre_bottom_sheet.dart';
+import 'package:movify/features/see_all/presentation/widgets/sheets/language_bottom_sheet.dart';
+import 'package:movify/features/see_all/presentation/widgets/sheets/rating_bottom_sheet.dart';
+import 'package:movify/features/see_all/presentation/widgets/sheets/release_date_bottom_sheet.dart';
+import 'package:movify/features/see_all/presentation/widgets/sheets/runtime_bottom_sheet.dart';
 import 'package:movify/features/see_all/presentation/widgets/sheets/studio_bottom_sheet.dart';
 import 'package:movify/shared/domain/entites/discover_filters.dart';
 
-/// Horizontal scrolling filter bar right beneath the top bar matching Figma node 785:10086.
+/// One chip of the bar: what it says, whether a value is set, how to open its
+/// sheet, and the filters with this value cleared.
+class _FilterChipSpec {
+  const _FilterChipSpec({
+    required this.label,
+    required this.active,
+    required this.onOpen,
+    required this.cleared,
+  });
+
+  final String label;
+  final bool active;
+  final VoidCallback onOpen;
+  final DiscoverFilters cleared;
+}
+
+/// Movies/Series switch followed by one chip per filter. Opening a sheet and
+/// applying its result happens here; the screen only receives the new filters.
 class SeeAllFilterBar extends StatelessWidget {
   const SeeAllFilterBar({
     super.key,
     required this.kind,
     required this.filters,
     required this.onKindChanged,
-    required this.onOpenGenres,
-    required this.onClearGenres,
-    required this.onOpenRating,
-    required this.onClearRating,
-    required this.onOpenReleaseDate,
-    required this.onClearReleaseDate,
-    required this.onOpenLanguage,
-    required this.onClearLanguage,
-    required this.onOpenRuntime,
-    required this.onClearRuntime,
-    required this.onOpenStudios,
-    required this.onClearStudios,
+    required this.onFiltersChanged,
   });
 
   final ContentType kind;
   final DiscoverFilters filters;
   final ValueChanged<ContentType> onKindChanged;
-  final VoidCallback onOpenGenres;
-  final VoidCallback onClearGenres;
-  final VoidCallback onOpenRating;
-  final VoidCallback onClearRating;
-  final VoidCallback onOpenReleaseDate;
-  final VoidCallback onClearReleaseDate;
-  final VoidCallback onOpenLanguage;
-  final VoidCallback onClearLanguage;
-  final VoidCallback onOpenRuntime;
-  final VoidCallback onClearRuntime;
-  final VoidCallback onOpenStudios;
-  final VoidCallback onClearStudios;
+  final ValueChanged<DiscoverFilters> onFiltersChanged;
 
-  String _formatGenreLabel(BuildContext context) {
+  /// "First" or "First +2" for a multi-select filter.
+  static String _firstPlusMore(String first, int count) =>
+      count == 1 ? first : '$first +${count - 1}';
+
+  String _genreLabel(BuildContext context) {
     if (filters.genreIds.isEmpty) {
       return 'Genres';
     }
-    final firstId = filters.genreIds.first;
-    String firstName = '';
-    if (kind == ContentType.movies) {
-      final match = MovieGenre.values.where((g) => g.id == firstId);
-      if (match.isNotEmpty) {
-        firstName = match.first.localizedText(context);
-      }
-    } else {
-      final match = TvGenre.values.where((g) => g.id == firstId);
-      if (match.isNotEmpty) {
-        firstName = match.first.localizedText(context);
-      }
-    }
-    if (filters.genreIds.length == 1) {
-      return firstName;
-    }
-    return '$firstName +${filters.genreIds.length - 1}';
+    final id = filters.genreIds.first;
+    final name = kind == ContentType.movies
+        ? MovieGenre.values.where((g) => g.id == id).firstOrNull
+        : TvGenre.values.where((g) => g.id == id).firstOrNull;
+    return _firstPlusMore(
+      name?.localizedText(context) ?? '',
+      filters.genreIds.length,
+    );
   }
 
-  String _formatRatingLabel() {
-    if (filters.minRating == null) {
-      return 'Rating';
-    }
-    return '★ ${filters.minRating!.toStringAsFixed(1)}+';
-  }
+  String _ratingLabel() => filters.minRating == null
+      ? 'Rating'
+      : '★ ${filters.minRating!.toStringAsFixed(1)}+';
 
-  String _formatDateLabel() {
-    if (filters.fromYear == null && filters.toYear == null) {
+  String _dateLabel() {
+    final (from, to) = (filters.fromYear, filters.toYear);
+    if (from == null && to == null) {
       return 'Release date';
     }
-    if (filters.fromYear != null && filters.toYear != null) {
-      if (filters.fromYear == filters.toYear) {
-        return '${filters.fromYear}';
-      }
-      return '${filters.fromYear}-${filters.toYear}';
+    if (from != null && to != null) {
+      return from == to ? '$from' : '$from-$to';
     }
-    if (filters.fromYear != null) {
-      return '${filters.fromYear}+';
-    }
-    return '≤ ${filters.toYear}';
+    return from != null ? '$from+' : '≤ $to';
   }
 
-  String _formatLanguageLabel() {
-    if (filters.languageCode == null) {
-      return 'Language';
-    }
-    const langNames = <String, String>{
-      'en': 'English',
-      'ko': 'Korean',
-      'ja': 'Japanese',
-      'es': 'Spanish',
-      'fr': 'French',
-      'ar': 'Arabic',
-      'de': 'German',
-      'it': 'Italian',
-      'tr': 'Turkish',
-      'hi': 'Hindi',
-      'zh': 'Chinese',
-    };
-    return langNames[filters.languageCode] ??
-        filters.languageCode!.toUpperCase();
-  }
-
-  String _formatRuntimeLabel() {
-    final min = filters.minRuntime;
-    final max = filters.maxRuntime;
+  String _runtimeLabel() {
+    final (min, max) = (filters.minRuntime, filters.maxRuntime);
     if (min == null && max == null) {
       return 'Runtime';
     }
     if (min != null && max != null) {
       return '$min–${max}m';
     }
-    if (min != null) {
-      return '>$min m';
-    }
-    return '<$max m';
+    return min != null ? '>$min m' : '<$max m';
   }
 
-  String _formatStudioLabel() {
+  String _studioLabel() {
     final isMovie = kind == ContentType.movies;
     if (filters.studioIds.isEmpty) {
       return isMovie ? 'Studios' : 'Networks';
@@ -135,75 +97,106 @@ class SeeAllFilterBar extends StatelessWidget {
     final list = isMovie
         ? StudioBottomSheet.movieStudios
         : StudioBottomSheet.tvNetworks;
-    final firstId = filters.studioIds.first;
-    final match = list.where((item) => item.$2 == firstId);
-    final firstName = match.isNotEmpty ? match.first.$1 : 'Selected';
-    if (filters.studioIds.length == 1) {
-      return firstName;
-    }
-    return '$firstName +${filters.studioIds.length - 1}';
+    final id = filters.studioIds.first;
+    final name = list.where((item) => item.$2 == id).firstOrNull?.$1;
+    return _firstPlusMore(name ?? 'Selected', filters.studioIds.length);
+  }
+
+  List<_FilterChipSpec> _specs(BuildContext context) {
+    final f = filters;
+    return [
+      _FilterChipSpec(
+        label: _genreLabel(context),
+        active: f.genreIds.isNotEmpty,
+        cleared: f.copyWith(genreIds: const {}),
+        onOpen: () => GenreBottomSheet.show(
+          context,
+          kind: kind,
+          initialGenreIds: f.genreIds,
+          onApply: (ids) => onFiltersChanged(f.copyWith(genreIds: ids)),
+        ),
+      ),
+      _FilterChipSpec(
+        label: _ratingLabel(),
+        active: f.minRating != null,
+        cleared: f.copyWith(minRating: () => null),
+        onOpen: () => RatingBottomSheet.show(
+          context,
+          selectedRating: f.minRating,
+          onSelectRating: (r) =>
+              onFiltersChanged(f.copyWith(minRating: () => r)),
+        ),
+      ),
+      _FilterChipSpec(
+        label: _dateLabel(),
+        active: f.fromYear != null || f.toYear != null,
+        cleared: f.copyWith(fromYear: () => null, toYear: () => null),
+        onOpen: () => ReleaseDateBottomSheet.show(
+          context,
+          fromYear: f.fromYear,
+          toYear: f.toYear,
+          onSelectYears: (from, to) => onFiltersChanged(
+            f.copyWith(fromYear: () => from, toYear: () => to),
+          ),
+        ),
+      ),
+      _FilterChipSpec(
+        label: f.languageCode == null
+            ? 'Language'
+            : LanguageBottomSheet.nameFor(f.languageCode!),
+        active: f.languageCode != null,
+        cleared: f.copyWith(languageCode: () => null),
+        onOpen: () => LanguageBottomSheet.show(
+          context,
+          selectedLanguage: f.languageCode,
+          onSelectLanguage: (code) =>
+              onFiltersChanged(f.copyWith(languageCode: () => code)),
+        ),
+      ),
+      _FilterChipSpec(
+        label: _runtimeLabel(),
+        active: f.minRuntime != null || f.maxRuntime != null,
+        cleared: f.copyWith(minRuntime: () => null, maxRuntime: () => null),
+        onOpen: () => RuntimeBottomSheet.show(
+          context,
+          minRuntime: f.minRuntime,
+          maxRuntime: f.maxRuntime,
+          onSelectRuntime: (min, max) => onFiltersChanged(
+            f.copyWith(minRuntime: () => min, maxRuntime: () => max),
+          ),
+        ),
+      ),
+      _FilterChipSpec(
+        label: _studioLabel(),
+        active: f.studioIds.isNotEmpty,
+        cleared: f.copyWith(studioIds: const {}),
+        onOpen: () => StudioBottomSheet.show(
+          context,
+          kind: kind,
+          initialStudioIds: f.studioIds,
+          onApply: (ids) => onFiltersChanged(f.copyWith(studioIds: ids)),
+        ),
+      ),
+    ];
   }
 
   @override
-  Widget build(BuildContext context) {
-    final hasGenres = filters.genreIds.isNotEmpty;
-    final hasRating = filters.minRating != null;
-    final hasDate = filters.fromYear != null || filters.toYear != null;
-    final hasLanguage = filters.languageCode != null;
-    final hasRuntime = filters.minRuntime != null || filters.maxRuntime != null;
-    final hasStudios = filters.studioIds.isNotEmpty;
-
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: Space.lg),
-      child: Row(
-        children: [
-          SeeAllMediaSwitcher(selectedKind: kind, onKindChanged: onKindChanged),
-          const SizedBox(width: Space.sm),
+  Widget build(BuildContext context) => SingleChildScrollView(
+    scrollDirection: Axis.horizontal,
+    physics: const BouncingScrollPhysics(),
+    padding: const EdgeInsets.symmetric(horizontal: Space.lg),
+    child: Row(
+      spacing: Space.sm,
+      children: [
+        SeeAllMediaSwitcher(selectedKind: kind, onKindChanged: onKindChanged),
+        for (final spec in _specs(context))
           SeeAllFilterChip(
-            label: _formatGenreLabel(context),
-            isSelected: hasGenres,
-            onTap: onOpenGenres,
-            onClear: hasGenres ? onClearGenres : null,
+            label: spec.label,
+            isSelected: spec.active,
+            onTap: spec.onOpen,
+            onClear: spec.active ? () => onFiltersChanged(spec.cleared) : null,
           ),
-          const SizedBox(width: Space.sm),
-          SeeAllFilterChip(
-            label: _formatRatingLabel(),
-            isSelected: hasRating,
-            onTap: onOpenRating,
-            onClear: hasRating ? onClearRating : null,
-          ),
-          const SizedBox(width: Space.sm),
-          SeeAllFilterChip(
-            label: _formatDateLabel(),
-            isSelected: hasDate,
-            onTap: onOpenReleaseDate,
-            onClear: hasDate ? onClearReleaseDate : null,
-          ),
-          const SizedBox(width: Space.sm),
-          SeeAllFilterChip(
-            label: _formatLanguageLabel(),
-            isSelected: hasLanguage,
-            onTap: onOpenLanguage,
-            onClear: hasLanguage ? onClearLanguage : null,
-          ),
-          const SizedBox(width: Space.sm),
-          SeeAllFilterChip(
-            label: _formatRuntimeLabel(),
-            isSelected: hasRuntime,
-            onTap: onOpenRuntime,
-            onClear: hasRuntime ? onClearRuntime : null,
-          ),
-          const SizedBox(width: Space.sm),
-          SeeAllFilterChip(
-            label: _formatStudioLabel(),
-            isSelected: hasStudios,
-            onTap: onOpenStudios,
-            onClear: hasStudios ? onClearStudios : null,
-          ),
-        ],
-      ),
-    );
-  }
+      ],
+    ),
+  );
 }

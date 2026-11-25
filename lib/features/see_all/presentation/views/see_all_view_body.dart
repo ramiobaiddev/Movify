@@ -10,16 +10,9 @@ import 'package:movify/features/see_all/presentation/cubit/see_all_state.dart';
 import 'package:movify/features/see_all/presentation/models/see_all_args.dart';
 import 'package:movify/features/see_all/presentation/widgets/filter_bar/see_all_filter_bar.dart';
 import 'package:movify/features/see_all/presentation/widgets/grid/see_all_poster_grid.dart';
-import 'package:movify/features/see_all/presentation/widgets/sheets/genre_bottom_sheet.dart';
-import 'package:movify/features/see_all/presentation/widgets/sheets/language_bottom_sheet.dart';
-import 'package:movify/features/see_all/presentation/widgets/sheets/rating_bottom_sheet.dart';
-import 'package:movify/features/see_all/presentation/widgets/sheets/release_date_bottom_sheet.dart';
-import 'package:movify/features/see_all/presentation/widgets/sheets/runtime_bottom_sheet.dart';
 import 'package:movify/features/see_all/presentation/widgets/sheets/sort_bottom_sheet.dart';
-import 'package:movify/features/see_all/presentation/widgets/sheets/studio_bottom_sheet.dart';
 import 'package:movify/features/see_all/presentation/widgets/sort_row/see_all_sort_row.dart';
 import 'package:movify/features/see_all/presentation/widgets/top_bar/see_all_top_bar.dart';
-import 'package:movify/shared/domain/entites/discover_filters.dart';
 import 'package:movify/shared/presentation/models/card_display_model.dart';
 
 /// Body of SeeAllView using pure widget composition matching Figma See All flow.
@@ -49,22 +42,12 @@ class SeeAllViewBody extends StatelessWidget {
     return state.kind == ContentType.movies ? 'Movies' : 'Series';
   }
 
-  bool _hasActiveFilters(DiscoverFilters filters) =>
-      filters.genreIds.isNotEmpty ||
-      filters.minRating != null ||
-      filters.fromYear != null ||
-      filters.toYear != null ||
-      filters.languageCode != null ||
-      filters.minRuntime != null ||
-      filters.maxRuntime != null ||
-      filters.studioIds.isNotEmpty;
-
   @override
   Widget build(BuildContext context) {
     final cubit = context.watch<SeeAllCubit>();
     final state = cubit.state;
     final title = _resolveTitle(context, state);
-    final hasFilters = _hasActiveFilters(state.filters);
+    final hasFilters = state.filters.hasFilters;
 
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
@@ -87,82 +70,7 @@ class SeeAllViewBody extends StatelessWidget {
               kind: state.kind,
               filters: state.filters,
               onKindChanged: cubit.setKind,
-              onOpenGenres: () => GenreBottomSheet.show(
-                context,
-                kind: state.kind,
-                initialGenreIds: state.filters.genreIds,
-                onApply: (newIds) => cubit.applyFilters(
-                  state.filters.copyWith(genreIds: newIds),
-                ),
-              ),
-              onClearGenres: () => cubit.applyFilters(
-                state.filters.copyWith(genreIds: const {}),
-              ),
-              onOpenRating: () => RatingBottomSheet.show(
-                context,
-                selectedRating: state.filters.minRating,
-                onSelectRating: (rating) => cubit.applyFilters(
-                  state.filters.copyWith(minRating: () => rating),
-                ),
-              ),
-              onClearRating: () => cubit.applyFilters(
-                state.filters.copyWith(minRating: () => null),
-              ),
-              onOpenReleaseDate: () => ReleaseDateBottomSheet.show(
-                context,
-                fromYear: state.filters.fromYear,
-                toYear: state.filters.toYear,
-                onSelectYears: (from, to) => cubit.applyFilters(
-                  state.filters.copyWith(
-                    fromYear: () => from,
-                    toYear: () => to,
-                  ),
-                ),
-              ),
-              onClearReleaseDate: () => cubit.applyFilters(
-                state.filters.copyWith(
-                  fromYear: () => null,
-                  toYear: () => null,
-                ),
-              ),
-              onOpenLanguage: () => LanguageBottomSheet.show(
-                context,
-                selectedLanguage: state.filters.languageCode,
-                onSelectLanguage: (code) => cubit.applyFilters(
-                  state.filters.copyWith(languageCode: () => code),
-                ),
-              ),
-              onClearLanguage: () => cubit.applyFilters(
-                state.filters.copyWith(languageCode: () => null),
-              ),
-              onOpenRuntime: () => RuntimeBottomSheet.show(
-                context,
-                minRuntime: state.filters.minRuntime,
-                maxRuntime: state.filters.maxRuntime,
-                onSelectRuntime: (min, max) => cubit.applyFilters(
-                  state.filters.copyWith(
-                    minRuntime: () => min,
-                    maxRuntime: () => max,
-                  ),
-                ),
-              ),
-              onClearRuntime: () => cubit.applyFilters(
-                state.filters.copyWith(
-                  minRuntime: () => null,
-                  maxRuntime: () => null,
-                ),
-              ),
-              onOpenStudios: () => StudioBottomSheet.show(
-                context,
-                kind: state.kind,
-                initialStudioIds: state.filters.studioIds,
-                onApply: (newIds) => cubit.applyFilters(
-                  state.filters.copyWith(studioIds: newIds),
-                ),
-              ),
-              onClearStudios: () => cubit.applyFilters(
-                state.filters.copyWith(studioIds: const {}),
-              ),
+              onFiltersChanged: cubit.applyFilters,
             ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: Space.md)),

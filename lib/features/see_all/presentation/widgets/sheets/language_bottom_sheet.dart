@@ -18,6 +18,17 @@ abstract final class LanguageBottomSheet {
     ('Chinese (中文)', 'zh'),
   ];
 
+  /// English name for a language code ("ko" -> "Korean"), or the upper-cased
+  /// code when it is not in the list.
+  static String nameFor(String code) {
+    for (final (label, value) in _options) {
+      if (value == code) {
+        return label.split(' (').first;
+      }
+    }
+    return code.toUpperCase();
+  }
+
   static Future<void> show(
     BuildContext context, {
     required String? selectedLanguage,

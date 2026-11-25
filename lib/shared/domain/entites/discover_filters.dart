@@ -33,6 +33,17 @@ class DiscoverFilters extends Equatable {
   /// TMDB company ids.
   final Set<int> studioIds;
 
+  /// True when anything other than the sort order is set.
+  bool get hasFilters =>
+      genreIds.isNotEmpty ||
+      minRating != null ||
+      fromYear != null ||
+      toYear != null ||
+      languageCode != null ||
+      minRuntime != null ||
+      maxRuntime != null ||
+      studioIds.isNotEmpty;
+
   DiscoverFilters copyWith({
     DiscoverSort? sort,
     Set<int>? genreIds,
