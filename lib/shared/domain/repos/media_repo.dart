@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:movify/core/errors/failure.dart';
-import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/core/pagination/domain/entites/page_result.dart';
+import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/shared/domain/entites/discover_filters.dart';
 import 'package:movify/shared/domain/entites/media_item.dart';
 import 'package:movify/shared/domain/entites/movie_entity.dart';

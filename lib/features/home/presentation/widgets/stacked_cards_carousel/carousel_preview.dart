@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/widget_previews.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:movify/core/design_system/theme/movify_theme.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/home/presentation/widgets/stacked_cards_carousel/stacked_cards_carousel.dart';

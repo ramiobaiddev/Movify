@@ -4,10 +4,10 @@ import 'package:mocktail/mocktail.dart';
 import 'package:movify/core/pagination/domain/entites/page_result.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/home/presentation/feeds/feed_fetchers.dart';
+import 'package:movify/shared/domain/entites/discover_filters.dart';
 import 'package:movify/shared/domain/entites/media_item.dart';
 import 'package:movify/shared/domain/entites/movie_entity.dart';
 import 'package:movify/shared/domain/entites/series_entity.dart';
-import 'package:movify/shared/domain/entites/discover_filters.dart';
 import 'package:movify/shared/domain/use_cases/discover_media_use_case.dart';
 import 'package:movify/shared/domain/use_cases/get_movie_feed_use_case.dart';
 import 'package:movify/shared/domain/use_cases/get_series_feed_use_case.dart';
@@ -81,14 +81,20 @@ void main() {
 
   test('fixed(movies) calls only the movie use case', () async {
     when(
-      () => movies(page: any(named: 'page'), endPoint: any(named: 'endPoint')),
+      () => movies(
+        page: any(named: 'page'),
+        endPoint: any(named: 'endPoint'),
+      ),
     ).thenAnswer((_) async => Right(_page([_movie(1), _movie(2)])));
 
     final r = await fetchers.fixed(ContentType.movies, 'movie/upcoming')(3);
 
     verify(() => movies(page: 3, endPoint: 'movie/upcoming')).called(1);
     verifyNever(
-      () => series(page: any(named: 'page'), endPoint: any(named: 'endPoint')),
+      () => series(
+        page: any(named: 'page'),
+        endPoint: any(named: 'endPoint'),
+      ),
     );
     final page = r.getOrElse(() => throw StateError('expected Right'));
     expect(page.results.map((c) => c.id), [1, 2]);
@@ -96,7 +102,10 @@ void main() {
 
   test('fixed(series) maps series cards', () async {
     when(
-      () => series(page: any(named: 'page'), endPoint: any(named: 'endPoint')),
+      () => series(
+        page: any(named: 'page'),
+        endPoint: any(named: 'endPoint'),
+      ),
     ).thenAnswer((_) async => Right(_page([_show(7)])));
 
     final r = await fetchers.fixed(ContentType.series, 'tv/on_the_air')(1);

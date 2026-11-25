@@ -42,31 +42,29 @@ class StackedCardsOrbitView extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final w = constraints.maxWidth;
-        final slots = _buildSlots(w);
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) {
+      final w = constraints.maxWidth;
+      final slots = _buildSlots(w);
 
-        final children = slots.map((slot) {
-          final index = orbitIndex(current, slot.offset, cards.length);
-          final card = cards[index];
-          return RepaintBoundary(
-            key: ValueKey<int>(slot.offset),
-            child: StackedCarouselCard(posterPath: card.posterPath),
-          );
-        }).toList();
-
-        return Flow(
-          clipBehavior: Clip.none,
-          delegate: OrbitFlowDelegate(
-            controller: controller,
-            slots: slots,
-            direction: direction,
-          ),
-          children: children,
+      final children = slots.map((slot) {
+        final index = orbitIndex(current, slot.offset, cards.length);
+        final card = cards[index];
+        return RepaintBoundary(
+          key: ValueKey<int>(slot.offset),
+          child: StackedCarouselCard(posterPath: card.posterPath),
         );
-      },
-    );
-  }
+      }).toList();
+
+      return Flow(
+        clipBehavior: Clip.none,
+        delegate: OrbitFlowDelegate(
+          controller: controller,
+          slots: slots,
+          direction: direction,
+        ),
+        children: children,
+      );
+    },
+  );
 }

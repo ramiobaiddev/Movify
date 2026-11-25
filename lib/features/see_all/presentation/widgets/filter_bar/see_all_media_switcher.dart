@@ -23,9 +23,7 @@ class SeeAllMediaSwitcher extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surfaceContainerTonal,
         borderRadius: BorderRadius.circular(Radii.md),
-        border: Border.all(
-          color: colors.surfaceDivider.withValues(alpha: 0.6),
-        ),
+        border: Border.all(color: colors.surfaceDivider.withValues(alpha: 0.6)),
       ),
       child: Row(
         children: [

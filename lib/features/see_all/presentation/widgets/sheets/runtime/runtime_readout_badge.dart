@@ -13,12 +13,18 @@ class RuntimeReadoutBadge extends StatelessWidget {
   final int? maxRuntime;
 
   String _title() {
-    if (minRuntime == null && maxRuntime == null) return 'Any Runtime';
+    if (minRuntime == null && maxRuntime == null) {
+      return 'Any Runtime';
+    }
     if (minRuntime != null && maxRuntime != null) {
-      if (minRuntime == maxRuntime) return '$minRuntime min';
+      if (minRuntime == maxRuntime) {
+        return '$minRuntime min';
+      }
       return '$minRuntime – $maxRuntime min';
     }
-    if (minRuntime != null) return 'Over $minRuntime min';
+    if (minRuntime != null) {
+      return 'Over $minRuntime min';
+    }
     return 'Under $maxRuntime min';
   }
 
@@ -29,7 +35,9 @@ class RuntimeReadoutBadge extends StatelessWidget {
     if (minRuntime != null && maxRuntime != null) {
       return 'Titles lasting between $minRuntime and $maxRuntime minutes';
     }
-    if (minRuntime != null) return 'Titles lasting longer than $minRuntime minutes';
+    if (minRuntime != null) {
+      return 'Titles lasting longer than $minRuntime minutes';
+    }
     return 'Titles shorter than $maxRuntime minutes';
   }
 
@@ -48,9 +56,7 @@ class RuntimeReadoutBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surfaceContainerTonal.withValues(alpha: 0.35),
         borderRadius: BorderRadius.circular(Radii.lg),
-        border: Border.all(
-          color: colors.surfaceDivider.withValues(alpha: 0.6),
-        ),
+        border: Border.all(color: colors.surfaceDivider.withValues(alpha: 0.6)),
       ),
       child: Row(
         children: [

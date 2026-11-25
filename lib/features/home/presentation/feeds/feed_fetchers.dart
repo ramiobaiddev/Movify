@@ -40,20 +40,22 @@ class FeedFetchers {
   /// [ContentType.series]).
   PageFetcher<CardDisplayModel> fixed(ContentType kind, String endPoint) =>
       switch (kind) {
-        ContentType.movies =>
-          (page) async => (await _getMovies(page: page, endPoint: endPoint))
-              .map((r) => r.map((m) => m.toCardDisplay())),
-        ContentType.series =>
-          (page) async => (await _getSeries(page: page, endPoint: endPoint))
-              .map((r) => r.map((s) => s.toCardDisplay())),
+        ContentType.movies => (page) async => (await _getMovies(
+          page: page,
+          endPoint: endPoint,
+        )).map((r) => r.map((m) => m.toCardDisplay())),
+        ContentType.series => (page) async => (await _getSeries(
+          page: page,
+          endPoint: endPoint,
+        )).map((r) => r.map((s) => s.toCardDisplay())),
         _ => throw ArgumentError.value(kind, 'kind', 'movies or series only'),
       };
 
   /// Trending movies and series mixed (`trending/all/day`), people dropped.
   PageFetcher<CardDisplayModel> trending() =>
-      (page) async => (await _getTrending(page: page)).map(
-        (r) => r.map((item) => item.toCardDisplay()),
-      );
+      (page) async => (await _getTrending(
+        page: page,
+      )).map((r) => r.map((item) => item.toCardDisplay()));
 
   /// Filtered list. "For you" is `discover(movies, DiscoverFilters())`
   /// (popularity); "All-time favorites" sorts by rating.

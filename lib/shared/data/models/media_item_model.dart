@@ -39,7 +39,9 @@ class MediaItemModel {
     };
     final id = (json['id'] as num?)?.toInt();
     final poster = json['poster_path'] as String?;
-    if (kind == null || id == null || poster == null) return null;
+    if (kind == null || id == null || poster == null) {
+      return null;
+    }
 
     final isMovie = kind == ContentType.movies;
     return MediaItemModel(

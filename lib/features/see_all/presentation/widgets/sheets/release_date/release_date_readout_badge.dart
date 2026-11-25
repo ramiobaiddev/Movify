@@ -13,12 +13,18 @@ class ReleaseDateReadoutBadge extends StatelessWidget {
   final int? toYear;
 
   String _title() {
-    if (fromYear == null && toYear == null) return 'All Time';
+    if (fromYear == null && toYear == null) {
+      return 'All Time';
+    }
     if (fromYear != null && toYear != null) {
-      if (fromYear == toYear) return '$fromYear';
+      if (fromYear == toYear) {
+        return '$fromYear';
+      }
       return '$fromYear – $toYear';
     }
-    if (fromYear != null) return '$fromYear and later';
+    if (fromYear != null) {
+      return '$fromYear and later';
+    }
     return 'Up to $toYear';
   }
 
@@ -27,10 +33,14 @@ class ReleaseDateReadoutBadge extends StatelessWidget {
       return 'Showing movies and series from any year';
     }
     if (fromYear != null && toYear != null) {
-      if (fromYear == toYear) return 'Titles released specifically in $fromYear';
+      if (fromYear == toYear) {
+        return 'Titles released specifically in $fromYear';
+      }
       return 'Titles released between $fromYear and $toYear';
     }
-    if (fromYear != null) return 'Titles released in $fromYear or after';
+    if (fromYear != null) {
+      return 'Titles released in $fromYear or after';
+    }
     return 'Titles released before or in $toYear';
   }
 
@@ -49,9 +59,7 @@ class ReleaseDateReadoutBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surfaceContainerTonal.withValues(alpha: 0.35),
         borderRadius: BorderRadius.circular(Radii.lg),
-        border: Border.all(
-          color: colors.surfaceDivider.withValues(alpha: 0.6),
-        ),
+        border: Border.all(color: colors.surfaceDivider.withValues(alpha: 0.6)),
       ),
       child: Row(
         children: [

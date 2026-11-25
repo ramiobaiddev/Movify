@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
-import 'package:movify/features/see_all/presentation/widgets/sheets/shared/filter_action_buttons.dart';
 import 'package:movify/features/see_all/presentation/widgets/sheets/runtime/runtime_preset_chips.dart';
 import 'package:movify/features/see_all/presentation/widgets/sheets/runtime/runtime_range_slider_bar.dart';
 import 'package:movify/features/see_all/presentation/widgets/sheets/runtime/runtime_readout_badge.dart';
+import 'package:movify/features/see_all/presentation/widgets/sheets/shared/filter_action_buttons.dart';
 import 'package:movify/shared/presentation/widgets/bottom_sheet/app_bottom_sheet.dart';
 
 /// Dedicated Runtime Bottom Sheet with dual-thumb duration range slider and presets.
@@ -27,7 +27,6 @@ class RuntimeBottomSheet extends StatefulWidget {
   }) => AppBottomSheet.show<void>(
     context,
     title: 'Runtime',
-    isScrollable: false,
     child: RuntimeBottomSheet(
       initialMinRuntime: minRuntime,
       initialMaxRuntime: maxRuntime,

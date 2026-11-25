@@ -24,10 +24,7 @@ class SeeAllResetButton extends StatelessWidget {
       ),
       child: Text(
         'Reset',
-        style: textTheme.labelLarge?.copyWith(
-          color: colors.primary300,
-          fontWeight: FontWeight.w700,
-        ),
+        style: textTheme.labelLarge?.copyWith(color: colors.primary300),
       ),
     );
   }

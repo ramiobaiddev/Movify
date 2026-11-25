@@ -53,7 +53,9 @@ abstract final class GenreMapping {
     required ContentType from,
     required ContentType to,
   }) {
-    if (from == to) return GenreMapResult(mapped: ids, dropped: const {});
+    if (from == to) {
+      return GenreMapResult(mapped: ids, dropped: const {});
+    }
     final table = from == ContentType.movies ? _movieToTv : _tvToMovie;
     final mapped = <int>{};
     final dropped = <int>{};

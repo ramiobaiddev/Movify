@@ -47,7 +47,10 @@ void main() {
       ),
     );
     when(
-      () => movies(page: any(named: 'page'), endPoint: any(named: 'endPoint')),
+      () => movies(
+        page: any(named: 'page'),
+        endPoint: any(named: 'endPoint'),
+      ),
     ).thenAnswer(
       (_) async => const Right(
         PageResult(page: 1, totalPages: 1, totalResults: 0, results: []),
@@ -58,30 +61,33 @@ void main() {
   SeeAllCubit make(SeeAllArgs args) =>
       SeeAllCubit(args: args, fetchers: fetchers);
 
-  test('setKind maps genres, drops unmatched, clears studios, keeps rating', () {
-    final cubit = make(
-      const SeeAllArgs.discover(
-        kind: ContentType.movies,
-        filters: DiscoverFilters(
-          genreIds: {28, 27},
-          studioIds: {420},
-          minRating: 7,
+  test(
+    'setKind maps genres, drops unmatched, clears studios, keeps rating',
+    () {
+      final cubit = make(
+        const SeeAllArgs.discover(
+          kind: ContentType.movies,
+          filters: DiscoverFilters(
+            genreIds: {28, 27},
+            studioIds: {420},
+            minRating: 7,
+          ),
         ),
-      ),
-    );
+      );
 
-    cubit.setKind(ContentType.series);
+      cubit.setKind(ContentType.series);
 
-    expect(cubit.state.kind, ContentType.series);
-    expect(cubit.state.filters.genreIds, {10759});
-    expect(cubit.state.filters.studioIds, isEmpty);
-    expect(cubit.state.filters.minRating, 7);
-    expect(cubit.state.droppedGenreIds, {27});
-    expect(cubit.state.revision, 1);
+      expect(cubit.state.kind, ContentType.series);
+      expect(cubit.state.filters.genreIds, {10759});
+      expect(cubit.state.filters.studioIds, isEmpty);
+      expect(cubit.state.filters.minRating, 7);
+      expect(cubit.state.droppedGenreIds, {27});
+      expect(cubit.state.revision, 1);
 
-    cubit.clearNotice();
-    expect(cubit.state.droppedGenreIds, isEmpty);
-  });
+      cubit.clearNotice();
+      expect(cubit.state.droppedGenreIds, isEmpty);
+    },
+  );
 
   test('reset clears filters and sort, keeps the kind', () {
     final cubit = make(
@@ -126,7 +132,7 @@ void main() {
 
     expect(cubit.state.revision, 0);
     expect(cubit.state.kind, ContentType.movies);
-    verify(() => movies(page: 1, endPoint: 'movie/upcoming')).called(1);
+    verify(() => movies(endPoint: 'movie/upcoming')).called(1);
     verifyNever(
       () => discover(
         kind: any(named: 'kind'),

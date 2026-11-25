@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
-import 'package:movify/core/design_system/tokens/app_colors.dart';
-import 'package:movify/core/design_system/tokens/radii.dart';
-import 'package:movify/core/design_system/tokens/spacing.dart';
 import 'package:movify/core/formatters/formatted_date_method.dart';
 import 'package:movify/core/utils/helper/get_gener_name.dart';
 import 'package:movify/shared/presentation/models/card_display_model.dart';

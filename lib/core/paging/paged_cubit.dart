@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movify/core/errors/failure.dart';
-import 'package:movify/core/paging/paged_state.dart';
 import 'package:movify/core/pagination/domain/entites/page_result.dart';
+import 'package:movify/core/paging/paged_state.dart';
 
 /// Fetches one page (1-based). Filters, sort order and endpoints are captured
 /// by the closure, so the cubit needs no params type:

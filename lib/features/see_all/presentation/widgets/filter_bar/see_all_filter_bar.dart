@@ -46,22 +46,32 @@ class SeeAllFilterBar extends StatelessWidget {
   final VoidCallback onClearStudios;
 
   String _formatGenreLabel(BuildContext context) {
-    if (filters.genreIds.isEmpty) return 'Genres';
+    if (filters.genreIds.isEmpty) {
+      return 'Genres';
+    }
     final firstId = filters.genreIds.first;
     String firstName = '';
     if (kind == ContentType.movies) {
       final match = MovieGenre.values.where((g) => g.id == firstId);
-      if (match.isNotEmpty) firstName = match.first.localizedText(context);
+      if (match.isNotEmpty) {
+        firstName = match.first.localizedText(context);
+      }
     } else {
       final match = TvGenre.values.where((g) => g.id == firstId);
-      if (match.isNotEmpty) firstName = match.first.localizedText(context);
+      if (match.isNotEmpty) {
+        firstName = match.first.localizedText(context);
+      }
     }
-    if (filters.genreIds.length == 1) return firstName;
+    if (filters.genreIds.length == 1) {
+      return firstName;
+    }
     return '$firstName +${filters.genreIds.length - 1}';
   }
 
   String _formatRatingLabel() {
-    if (filters.minRating == null) return 'Rating';
+    if (filters.minRating == null) {
+      return 'Rating';
+    }
     return '★ ${filters.minRating!.toStringAsFixed(1)}+';
   }
 
@@ -70,15 +80,21 @@ class SeeAllFilterBar extends StatelessWidget {
       return 'Release date';
     }
     if (filters.fromYear != null && filters.toYear != null) {
-      if (filters.fromYear == filters.toYear) return '${filters.fromYear}';
+      if (filters.fromYear == filters.toYear) {
+        return '${filters.fromYear}';
+      }
       return '${filters.fromYear}-${filters.toYear}';
     }
-    if (filters.fromYear != null) return '${filters.fromYear}+';
+    if (filters.fromYear != null) {
+      return '${filters.fromYear}+';
+    }
     return '≤ ${filters.toYear}';
   }
 
   String _formatLanguageLabel() {
-    if (filters.languageCode == null) return 'Language';
+    if (filters.languageCode == null) {
+      return 'Language';
+    }
     const langNames = <String, String>{
       'en': 'English',
       'ko': 'Korean',
@@ -92,15 +108,22 @@ class SeeAllFilterBar extends StatelessWidget {
       'hi': 'Hindi',
       'zh': 'Chinese',
     };
-    return langNames[filters.languageCode] ?? filters.languageCode!.toUpperCase();
+    return langNames[filters.languageCode] ??
+        filters.languageCode!.toUpperCase();
   }
 
   String _formatRuntimeLabel() {
     final min = filters.minRuntime;
     final max = filters.maxRuntime;
-    if (min == null && max == null) return 'Runtime';
-    if (min != null && max != null) return '${min}–${max}m';
-    if (min != null) return '>$min m';
+    if (min == null && max == null) {
+      return 'Runtime';
+    }
+    if (min != null && max != null) {
+      return '$min–${max}m';
+    }
+    if (min != null) {
+      return '>$min m';
+    }
     return '<$max m';
   }
 
@@ -115,7 +138,9 @@ class SeeAllFilterBar extends StatelessWidget {
     final firstId = filters.studioIds.first;
     final match = list.where((item) => item.$2 == firstId);
     final firstName = match.isNotEmpty ? match.first.$1 : 'Selected';
-    if (filters.studioIds.length == 1) return firstName;
+    if (filters.studioIds.length == 1) {
+      return firstName;
+    }
     return '$firstName +${filters.studioIds.length - 1}';
   }
 
@@ -134,10 +159,7 @@ class SeeAllFilterBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: Space.lg),
       child: Row(
         children: [
-          SeeAllMediaSwitcher(
-            selectedKind: kind,
-            onKindChanged: onKindChanged,
-          ),
+          SeeAllMediaSwitcher(selectedKind: kind, onKindChanged: onKindChanged),
           const SizedBox(width: Space.sm),
           SeeAllFilterChip(
             label: _formatGenreLabel(context),
