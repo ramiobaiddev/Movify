@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
-import 'package:movify/features/see_all/presentation/widgets/sheets/shared/filter_action_buttons.dart';
+import 'package:movify/shared/presentation/widgets/bottom_sheet/filter_action_buttons.dart';
 import 'package:movify/features/see_all/presentation/widgets/sheets/release_date/release_date_preset_chips.dart';
 import 'package:movify/features/see_all/presentation/widgets/sheets/release_date/release_date_range_slider_bar.dart';
 import 'package:movify/features/see_all/presentation/widgets/sheets/release_date/release_date_readout_badge.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
-import 'package:movify/features/see_all/presentation/widgets/sheets/shared/filter_action_buttons.dart';
+import 'package:movify/shared/presentation/widgets/bottom_sheet/filter_action_buttons.dart';
 import 'package:movify/features/see_all/presentation/widgets/sheets/rating/rating_preset_chips.dart';
 import 'package:movify/features/see_all/presentation/widgets/sheets/rating/rating_readout_badge.dart';
 import 'package:movify/features/see_all/presentation/widgets/sheets/rating/rating_slider_bar.dart';

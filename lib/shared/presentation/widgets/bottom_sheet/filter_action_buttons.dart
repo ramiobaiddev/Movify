@@ -37,7 +37,7 @@ class FilterActionButtons extends StatelessWidget {
             child: Text(
               'Apply Filters',
               style: textTheme.labelLarge?.copyWith(
-                color: Colors.white,
+                color: colors.textOnImage,
                 fontWeight: FontWeight.w700,
               ),
             ),
