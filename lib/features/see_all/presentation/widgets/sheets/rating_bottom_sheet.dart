@@ -1,77 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
-import 'package:movify/features/see_all/presentation/widgets/sheets/rating/rating_preset_chips.dart';
-import 'package:movify/features/see_all/presentation/widgets/sheets/rating/rating_readout_badge.dart';
-import 'package:movify/features/see_all/presentation/widgets/sheets/rating/rating_slider_bar.dart';
-import 'package:movify/shared/presentation/widgets/bottom_sheet/app_bottom_sheet.dart';
-import 'package:movify/shared/presentation/widgets/bottom_sheet/filter_action_buttons.dart';
+import 'package:movify/shared/presentation/widgets/bottom_sheet/draft_sheet.dart';
+import 'package:movify/shared/presentation/widgets/bottom_sheet/preset_chips.dart';
+import 'package:movify/shared/presentation/widgets/bottom_sheet/readout_badge.dart';
+import 'package:movify/shared/presentation/widgets/bottom_sheet/sheet_sliders.dart';
 
-/// Dedicated Rating Bottom Sheet with interactive slider, readout badge, and presets.
-class RatingBottomSheet extends StatefulWidget {
-  const RatingBottomSheet({
-    super.key,
-    required this.initialRating,
-    required this.onApply,
-  });
+/// Minimum rating (0.5 steps). null = any rating.
+abstract final class RatingBottomSheet {
+  static const _presets = <(String, double?)>[
+    ('Any', null),
+    ('6.0+', 6.0),
+    ('7.0+', 7.0),
+    ('8.0+', 8.0),
+    ('8.5+', 8.5),
+  ];
 
-  final double? initialRating;
-  final ValueChanged<double?> onApply;
+  static String _describe(double rating) {
+    if (rating >= 8.5) {
+      return 'Masterpieces & highly celebrated';
+    }
+    if (rating >= 8.0) {
+      return 'Exceptional & critically acclaimed';
+    }
+    if (rating >= 7.0) {
+      return 'Great & positively reviewed';
+    }
+    if (rating >= 6.0) {
+      return 'Good & generally well received';
+    }
+    return 'Titles rated $rating and higher';
+  }
 
   static Future<void> show(
     BuildContext context, {
     required double? selectedRating,
     required ValueChanged<double?> onSelectRating,
-  }) => AppBottomSheet.show<void>(
+  }) => DraftSheet.show<double?>(
     context,
     title: 'Rating',
-    child: RatingBottomSheet(
-      initialRating: selectedRating,
-      onApply: onSelectRating,
+    initial: selectedRating,
+    emptyValue: null,
+    onApply: onSelectRating,
+    builder: (context, rating, set) => Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ReadoutBadge(
+          icon: rating == null
+              ? Icons.all_inclusive_rounded
+              : Icons.star_rounded,
+          title: rating == null
+              ? 'Any Rating'
+              : '${rating.toStringAsFixed(1)}+ / 10',
+          subtitle: rating == null
+              ? 'Showing all titles without rating restrictions'
+              : _describe(rating),
+          active: rating != null,
+          accent: context.colors.statusWarning,
+        ),
+        const SizedBox(height: Space.lg),
+        PresetChips<double?>(presets: _presets, selected: rating, onSelect: set),
+        const SizedBox(height: Space.sm),
+        SheetSlider(
+          min: 0,
+          max: 10,
+          divisions: 20,
+          value: rating,
+          onChanged: set,
+          tickLabels: const ['0.0 (Any)', '5.0', '10.0'],
+        ),
+      ],
     ),
-  );
-
-  @override
-  State<RatingBottomSheet> createState() => _RatingBottomSheetState();
-}
-
-class _RatingBottomSheetState extends State<RatingBottomSheet> {
-  late double? _currentRating;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentRating = widget.initialRating;
-  }
-
-  void _onReset() {
-    setState(() {
-      _currentRating = null;
-    });
-  }
-
-  void _onApply() {
-    widget.onApply(_currentRating);
-    Navigator.of(context).pop();
-  }
-
-  @override
-  Widget build(BuildContext context) => Column(
-    mainAxisSize: MainAxisSize.min,
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      RatingReadoutBadge(rating: _currentRating),
-      const SizedBox(height: Space.lg),
-      RatingPresetChips(
-        selectedRating: _currentRating,
-        onSelect: (val) => setState(() => _currentRating = val),
-      ),
-      const SizedBox(height: Space.sm),
-      RatingSliderBar(
-        rating: _currentRating,
-        onChanged: (val) => setState(() => _currentRating = val),
-      ),
-      const SizedBox(height: Space.lg),
-      FilterActionButtons(onReset: _onReset, onApply: _onApply),
-    ],
   );
 }
