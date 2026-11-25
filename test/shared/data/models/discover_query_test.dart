@@ -64,4 +64,33 @@ void main() {
     expect(sort(ContentType.movies, DiscoverSort.newest), 'primary_release_date.desc');
     expect(sort(ContentType.series, DiscoverSort.oldest), 'first_air_date.asc');
   });
+
+  test('series studios use with_networks joined with OR', () {
+    final q = DiscoverQuery.build(
+      kind: ContentType.series,
+      filters: const DiscoverFilters(studioIds: {213, 49}),
+      page: 1,
+    );
+    expect(q['with_networks'], '213|49');
+    expect(q.containsKey('with_companies'), isFalse);
+  });
+
+  test('movie studios use with_companies joined with OR', () {
+    final q = DiscoverQuery.build(
+      kind: ContentType.movies,
+      filters: const DiscoverFilters(studioIds: {420, 3}),
+      page: 1,
+    );
+    expect(q['with_companies'], '420|3');
+  });
+
+  test('revenue sort works for movies but falls back to popularity for tv', () {
+    String sort(ContentType k) => DiscoverQuery.build(
+      kind: k,
+      filters: const DiscoverFilters(sort: DiscoverSort.revenueDesc),
+      page: 1,
+    )['sort_by']!;
+    expect(sort(ContentType.movies), 'revenue.desc');
+    expect(sort(ContentType.series), 'popularity.desc');
+  });
 }
