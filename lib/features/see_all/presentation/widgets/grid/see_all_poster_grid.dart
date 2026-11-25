@@ -32,7 +32,7 @@ class SeeAllPosterGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.widthOf(context);
     // 2 columns on phone, 3–4 columns on tablet
-    final int columns = screenWidth >= 900 ? 4 : (screenWidth >= 600 ? 3 : 2);
+    final int columns = screenWidth >= 900 ? 4 : (screenWidth >= 600 ? 4 : 3);
     final double cardWidth =
         (screenWidth - (Space.lg * 2) - ((columns - 1) * Space.md)) / columns;
     final double cardHeight = PosterRowMetrics.height(

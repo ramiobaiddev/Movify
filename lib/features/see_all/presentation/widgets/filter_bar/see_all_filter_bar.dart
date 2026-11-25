@@ -57,10 +57,7 @@ class SeeAllFilterBar extends StatelessWidget {
     final name = kind == ContentType.movies
         ? MovieGenre.values.where((g) => g.id == id).firstOrNull
         : TvGenre.values.where((g) => g.id == id).firstOrNull;
-    return _firstPlusMore(
-      name?.localizedText(context) ?? '',
-      filters.genreIds.length,
-    );
+    return _firstPlusMore(name?.name ?? '', filters.genreIds.length);
   }
 
   String _ratingLabel() => filters.minRating == null

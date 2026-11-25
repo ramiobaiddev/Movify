@@ -3,20 +3,18 @@ import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/shared/presentation/widgets/bottom_sheet/app_bottom_sheet.dart';
 import 'package:movify/shared/presentation/widgets/bottom_sheet/app_bottom_sheet_radio_tile.dart';
 
-/// Turnkey generic single-selection bottom sheet for enum or value lists.
 class AppSelectionBottomSheet<T> extends StatelessWidget {
   const AppSelectionBottomSheet({
     super.key,
     required this.options,
     required this.selectedValue,
-    required this.onSelect,
+    this.onSelect,
   });
 
   final List<(String label, T value)> options;
   final T selectedValue;
-  final ValueChanged<T> onSelect;
+  final ValueChanged<T>? onSelect;
 
-  /// Displays the selection bottom sheet and returns the picked value.
   static Future<T?> show<T>(
     BuildContext context, {
     required String title,
@@ -30,7 +28,6 @@ class AppSelectionBottomSheet<T> extends StatelessWidget {
     child: AppSelectionBottomSheet<T>(
       options: options,
       selectedValue: selectedValue,
-      onSelect: (val) => Navigator.of(context).pop(val),
     ),
   );
 
@@ -42,7 +39,13 @@ class AppSelectionBottomSheet<T> extends StatelessWidget {
         AppBottomSheetRadioTile(
           title: label,
           isSelected: selectedValue == value,
-          onTap: () => onSelect(value),
+          onTap: () {
+            if (onSelect != null) {
+              onSelect!(value);
+            } else {
+              Navigator.of(context, rootNavigator: true).pop(value);
+            }
+          },
         ),
         const SizedBox(height: Space.sm),
       ],

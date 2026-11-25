@@ -56,9 +56,6 @@ class SortOptionTile extends StatelessWidget {
                     Text(
                       title,
                       style: textTheme.titleSmall?.copyWith(
-                        fontWeight: isSelected
-                            ? FontWeight.w700
-                            : FontWeight.w500,
                         color: isSelected
                             ? colors.textPrimary
                             : colors.textContrast,
@@ -89,7 +86,7 @@ class SortOptionTile extends StatelessWidget {
                     isAscending
                         ? Icons.arrow_downward_rounded
                         : Icons.arrow_upward_rounded,
-                    color: Colors.white,
+                    color: colors.textOnImage,
                     size: 20,
                   ),
                 )

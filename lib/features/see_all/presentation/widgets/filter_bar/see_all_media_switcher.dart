@@ -26,6 +26,7 @@ class SeeAllMediaSwitcher extends StatelessWidget {
         border: Border.all(color: colors.surfaceDivider.withValues(alpha: 0.6)),
       ),
       child: Row(
+        spacing: Space.xsm,
         children: [
           Expanded(
             child: _PillItem(
@@ -78,9 +79,7 @@ class _PillItem extends StatelessWidget {
         child: Text(
           title,
           style: textTheme.labelMedium?.copyWith(
-            fontWeight: FontWeight.w700,
-            color: isSelected ? Colors.white : colors.textContrast,
-            fontSize: 12,
+            color: isSelected ? colors.textOnImage : colors.textContrast,
           ),
         ),
       ),
