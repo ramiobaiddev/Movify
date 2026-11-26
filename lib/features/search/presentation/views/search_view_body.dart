@@ -8,29 +8,24 @@ import 'package:movify/features/search/presentation/widgets/search_history_view.
 
 /// Body of SearchView dynamically switching between initial loading, history, and active results.
 class SearchViewBody extends StatelessWidget {
-  const SearchViewBody({
-    super.key,
-    required this.onHistoryItemTap,
-  });
+  const SearchViewBody({super.key, required this.onHistoryItemTap});
 
   final ValueChanged<SearchHistoryEntity> onHistoryItemTap;
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<SearchCubit, SearchState>(
-      builder: (context, state) => switch (state) {
-        SearchInitial() => const SizedBox.shrink(),
-        SearchHistoryLoaded(:final history) => SearchHistoryView(
-          history: history,
-          onItemTap: onHistoryItemTap,
-          onItemDelete: (item) => context.read<SearchCubit>().deleteFromHistory(
-            item.id,
-            item.historyContentType,
-          ),
-          onClearAll: () => context.read<SearchCubit>().clearHistory(),
+  Widget build(BuildContext context) => BlocBuilder<SearchCubit, SearchState>(
+    builder: (context, state) => switch (state) {
+      SearchInitial() => const SizedBox.shrink(),
+      SearchHistoryLoaded(:final history) => SearchHistoryView(
+        history: history,
+        onItemTap: onHistoryItemTap,
+        onItemDelete: (item) => context.read<SearchCubit>().deleteFromHistory(
+          item.id,
+          item.historyContentType,
         ),
-        SearchActive() => SearchResultsView(state: state),
-      },
-    );
-  }
+        onClearAll: () => context.read<SearchCubit>().clearHistory(),
+      ),
+      SearchActive() => SearchResultsView(state: state),
+    },
+  );
 }

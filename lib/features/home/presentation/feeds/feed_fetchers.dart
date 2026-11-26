@@ -22,29 +22,26 @@ abstract final class FeedEndpoint {
 ///     ContentType.movies, FeedEndpoint.movieUpcoming))
 class FeedFetchers {
   const FeedFetchers({
-    required GetMovieFeedUseCase getMovies,
-    required GetSeriesFeedUseCase getSeries,
-    required GetTrendingUseCase getTrending,
-    required DiscoverMediaUseCase discoverMedia,
-  }) : _getMovies = getMovies,
-       _getSeries = getSeries,
-       _getTrending = getTrending,
-       _discover = discoverMedia;
+    required this.getMovies,
+    required this.getSeries,
+    required this.getTrending,
+    required this.discoverMedia,
+  });
 
-  final GetMovieFeedUseCase _getMovies;
-  final GetSeriesFeedUseCase _getSeries;
-  final GetTrendingUseCase _getTrending;
-  final DiscoverMediaUseCase _discover;
+  final GetMovieFeedUseCase getMovies;
+  final GetSeriesFeedUseCase getSeries;
+  final GetTrendingUseCase getTrending;
+  final DiscoverMediaUseCase discoverMedia;
 
   /// A fixed endpoint for one kind ([ContentType.movies] or
   /// [ContentType.series]).
   PageFetcher<CardDisplayModel> fixed(ContentType kind, String endPoint) =>
       switch (kind) {
-        ContentType.movies => (page) async => (await _getMovies(
+        ContentType.movies => (page) async => (await getMovies(
           page: page,
           endPoint: endPoint,
         )).map((r) => r.map((m) => m.toCardDisplay())),
-        ContentType.series => (page) async => (await _getSeries(
+        ContentType.series => (page) async => (await getSeries(
           page: page,
           endPoint: endPoint,
         )).map((r) => r.map((s) => s.toCardDisplay())),
@@ -53,7 +50,7 @@ class FeedFetchers {
 
   /// Trending movies and series mixed (`trending/all/day`), people dropped.
   PageFetcher<CardDisplayModel> trending() =>
-      (page) async => (await _getTrending(
+      (page) async => (await getTrending(
         page: page,
       )).map((r) => r.map((item) => item.toCardDisplay()));
 
@@ -63,7 +60,7 @@ class FeedFetchers {
     ContentType kind,
     DiscoverFilters filters,
   ) =>
-      (page) async => (await _discover(
+      (page) async => (await discoverMedia(
         kind: kind,
         filters: filters,
         page: page,

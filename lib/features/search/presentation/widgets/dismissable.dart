@@ -8,12 +8,11 @@ class CustomDismisable extends StatelessWidget {
     super.key,
     required this.child,
     required this.onDelete,
-    required this.id,
+
     required this.item,
   });
   final Widget child;
   final VoidCallback onDelete;
-  final int id;
   final SearchHistoryEntity item;
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class CustomDismisable extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return Dismissible(
       key: ValueKey(
-        'history_${item.id}_${item.searchedAt.millisecondsSinceEpoch}',
+        'history_${item.id}_${item.searchedAt.millisecondsSinceEpoch}${item.historyContentType.text}',
       ),
       direction: DismissDirection.endToStart,
       onDismissed: (_) => onDelete(),

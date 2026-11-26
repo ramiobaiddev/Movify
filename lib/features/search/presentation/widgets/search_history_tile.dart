@@ -45,7 +45,6 @@ class SearchHistoryTile extends StatelessWidget {
         : null;
 
     return CustomDismisable(
-      id: item.id,
       item: item,
       onDelete: onDelete,
       child: Material(
