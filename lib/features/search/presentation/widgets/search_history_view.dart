@@ -16,7 +16,7 @@ class SearchHistoryView extends StatelessWidget {
 
   final List<SearchHistoryEntity> history;
   final ValueChanged<SearchHistoryEntity> onItemTap;
-  final ValueChanged<int> onItemDelete;
+  final ValueChanged<SearchHistoryEntity> onItemDelete;
   final VoidCallback onClearAll;
 
   @override
@@ -72,7 +72,7 @@ class SearchHistoryView extends StatelessWidget {
             return SearchHistoryTile(
               item: item,
               onTap: () => onItemTap(item),
-              onDelete: () => onItemDelete(item.id),
+              onDelete: () => onItemDelete(item),
             );
           },
         ),

@@ -23,8 +23,10 @@ class SearchViewBody extends StatelessWidget {
         SearchHistoryLoaded(:final history) => SearchHistoryView(
           history: history,
           onItemTap: onHistoryItemTap,
-          onItemDelete: (id) =>
-              context.read<SearchCubit>().deleteFromHistory(id),
+          onItemDelete: (item) => context.read<SearchCubit>().deleteFromHistory(
+            item.id,
+            item.historyContentType,
+          ),
           onClearAll: () => context.read<SearchCubit>().clearHistory(),
         ),
         SearchActive() => SearchResultsView(state: state),

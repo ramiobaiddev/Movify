@@ -1,3 +1,4 @@
+import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/search/domain/repo/search_history.dart';
 
 class DeleteSearchHistoryUseCase {
@@ -5,5 +6,6 @@ class DeleteSearchHistoryUseCase {
 
   DeleteSearchHistoryUseCase({required this.searchHistoryRepo});
 
-  Future<void> call(int id) => searchHistoryRepo.deleteFromSearchHistory(id);
+  Future<void> call(int id, ContentType type) =>
+      searchHistoryRepo.deleteFromSearchHistory(id, type);
 }

@@ -146,9 +146,9 @@ class SearchCubit extends Cubit<SearchState> {
     } catch (_) {}
   }
 
-  Future<void> deleteFromHistory(int id) async {
+  Future<void> deleteFromHistory(int id, ContentType type) async {
     try {
-      await _historyRepo.deleteFromSearchHistory(id);
+      await _historyRepo.deleteFromSearchHistory(id, type);
       await loadHistory();
     } catch (_) {}
   }

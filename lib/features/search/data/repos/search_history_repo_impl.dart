@@ -1,3 +1,4 @@
+import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/search/data/data_sources/local/local_search_history_data_source.dart';
 import 'package:movify/features/search/data/models/search_history_model.dart';
 import 'package:movify/features/search/domain/entities/search_history_entity.dart';
@@ -25,6 +26,6 @@ class SearchHistoryRepoImpl implements SearchHistoryRepo {
   }
 
   @override
-  Future<void> deleteFromSearchHistory(int id) =>
-      localSearchDataSource.deleteFromSearchHistory(id);
+  Future<void> deleteFromSearchHistory(int id, ContentType type) =>
+      localSearchDataSource.deleteFromSearchHistory(id, type);
 }

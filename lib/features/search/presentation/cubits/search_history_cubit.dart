@@ -1,5 +1,6 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:movify/core/network/utils/safe_emit_state.dart';
+import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/search/domain/entities/search_history_entity.dart';
 import 'package:movify/features/search/domain/use_cases/add_to_history_use_case.dart';
 import 'package:movify/features/search/domain/use_cases/clear_search_history_use_case.dart';
@@ -33,8 +34,8 @@ class SearchHistoryCubit extends Cubit<SearchHistoryState> {
     getSearchHistory();
   }
 
-  Future<void> deleteFromHistory(int id) async {
-    await deleteFromSearchHistoryUseCase.call(id);
+  Future<void> deleteFromHistory(int id, ContentType type) async {
+    await deleteFromSearchHistoryUseCase.call(id, type);
     getSearchHistory();
   }
 
