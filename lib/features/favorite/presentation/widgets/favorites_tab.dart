@@ -209,7 +209,7 @@ class _TabSkeleton extends StatelessWidget {
     final layout = PosterGridLayout.of(context);
     return SingleChildScrollView(
       physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.only(top: Space.lg),
+      padding: const EdgeInsets.fromLTRB(Space.lg, Space.lg, Space.lg, 0),
       child: SeeAllGridSkeleton(
         columns: layout.columns,
         childAspectRatio: layout.childAspectRatio,
