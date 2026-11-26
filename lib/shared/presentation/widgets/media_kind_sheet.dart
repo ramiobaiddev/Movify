@@ -15,8 +15,8 @@ Future<ContentType?> showMediaKindSheet(
     context,
     title: 'Type',
     options: [
-      (l10n.movies, ContentType.movies),
-      (l10n.tvShows, ContentType.series),
+      AppSelectionOption(l10n.movies, ContentType.movies),
+      AppSelectionOption(l10n.tvShows, ContentType.series),
     ],
     selectedValue: selected,
   );

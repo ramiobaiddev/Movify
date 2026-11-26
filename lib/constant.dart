@@ -14,4 +14,7 @@ class Constants {
   );
   static const String bundleIdentifier = 'com.example.movify';
   static const int pageCacheCount = 3;
+  static const String appLinlk =
+      'https://play.google.com/store/apps/details?id=com.rami.movify';
+  static const String supportEmail = 'ramiobaid545421@gmail.com';
 }

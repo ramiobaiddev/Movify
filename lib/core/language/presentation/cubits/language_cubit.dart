@@ -23,7 +23,7 @@ class LanguageCubit extends HydratedCubit<LanguageState>
 
   static Locale _getSystemFallbackLocale(Locale systemLocale) {
     final langCode = systemLocale.languageCode;
-    if (['ar', 'en', 'tr', 'fr', 'es'].contains(langCode)) {
+    if (['ar', 'en', 'tr', 'fr', 'es', 'de'].contains(langCode)) {
       return Locale(langCode);
     }
     return const Locale('en'); // fallback

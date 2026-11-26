@@ -25,15 +25,15 @@ class ProfileSection extends StatelessWidget {
           padding: const EdgeInsets.only(left: Space.xsm, bottom: Space.sm),
           child: Text(
             title.toUpperCase(),
-            style: textTheme.labelMedium?.copyWith(
-              color: colors.textSecondary,
+            style: textTheme.labelSmall?.copyWith(
+              color: colors.textContrast,
               letterSpacing: 0.8,
             ),
           ),
         ),
         Container(
           decoration: BoxDecoration(
-            color: colors.surfaceContainerTonal,
+            color: colors.surfaceProfileRow,
             borderRadius: BorderRadius.circular(Radii.lg),
             border: Border.all(
               color: colors.surfaceDivider.withValues(alpha: 0.15),
@@ -50,7 +50,7 @@ class ProfileSection extends StatelessWidget {
                     thickness: 1,
                     indent: Space.lg,
                     endIndent: Space.lg,
-                    color: colors.surfaceDivider.withValues(alpha: 0.15),
+                    color: colors.surfaceDivider,
                   ),
                 children[i],
               ],

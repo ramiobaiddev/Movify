@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
 
-/// Reusable radio option card for bottom sheets matching Figma node 789:11321 & 783:8290.
+/// Reusable radio option card for bottom sheets matching Figma node 789:11321 & 567:4009.
 class AppBottomSheetRadioTile extends StatelessWidget {
   const AppBottomSheetRadioTile({
     super.key,
     required this.title,
+    this.subtitle,
     required this.isSelected,
     required this.onTap,
   });
 
   final String title;
+  final String? subtitle;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -45,12 +47,29 @@ class AppBottomSheetRadioTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Text(
-                  title,
-                  style: textTheme.titleSmall?.copyWith(
-                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                    color: isSelected ? colors.textPrimary : colors.textContrast,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      title,
+                      style: textTheme.titleSmall?.copyWith(
+                        fontWeight:
+                            isSelected ? FontWeight.w700 : FontWeight.w500,
+                        color:
+                            isSelected ? colors.textPrimary : colors.textContrast,
+                      ),
+                    ),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: Space.xsm),
+                      Text(
+                        subtitle!,
+                        style: textTheme.bodySmall?.copyWith(
+                          color: colors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ),
               const SizedBox(width: Space.sm),
@@ -61,7 +80,11 @@ class AppBottomSheetRadioTile extends StatelessWidget {
                   size: 22,
                 )
               else
-                const SizedBox(width: 22, height: 22),
+                Icon(
+                  Icons.radio_button_unchecked_rounded,
+                  color: colors.iconSecondary,
+                  size: 22,
+                ),
             ],
           ),
         ),

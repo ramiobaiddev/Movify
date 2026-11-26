@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
-import 'package:movify/shared/presentation/widgets/bottom_sheet/app_bottom_sheet_drag_handle.dart';
 import 'package:movify/shared/presentation/widgets/bottom_sheet/app_bottom_sheet_header.dart';
 
 /// Reusable modal bottom sheet container matching Figma styling (36px radius, dark surface).
@@ -73,7 +72,7 @@ class AppBottomSheet extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.fromLTRB(
             Space.lg,
-            0,
+            Space.md,
             Space.lg,
             bottomInset + Space.md,
           ),
@@ -81,7 +80,6 @@ class AppBottomSheet extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const AppBottomSheetDragHandle(),
               AppBottomSheetHeader(
                 title: title,
                 action: action,
@@ -107,7 +105,7 @@ class AppBottomSheet extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.fromLTRB(
         Space.lg,
-        0,
+        Space.md,
         Space.lg,
         bottomInset + Space.md,
       ),
@@ -115,7 +113,6 @@ class AppBottomSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const AppBottomSheetDragHandle(),
           AppBottomSheetHeader(title: title, action: action, onClose: onClose),
           const SizedBox(height: Space.md),
           child,

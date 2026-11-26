@@ -25,52 +25,37 @@ class ProfileSettingTile extends StatelessWidget {
     final colors = context.colors;
     final textTheme = Theme.of(context).textTheme;
 
-    final primaryColor = isDestructive ? colors.surfaceError : colors.textPrimary;
-    final iconColor = isDestructive ? colors.surfaceError : colors.iconSecondary;
+    final iconColor = colors.iconSecondary;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        child: SizedBox(
-          height: 56,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Space.lg),
-            child: Row(
-              children: [
-                Icon(
-                  icon,
-                  size: 20,
-                  color: iconColor,
+    return InkWell(
+      onTap: onTap,
+      child: SizedBox(
+        height: 56,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: Space.lg),
+          child: Row(
+            children: [
+              Icon(icon, size: 20, color: iconColor),
+              const SizedBox(width: Space.md),
+              Expanded(
+                child: Text(
+                  title,
+                  style: textTheme.bodyMedium,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(width: Space.md),
-                Expanded(
-                  child: Text(
-                    title,
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: primaryColor,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+              ),
+              if (value != null) ...[
+                Text(
+                  value!,
+                  style: textTheme.bodySmall?.copyWith(
+                    color: colors.textSecondary,
                   ),
                 ),
-                if (value != null) ...[
-                  Text(
-                    value!,
-                    style: textTheme.bodySmall?.copyWith(
-                      color: colors.textSecondary,
-                    ),
-                  ),
-                  const SizedBox(width: Space.sm),
-                ],
-                trailing ??
-                    Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 14,
-                      color: colors.iconSecondary,
-                    ),
+                const SizedBox(width: Space.sm),
               ],
-            ),
+              trailing ?? const SizedBox.shrink(),
+            ],
           ),
         ),
       ),
