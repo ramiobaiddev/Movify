@@ -10,11 +10,7 @@ import 'package:movify/features/see_all/presentation/views/see_all_view_body.dar
 
 /// Screen container for See All and filtering.
 class SeeAllView extends StatelessWidget {
-  const SeeAllView({
-    super.key,
-    required this.args,
-    this.fetchers,
-  });
+  const SeeAllView({super.key, required this.args, this.fetchers});
 
   final SeeAllArgs args;
   final FeedFetchers? fetchers;
@@ -24,10 +20,8 @@ class SeeAllView extends StatelessWidget {
     final colors = context.colors;
 
     return BlocProvider<SeeAllCubit>(
-      create: (context) => SeeAllCubit(
-        args: args,
-        fetchers: fetchers ?? getIt<FeedFetchers>(),
-      ),
+      create: (context) =>
+          SeeAllCubit(args: args, fetchers: fetchers ?? getIt<FeedFetchers>()),
       child: BlocListener<SeeAllCubit, SeeAllState>(
         listenWhen: (previous, current) =>
             current.droppedGenreIds.isNotEmpty &&
@@ -47,7 +41,10 @@ class SeeAllView extends StatelessWidget {
         child: Scaffold(
           backgroundColor: colors.surfacePrimary,
           body: SafeArea(
-            child: SeeAllViewBody(args: args),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Space.lg),
+              child: SeeAllViewBody(args: args),
+            ),
           ),
         ),
       ),

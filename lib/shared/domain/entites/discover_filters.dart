@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:movify/shared/domain/entites/keyword.dart';
 import 'package:movify/shared/domain/enums/discover_sort.dart';
 
 /// Everything the user can filter a See all list by. A null/empty field means
@@ -15,6 +16,7 @@ class DiscoverFilters extends Equatable {
     this.minRuntime,
     this.maxRuntime,
     this.studioIds = const {},
+    this.keywords = const {},
   });
 
   final DiscoverSort sort;
@@ -33,6 +35,9 @@ class DiscoverFilters extends Equatable {
   /// TMDB company ids.
   final Set<int> studioIds;
 
+  /// TMDB keywords filter.
+  final Set<Keyword> keywords;
+
   /// True when anything other than the sort order is set.
   bool get hasFilters =>
       genreIds.isNotEmpty ||
@@ -42,7 +47,8 @@ class DiscoverFilters extends Equatable {
       languageCode != null ||
       minRuntime != null ||
       maxRuntime != null ||
-      studioIds.isNotEmpty;
+      studioIds.isNotEmpty ||
+      keywords.isNotEmpty;
 
   DiscoverFilters copyWith({
     DiscoverSort? sort,
@@ -54,6 +60,7 @@ class DiscoverFilters extends Equatable {
     int? Function()? minRuntime,
     int? Function()? maxRuntime,
     Set<int>? studioIds,
+    Set<Keyword>? keywords,
   }) => DiscoverFilters(
     sort: sort ?? this.sort,
     genreIds: genreIds ?? this.genreIds,
@@ -64,6 +71,7 @@ class DiscoverFilters extends Equatable {
     minRuntime: minRuntime != null ? minRuntime() : this.minRuntime,
     maxRuntime: maxRuntime != null ? maxRuntime() : this.maxRuntime,
     studioIds: studioIds ?? this.studioIds,
+    keywords: keywords ?? this.keywords,
   );
 
   @override
@@ -77,5 +85,6 @@ class DiscoverFilters extends Equatable {
     minRuntime,
     maxRuntime,
     studioIds,
+    keywords,
   ];
 }

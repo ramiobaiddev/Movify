@@ -3,11 +3,7 @@ import 'package:movify/core/design_system/tokens/app_colors.dart';
 
 /// Poster metadata below the image: Title & optional Media Type / Genre subtitle.
 class PosterMetadata extends StatelessWidget {
-  const PosterMetadata({
-    super.key,
-    required this.title,
-    this.subtitle,
-  });
+  const PosterMetadata({super.key, required this.title, this.subtitle});
 
   final String title;
   final String? subtitle;
@@ -33,9 +29,7 @@ class PosterMetadata extends StatelessWidget {
             subtitle!,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: textTheme.bodySmall?.copyWith(
-              color: colors.textContrast,
-            ),
+            style: textTheme.bodySmall?.copyWith(color: colors.textContrast),
           ),
         ],
       ],

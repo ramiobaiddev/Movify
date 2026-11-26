@@ -1,46 +1,72 @@
 import 'package:dartz/dartz.dart';
 import 'package:movify/core/errors/failure.dart';
+import 'package:movify/core/network/api/services/safe_api_calls.dart';
+import 'package:movify/core/pagination/domain/entites/page_result.dart';
 import 'package:movify/features/search/data/data_sources/remote/remote_search_data_source.dart';
-import 'package:movify/features/search/domain/entities/search_actor_entity.dart';
 import 'package:movify/features/search/domain/repo/search_repo.dart';
+import 'package:movify/shared/domain/entites/keyword.dart';
+import 'package:movify/shared/domain/entites/media_item.dart';
 import 'package:movify/shared/domain/entites/movie_entity.dart';
+import 'package:movify/shared/domain/entites/person_item.dart';
 import 'package:movify/shared/domain/entites/series_entity.dart';
 
 class SearchRepoImpl implements SearchRepo {
+  const SearchRepoImpl({required this.remoteDataSource});
+
   final RemoteSearchDataSource remoteDataSource;
 
-  SearchRepoImpl({required this.remoteDataSource});
   @override
-  Future<Either<Failure, List<MovieEntity>>> searchMovies(String query) async {
-    try {
-      final suggestions = await remoteDataSource.searchMovies(query);
-      return right(suggestions.map((e) => e.toEntity()).toList());
-    } catch (e) {
-      return left(ServerFailure(errorMessage: e.toString()));
-    }
-  }
+  Future<Either<Failure, PageResult<MediaItem>>> searchMulti({
+    required String query,
+    int page = 1,
+  }) => safeApiCall(
+    () async => (await remoteDataSource.searchMulti(
+      query: query,
+      page: page,
+    )).map((model) => model.toEntity()),
+  );
 
   @override
-  Future<Either<Failure, List<SearchActorEntity>>> searchActor(
-    String query,
-  ) async {
-    try {
-      final suggestions = await remoteDataSource.searchActors(query);
-      return right(suggestions);
-    } catch (e) {
-      return left(ServerFailure(errorMessage: e.toString()));
-    }
-  }
+  Future<Either<Failure, PageResult<MovieEntity>>> searchMovies({
+    required String query,
+    int page = 1,
+  }) => safeApiCall(
+    () async => (await remoteDataSource.searchMovies(
+      query: query,
+      page: page,
+    )).map((model) => model.toEntity()),
+  );
 
   @override
-  Future<Either<Failure, List<SeriesEntity>>> searchTvShows(
-    String query,
-  ) async {
-    try {
-      final results = await remoteDataSource.searchSeries(query);
-      return right(results.map((e) => e.toEntity()).toList());
-    } catch (e) {
-      return left(ServerFailure(errorMessage: e.toString()));
-    }
-  }
+  Future<Either<Failure, PageResult<SeriesEntity>>> searchSeries({
+    required String query,
+    int page = 1,
+  }) => safeApiCall(
+    () async => (await remoteDataSource.searchSeries(
+      query: query,
+      page: page,
+    )).map((model) => model.toEntity()),
+  );
+
+  @override
+  Future<Either<Failure, PageResult<PersonItem>>> searchPeople({
+    required String query,
+    int page = 1,
+  }) => safeApiCall(
+    () async => (await remoteDataSource.searchPeople(
+      query: query,
+      page: page,
+    )).map((model) => model.toEntity()),
+  );
+
+  @override
+  Future<Either<Failure, PageResult<Keyword>>> searchKeywords({
+    required String query,
+    int page = 1,
+  }) => safeApiCall(
+    () async => (await remoteDataSource.searchKeywords(
+      query: query,
+      page: page,
+    )).map((model) => model.toEntity()),
+  );
 }

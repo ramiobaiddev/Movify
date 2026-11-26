@@ -1,68 +1,91 @@
-import 'package:dio/dio.dart';
 import 'package:movify/core/network/api/services/api_service.dart';
+import 'package:movify/core/pagination/domain/entites/page_result.dart';
 import 'package:movify/features/home/data/models/movie_model.dart';
 import 'package:movify/features/home/data/models/series_model.dart';
 import 'package:movify/features/search/data/data_sources/remote/remote_search_data_source.dart';
-import 'package:movify/features/search/data/models/search_actor_model/search_actor_model.dart';
+import 'package:movify/features/search/data/models/keyword_model.dart';
+import 'package:movify/features/search/data/models/person_item_model.dart';
+import 'package:movify/shared/data/mappers/map_paged_response.dart';
+import 'package:movify/shared/data/models/media_item_model.dart';
 
 class RemoteSearchDataSourceImpl implements RemoteSearchDataSource {
+  const RemoteSearchDataSourceImpl({required this.apiService});
+
   final ApiService apiService;
-  final Map<String, CancelToken> _tokens = {};
-  CancelToken _refreshToken(String key) {
-    _tokens[key]?.cancel(); // cancel the previous one
-    final token = CancelToken();
-    _tokens[key] = token;
-    return token;
-  }
 
-  void dispose() {
-    for (final t in _tokens.values) {
-      t.cancel();
-    }
-    _tokens.clear();
-  }
-
-  RemoteSearchDataSourceImpl({required this.apiService});
   @override
-  Future<List<MovieModel>> searchMovies(String query) async {
-    final data = await apiService.tmdb.search.searchMovies(
-      query,
-      cancelToken: _refreshToken('searchMovies'),
-    );
-    final suggestions = (data['results'] as List)
-        .where((e) => e['poster_path'] != null)
-        .map((e) => MovieModel.fromJson(e as Map<String, dynamic>))
+  Future<PageResult<MediaItemModel>> searchMulti({
+    required String query,
+    int page = 1,
+  }) async {
+    final data = await apiService.tmdb.search.searchMulti(query, page: page);
+    final items = (data['results'] as List)
+        .map((e) => MediaItemModel.tryFromJson(e as Map<String, dynamic>))
+        .whereType<MediaItemModel>()
         .toList();
-    return suggestions;
+
+    return PageResult<MediaItemModel>(
+      page: (data['page'] as num?)?.toInt() ?? page,
+      totalPages: (data['total_pages'] as num?)?.toInt() ?? 1,
+      totalResults: (data['total_results'] as num?)?.toInt() ?? items.length,
+      results: items,
+    );
   }
 
   @override
-  Future<List<SearchActorModel>> searchActors(String query) async {
-    final data = await apiService.tmdb.search.searchActors(
-      query,
-      cancelToken: _refreshToken('searchActors'),
-    );
-    final actors = (data['results'] as List)
-        .where((element) => element['profile_path'] != null)
+  Future<PageResult<MovieModel>> searchMovies({
+    required String query,
+    int page = 1,
+  }) async => mapPagedResponse(
+    data: await apiService.tmdb.search.searchMovies(query, page: page),
+    fromJson: MovieModel.fromJson,
+  );
+
+  @override
+  Future<PageResult<SeriesModel>> searchSeries({
+    required String query,
+    int page = 1,
+  }) async => mapPagedResponse(
+    data: await apiService.tmdb.search.searchSeries(query, page: page),
+    fromJson: SeriesModel.fromJson,
+  );
+
+  @override
+  Future<PageResult<PersonItemModel>> searchPeople({
+    required String query,
+    int page = 1,
+  }) async {
+    final data = await apiService.tmdb.search.searchActors(query, page: page);
+    final items = (data['results'] as List)
         .map(
-          (element) =>
-              SearchActorModel.fromJson(element as Map<String, dynamic>),
+          (e) => PersonItemModel.fromJson(e as Map<String, dynamic>),
         )
+        .where((e) => e.profilePath != null)
         .toList();
 
-    return actors;
+    return PageResult<PersonItemModel>(
+      page: (data['page'] as num?)?.toInt() ?? page,
+      totalPages: (data['total_pages'] as num?)?.toInt() ?? 1,
+      totalResults: (data['total_results'] as num?)?.toInt() ?? items.length,
+      results: items,
+    );
   }
 
   @override
-  Future<List<SeriesModel>> searchSeries(String query) async {
-    final data = await apiService.tmdb.search.searchSeries(
-      query,
-      cancelToken: _refreshToken('searchSeries'),
-    );
-    final suggestions = (data['results'] as List)
-        .where((e) => e['poster_path'] != null)
-        .map((e) => SeriesModel.fromJson(e as Map<String, dynamic>))
+  Future<PageResult<KeywordModel>> searchKeywords({
+    required String query,
+    int page = 1,
+  }) async {
+    final data = await apiService.tmdb.search.searchKeywords(query, page: page);
+    final items = (data['results'] as List)
+        .map((e) => KeywordModel.fromJson(e as Map<String, dynamic>))
         .toList();
-    return suggestions;
+
+    return PageResult<KeywordModel>(
+      page: (data['page'] as num?)?.toInt() ?? page,
+      totalPages: (data['total_pages'] as num?)?.toInt() ?? 1,
+      totalResults: (data['total_results'] as num?)?.toInt() ?? items.length,
+      results: items,
+    );
   }
 }

@@ -6,7 +6,7 @@ abstract class SearchActorState {}
 class SeachActorInitial extends SearchActorState {}
 
 class SearchActorSuccess extends SearchActorState {
-  final List<SearchActorEntity> suggestions;
+  final PageResult<PersonItem> suggestions;
 
   SearchActorSuccess({required this.suggestions});
 }

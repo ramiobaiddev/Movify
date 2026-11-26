@@ -7,27 +7,59 @@ class TmdbSearchApi {
   final TmdbBaseClient client;
 
   TmdbSearchApi(this.client);
-  ApiResponse searchMovies(String query, {CancelToken? cancelToken}) =>
-      client.get(
-        'search/movie',
-        queryParams: {'query': query},
-        cancelToken: cancelToken,
-        overridePolicy: CachePolicy.noCache,
-      );
 
-  ApiResponse searchSeries(String query, {CancelToken? cancelToken}) =>
-      client.get(
-        'search/tv',
-        queryParams: {'query': query},
-        cancelToken: cancelToken,
-        overridePolicy: CachePolicy.noCache,
-      );
+  ApiResponse searchMulti(
+    String query, {
+    int page = 1,
+    CancelToken? cancelToken,
+  }) => client.get(
+    'search/multi',
+    queryParams: {'query': query, 'page': '$page'},
+    cancelToken: cancelToken,
+    overridePolicy: CachePolicy.noCache,
+  );
 
-  ApiResponse searchActors(String query, {CancelToken? cancelToken}) =>
-      client.get(
-        'search/person',
-        queryParams: {'query': query},
-        cancelToken: cancelToken,
-        overridePolicy: CachePolicy.noCache,
-      );
+  ApiResponse searchMovies(
+    String query, {
+    int page = 1,
+    CancelToken? cancelToken,
+  }) => client.get(
+    'search/movie',
+    queryParams: {'query': query, 'page': '$page'},
+    cancelToken: cancelToken,
+    overridePolicy: CachePolicy.noCache,
+  );
+
+  ApiResponse searchSeries(
+    String query, {
+    int page = 1,
+    CancelToken? cancelToken,
+  }) => client.get(
+    'search/tv',
+    queryParams: {'query': query, 'page': '$page'},
+    cancelToken: cancelToken,
+    overridePolicy: CachePolicy.noCache,
+  );
+
+  ApiResponse searchActors(
+    String query, {
+    int page = 1,
+    CancelToken? cancelToken,
+  }) => client.get(
+    'search/person',
+    queryParams: {'query': query, 'page': '$page'},
+    cancelToken: cancelToken,
+    overridePolicy: CachePolicy.noCache,
+  );
+
+  ApiResponse searchKeywords(
+    String query, {
+    int page = 1,
+    CancelToken? cancelToken,
+  }) => client.get(
+    'search/keyword',
+    queryParams: {'query': query, 'page': '$page'},
+    cancelToken: cancelToken,
+    overridePolicy: CachePolicy.noCache,
+  );
 }

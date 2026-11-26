@@ -26,26 +26,23 @@ class SeeAllSortRow extends StatelessWidget {
     final colors = context.colors;
     final textTheme = Theme.of(context).textTheme;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Space.lg),
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: GestureDetector(
-          onTap: onTap,
-          behavior: HitTestBehavior.opaque,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                _label,
-                style: textTheme.labelMedium?.copyWith(
-                  color: colors.textContrast,
-                ),
+    return Align(
+      alignment: Alignment.centerRight,
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              _label,
+              style: textTheme.labelMedium?.copyWith(
+                color: colors.textContrast,
               ),
-              const SizedBox(width: Space.xsm),
-              Icon(_icon, size: 16, color: colors.textContrast),
-            ],
-          ),
+            ),
+            const SizedBox(width: Space.xsm),
+            Icon(_icon, size: 16, color: colors.textContrast),
+          ],
         ),
       ),
     );

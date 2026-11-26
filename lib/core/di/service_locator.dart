@@ -100,6 +100,7 @@ import 'package:movify/features/search/domain/use_cases/get_search_history_use_c
 import 'package:movify/features/search/domain/use_cases/search_movie_use_case.dart';
 import 'package:movify/features/search/domain/use_cases/search_tv_show_use_case.dart';
 import 'package:movify/features/search/presentation/blocs/search_bloc.dart';
+import 'package:movify/features/search/presentation/cubits/search_cubit/search_cubit.dart';
 import 'package:movify/features/search/presentation/cubits/search_history_cubit.dart';
 import 'package:movify/features/settings/data/data_sources/local/settings_local_data_source.dart';
 import 'package:movify/features/settings/data/data_sources/local/settings_local_data_source_impl.dart';
@@ -481,6 +482,12 @@ void _registerCubits() {
     () => SearchBloc(
       searchMovieUseCase: getIt<SearchMovieUseCase>(),
       searchSeriesUseCase: getIt<SearchSeriesUseCase>(),
+    ),
+  );
+  getIt.registerFactory<SearchCubit>(
+    () => SearchCubit(
+      searchRepo: getIt<SearchRepo>(),
+      historyRepo: getIt<SearchHistoryRepo>(),
     ),
   );
   getIt.registerFactory<FetchSeriesSeasonDetailsCubit>(

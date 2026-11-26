@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:movify/core/design_system/design_system.dart';
+import 'package:movify/core/design_system/tokens/spacing.dart';
 
-/// Poster rows size themselves from the theme's text styles, so they follow
-/// the fluid text scale on tablets instead of overflowing a fixed height.
+/// Clean, predictable metrics for poster cards across horizontal rows and grids.
+///
+/// Scales dynamically with system accessibility / large font settings without
+/// fragile manual typography arithmetic.
 abstract final class PosterRowMetrics {
-  static const double posterWidth = 120;
+  static const double posterWidth = 120.0;
 
-  static double _line(TextStyle? style) =>
-      (style?.fontSize ?? 14) * (style?.height ?? 1.2);
-
-  /// Height of a PosterCard of [width]: 2:3 image, gap, title, gap, subtitle.
+  /// Height of a poster card of [width] (2:3 aspect ratio), accounting for
+  /// image height, spacing, and system font scaling.
   static double height(BuildContext context, {double width = posterWidth}) {
-    final text = Theme.of(context).textTheme;
-    return width * 3 / 2 +
-        Space.sm +
-        _line(text.labelLarge) +
-        2 +
-        _line(text.bodySmall) +
-        1; // rounding slack
+    final textScale =
+        MediaQuery.textScalerOf(context).scale(1.0).clamp(1.0, 1.35);
+    final imageHeight = width * 1.5;
+    const metadataHeight = 48.0;
+
+    return imageHeight + Space.sm + (metadataHeight * textScale);
   }
 }

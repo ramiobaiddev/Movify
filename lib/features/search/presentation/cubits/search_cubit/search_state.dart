@@ -1,30 +1,80 @@
-part of 'search_cubit.dart';
+import 'package:equatable/equatable.dart';
+import 'package:movify/core/paging/paged_cubit.dart';
+import 'package:movify/features/search/domain/entities/search_history_entity.dart';
+import 'package:movify/features/search/presentation/models/search_tab.dart';
+import 'package:movify/shared/domain/entites/keyword.dart';
+import 'package:movify/shared/domain/entites/person_item.dart';
+import 'package:movify/shared/presentation/models/card_display_model.dart';
 
-@immutable
-abstract class SearchState {}
+/// Sealed state hierarchy for Search.
+sealed class SearchState extends Equatable {
+  const SearchState();
 
-class SearchInitial extends SearchState {}
+  bool get isIdle => this is SearchInitial || this is SearchHistoryLoaded;
+}
 
-class SearchSuccess extends SearchState {
-  final List<SearchResult> results;
-  final List<SearchResult> movies;
-  final List<SearchResult> tvShows;
-  SearchSuccess({
-    required this.results,
-    required this.movies,
-    required this.tvShows,
+/// Initial state while search history is being retrieved from local storage.
+final class SearchInitial extends SearchState {
+  const SearchInitial();
+
+  @override
+  List<Object?> get props => [];
+}
+
+/// Search history is retrieved and ready.
+final class SearchHistoryLoaded extends SearchState {
+  const SearchHistoryLoaded({this.history = const []});
+
+  final List<SearchHistoryEntity> history;
+
+  SearchHistoryLoaded copyWith({List<SearchHistoryEntity>? history}) =>
+      SearchHistoryLoaded(history: history ?? this.history);
+
+  @override
+  List<Object?> get props => [history];
+}
+
+/// Active search mode: user entered a query; shows tabs and results.
+final class SearchActive extends SearchState {
+  const SearchActive({
+    required this.query,
+    required this.tab,
+    required this.revision,
+    this.mediaList,
+    this.peopleList,
+    this.keywordList,
   });
-}
 
-class SearchFailure extends SearchState {
-  final String errorMessage;
+  final String query;
+  final SearchTab tab;
+  final int revision;
+  final PagedCubit<CardDisplayModel>? mediaList;
+  final PagedCubit<PersonItem>? peopleList;
+  final PagedCubit<Keyword>? keywordList;
 
-  SearchFailure({required this.errorMessage});
-}
+  SearchActive copyWith({
+    String? query,
+    SearchTab? tab,
+    int? revision,
+    PagedCubit<CardDisplayModel>? Function()? mediaList,
+    PagedCubit<PersonItem>? Function()? peopleList,
+    PagedCubit<Keyword>? Function()? keywordList,
+  }) => SearchActive(
+    query: query ?? this.query,
+    tab: tab ?? this.tab,
+    revision: revision ?? this.revision,
+    mediaList: mediaList != null ? mediaList() : this.mediaList,
+    peopleList: peopleList != null ? peopleList() : this.peopleList,
+    keywordList: keywordList != null ? keywordList() : this.keywordList,
+  );
 
-class SearchLoading extends SearchState {}
-
-class SearchHistorySuccess extends SearchState {
-  final List<SearchHistoryEntity> searchHistory;
-  SearchHistorySuccess({required this.searchHistory});
+  @override
+  List<Object?> get props => [
+    query,
+    tab,
+    revision,
+    mediaList,
+    peopleList,
+    keywordList,
+  ];
 }

@@ -1,28 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movify/features/search/presentation/blocs/search_bloc.dart';
-import 'package:movify/features/search/presentation/blocs/search_states.dart';
-import 'package:movify/features/search/presentation/views/history_view.dart';
-import 'package:movify/features/search/presentation/widgets/search_tab_bar_views.dart';
+import 'package:movify/features/search/domain/entities/search_history_entity.dart';
+import 'package:movify/features/search/presentation/cubits/search_cubit/search_cubit.dart';
+import 'package:movify/features/search/presentation/cubits/search_cubit/search_state.dart';
+import 'package:movify/features/search/presentation/views/search_results_view.dart';
+import 'package:movify/features/search/presentation/widgets/search_history_view.dart';
 
+/// Body of SearchView dynamically switching between initial loading, history, and active results.
 class SearchViewBody extends StatelessWidget {
-  const SearchViewBody({super.key});
+  const SearchViewBody({
+    super.key,
+    required this.onHistoryItemTap,
+  });
+
+  final ValueChanged<SearchHistoryEntity> onHistoryItemTap;
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<SearchBloc, SearchState>(
-    builder: (context, state) => switch (state) {
-      SearchInitial() => const HistoryView(),
-      SearchLoading() => const Center(child: CircularProgressIndicator()),
-
-      SearchLoaded(
-        results: final results,
-        movies: final movies,
-        tvShows: final tvShows,
-      ) =>
-        SearchTabBarViews(results: results, movies: movies, tvShows: tvShows),
-      SearchError(errorMessage: final errorMessage) => Center(
-        child: Text(errorMessage),
-      ),
-    },
-  );
+  Widget build(BuildContext context) {
+    return BlocBuilder<SearchCubit, SearchState>(
+      builder: (context, state) => switch (state) {
+        SearchInitial() => const SizedBox.shrink(),
+        SearchHistoryLoaded(:final history) => SearchHistoryView(
+          history: history,
+          onItemTap: onHistoryItemTap,
+          onItemDelete: (id) =>
+              context.read<SearchCubit>().deleteFromHistory(id),
+          onClearAll: () => context.read<SearchCubit>().clearHistory(),
+        ),
+        SearchActive() => SearchResultsView(state: state),
+      },
+    );
+  }
 }

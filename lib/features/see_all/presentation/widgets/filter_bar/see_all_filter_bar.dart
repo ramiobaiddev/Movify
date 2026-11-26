@@ -181,11 +181,26 @@ class SeeAllFilterBar extends StatelessWidget {
   Widget build(BuildContext context) => SingleChildScrollView(
     scrollDirection: Axis.horizontal,
     physics: const BouncingScrollPhysics(),
-    padding: const EdgeInsets.symmetric(horizontal: Space.lg),
+
     child: Row(
       spacing: Space.sm,
       children: [
         SeeAllMediaSwitcher(selectedKind: kind, onKindChanged: onKindChanged),
+        for (final keyword in filters.keywords)
+          AppChip(
+            label: keyword.name,
+            selected: true,
+            outlined: true,
+            onTap: () {
+              final newKeywords = Set.of(filters.keywords)..remove(keyword);
+              onFiltersChanged(filters.copyWith(keywords: newKeywords));
+            },
+            trailing: Icon(
+              Icons.close_rounded,
+              size: 16,
+              color: context.colors.textOnImage,
+            ),
+          ),
         for (final spec in _specs(context))
           SeeAllFilterChip(
             label: spec.label,

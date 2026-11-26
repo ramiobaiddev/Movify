@@ -11,27 +11,20 @@ class SeeAllBackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap ?? () => Navigator.of(context).maybePop(),
-        borderRadius: BorderRadius.circular(Radii.lg),
-        child: Ink(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: colors.surfaceContainerTonal,
-            borderRadius: BorderRadius.circular(Radii.lg),
-            border: Border.all(
-              color: colors.surfaceDivider.withValues(alpha: 0.5),
-            ),
-          ),
-          child: Center(
-            child: Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: colors.iconPrimary,
-              size: 20,
-            ),
+    return InkWell(
+      onTap: onTap ?? () => Navigator.of(context).maybePop(),
+      borderRadius: BorderRadius.circular(Radii.lg),
+      child: Ink(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(Radii.lg),
+        ),
+        child: Center(
+          child: Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: colors.iconPrimary,
+            size: 20,
           ),
         ),
       ),

@@ -22,10 +22,7 @@ class SeeAllTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(
-      horizontal: Space.lg,
-      vertical: Space.md,
-    ),
+    padding: const EdgeInsets.symmetric(vertical: Space.md),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

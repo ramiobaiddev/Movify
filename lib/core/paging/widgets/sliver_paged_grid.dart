@@ -60,21 +60,18 @@ class SliverPagedGrid<T> extends StatelessWidget {
 
         return SliverMainAxisGroup(
           slivers: [
-            SliverPadding(
-              padding: padding,
-              sliver: SliverGrid(
-                gridDelegate: gridDelegate,
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  if (index >= state.items.length - prefetchDistance &&
-                      state.canLoadMore) {
-                    // Not during build: loadMore emits a new state.
-                    WidgetsBinding.instance.addPostFrameCallback(
-                      (_) => cubit.loadMore(),
-                    );
-                  }
-                  return itemBuilder(context, state.items[index], index);
-                }, childCount: state.items.length),
-              ),
+            SliverGrid(
+              gridDelegate: gridDelegate,
+              delegate: SliverChildBuilderDelegate((context, index) {
+                if (index >= state.items.length - prefetchDistance &&
+                    state.canLoadMore) {
+                  // Not during build: loadMore emits a new state.
+                  WidgetsBinding.instance.addPostFrameCallback(
+                    (_) => cubit.loadMore(),
+                  );
+                }
+                return itemBuilder(context, state.items[index], index);
+              }, childCount: state.items.length),
             ),
             if (state.isLoadingMore)
               const SliverToBoxAdapter(

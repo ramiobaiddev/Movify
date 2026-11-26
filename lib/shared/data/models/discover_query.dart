@@ -30,6 +30,8 @@ abstract final class DiscoverQuery {
       if (f.languageCode != null) 'with_original_language': f.languageCode!,
       if (f.minRuntime != null) 'with_runtime.gte': '${f.minRuntime}',
       if (f.maxRuntime != null) 'with_runtime.lte': '${f.maxRuntime}',
+      if (f.keywords.isNotEmpty)
+        'with_keywords': f.keywords.map((k) => k.id).join(','),
       if (f.studioIds.isNotEmpty)
         isMovie ? 'with_companies' : 'with_networks': f.studioIds.join('|'),
     };

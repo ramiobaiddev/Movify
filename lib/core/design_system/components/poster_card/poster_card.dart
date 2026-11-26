@@ -87,7 +87,9 @@ class _PosterCardState extends State<PosterCard> {
           ),
         ),
         const SizedBox(height: Space.sm),
-        PosterMetadata(title: widget.title, subtitle: widget.subtitle),
+        Flexible(
+          child: PosterMetadata(title: widget.title, subtitle: widget.subtitle),
+        ),
       ],
     );
 

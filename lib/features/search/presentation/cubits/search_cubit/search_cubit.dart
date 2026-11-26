@@ -1,91 +1,184 @@
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
-import 'package:movify/core/network/utils/safe_emit_state.dart';
-import 'package:movify/core/utils/sorting_methods.dart';
-import 'package:movify/features/search/data/models/search_result.dart';
+import 'package:movify/core/paging/paged_cubit.dart';
 import 'package:movify/features/search/domain/entities/search_history_entity.dart';
-import 'package:movify/features/search/domain/use_cases/add_to_history_use_case.dart';
-import 'package:movify/features/search/domain/use_cases/clear_search_history_use_case.dart';
-import 'package:movify/features/search/domain/use_cases/delete_from_search_history_use_case.dart';
-import 'package:movify/features/search/domain/use_cases/get_search_history_use_case.dart';
-import 'package:movify/features/search/domain/use_cases/search_movie_use_case.dart';
-import 'package:movify/features/search/domain/use_cases/search_tv_show_use_case.dart';
-
-part 'search_state.dart';
+import 'package:movify/features/search/domain/repo/search_history.dart';
+import 'package:movify/features/search/domain/repo/search_repo.dart';
+import 'package:movify/features/search/presentation/cubits/search_cubit/search_state.dart';
+import 'package:movify/features/search/presentation/models/search_tab.dart';
+import 'package:movify/shared/domain/entites/keyword.dart';
+import 'package:movify/shared/domain/entites/person_item.dart';
+import 'package:movify/shared/presentation/models/card_display_mappers.dart';
+import 'package:movify/shared/presentation/models/card_display_model.dart';
 
 class SearchCubit extends Cubit<SearchState> {
-  SearchCubit(
-    this.searchMovieUseCase,
-    this.searchTvShowUseCase,
-    this.addToHistoryUseCase,
-    this.clearSearchHistoryUseCase,
-    this.deleteFromSearchHistoryUseCase,
-    this.getSearchHistoryUseCase,
-  ) : super(SearchInitial());
-  final SearchMovieUseCase searchMovieUseCase;
-  final SearchSeriesUseCase searchTvShowUseCase;
-  final AddSearchHistoryUseCase addToHistoryUseCase;
-  final ClearSearchHistoryUseCase clearSearchHistoryUseCase;
-  final DeleteSearchHistoryUseCase deleteFromSearchHistoryUseCase;
-  final GetSearchHistoryUseCase getSearchHistoryUseCase;
+  SearchCubit({
+    required SearchRepo searchRepo,
+    required SearchHistoryRepo historyRepo,
+  }) : _searchRepo = searchRepo,
+       _historyRepo = historyRepo,
+       super(const SearchInitial()) {
+    loadHistory();
+  }
 
-  Future<void> searchItems(String query) async {
-    final movieResult = await searchMovieUseCase.call(query);
-    final tvShowsResults = await searchTvShowUseCase.call(query);
+  final SearchRepo _searchRepo;
+  final SearchHistoryRepo _historyRepo;
+  Timer? _debounceTimer;
+  SearchTab _currentTab = SearchTab.moviesAndSeries;
 
-    movieResult.fold(
-      (failure) {
-        safeEmit(SearchFailure(errorMessage: failure.errorMessage));
-      },
-      (movies) {
-        tvShowsResults.fold(
-          (failure) {
-            safeEmit(SearchFailure(errorMessage: failure.errorMessage));
-          },
-          (tvshows) {
-            final combinedResults = <SearchResult>[
-              ...movies.map((movie) => MovieResult(movie)),
-              ...tvshows.map((tvshow) => TvShowResult(tvshow)),
-            ];
-            final sortedResults = sortSearchResultsByRatingAndDate(
-              combinedResults,
-            );
-            final sortedMoviesResults = sortSearchResultsByRatingAndDate(
-              movies.map((movie) => MovieResult(movie)).toList(),
-            );
-            final sortedTvShowsResults = sortSearchResultsByRatingAndDate(
-              tvshows.map((tvshow) => TvShowResult(tvshow)).toList(),
-            );
+  void onQueryChanged(String newQuery) {
+    _debounceTimer?.cancel();
+    if (newQuery.trim().isEmpty) {
+      _closeActiveLists();
+      loadHistory();
+      return;
+    }
 
-            safeEmit(
-              SearchSuccess(
-                results: sortedResults,
-                movies: sortedMoviesResults,
-                tvShows: sortedTvShowsResults,
-              ),
-            );
-          },
+    _debounceTimer = Timer(const Duration(milliseconds: 350), () {
+      _triggerSearch(query: newQuery, tab: _currentTab);
+    });
+  }
+
+  void onTabChanged(SearchTab newTab) {
+    if (newTab == _currentTab) return;
+    _currentTab = newTab;
+    _debounceTimer?.cancel();
+    final currentState = state;
+    if (currentState is SearchActive) {
+      _triggerSearch(query: currentState.query, tab: newTab);
+    }
+  }
+
+  void _triggerSearch({required String query, required SearchTab tab}) {
+    _closeActiveLists();
+    final currentRevision = state is SearchActive
+        ? (state as SearchActive).revision + 1
+        : 1;
+
+    switch (tab) {
+      case SearchTab.moviesAndSeries:
+        final list = PagedCubit<CardDisplayModel>(
+          (page) async => (await _searchRepo.searchMulti(
+            query: query,
+            page: page,
+          )).map((p) => p.map((m) => m.toCardDisplay())),
+        )..load();
+        emit(
+          SearchActive(
+            query: query,
+            tab: tab,
+            revision: currentRevision,
+            mediaList: list,
+          ),
         );
-      },
-    );
+
+      case SearchTab.movies:
+        final list = PagedCubit<CardDisplayModel>(
+          (page) async => (await _searchRepo.searchMovies(
+            query: query,
+            page: page,
+          )).map((p) => p.map((m) => m.toCardDisplay())),
+        )..load();
+        emit(
+          SearchActive(
+            query: query,
+            tab: tab,
+            revision: currentRevision,
+            mediaList: list,
+          ),
+        );
+
+      case SearchTab.series:
+        final list = PagedCubit<CardDisplayModel>(
+          (page) async => (await _searchRepo.searchSeries(
+            query: query,
+            page: page,
+          )).map((p) => p.map((m) => m.toCardDisplay())),
+        )..load();
+        emit(
+          SearchActive(
+            query: query,
+            tab: tab,
+            revision: currentRevision,
+            mediaList: list,
+          ),
+        );
+
+      case SearchTab.people:
+        final list = PagedCubit<PersonItem>(
+          (page) => _searchRepo.searchPeople(query: query, page: page),
+        )..load();
+        emit(
+          SearchActive(
+            query: query,
+            tab: tab,
+            revision: currentRevision,
+            peopleList: list,
+          ),
+        );
+
+      case SearchTab.keywords:
+        final list = PagedCubit<Keyword>(
+          (page) => _searchRepo.searchKeywords(query: query, page: page),
+        )..load();
+        emit(
+          SearchActive(
+            query: query,
+            tab: tab,
+            revision: currentRevision,
+            keywordList: list,
+          ),
+        );
+    }
   }
 
-  Future<void> addToSearchHistory(SearchHistoryEntity searchHistory) async {
-    await addToHistoryUseCase.call(searchHistory);
+  void _closeActiveLists() {
+    final currentState = state;
+    if (currentState is SearchActive) {
+      currentState.mediaList?.close();
+      currentState.peopleList?.close();
+      currentState.keywordList?.close();
+    }
   }
 
-  Future<void> clearSearchHistory() async {
-    await clearSearchHistoryUseCase.call();
-    getSearchHistory();
+  Future<void> loadHistory() async {
+    try {
+      final items = await _historyRepo.getSearchHistory();
+      if (!isClosed) {
+        emit(SearchHistoryLoaded(history: items));
+      }
+    } catch (_) {}
   }
 
-  Future<void> deleteSearchHistory(int id) async {
-    await deleteFromSearchHistoryUseCase.call(id);
-    getSearchHistory();
+  Future<void> addToHistory(SearchHistoryEntity item) async {
+    try {
+      await _historyRepo.addToSearchHistory(item);
+      if (state is SearchHistoryLoaded) {
+        await loadHistory();
+      }
+    } catch (_) {}
   }
 
-  Future<void> getSearchHistory() async {
-    final searchHistory = await getSearchHistoryUseCase.call();
-    safeEmit(SearchHistorySuccess(searchHistory: searchHistory));
+  Future<void> deleteFromHistory(int id) async {
+    try {
+      await _historyRepo.deleteFromSearchHistory(id);
+      await loadHistory();
+    } catch (_) {}
+  }
+
+  Future<void> clearHistory() async {
+    try {
+      await _historyRepo.clearSearchHistory();
+      if (!isClosed) {
+        emit(const SearchHistoryLoaded(history: []));
+      }
+    } catch (_) {}
+  }
+
+  @override
+  Future<void> close() {
+    _debounceTimer?.cancel();
+    _closeActiveLists();
+    return super.close();
   }
 }
