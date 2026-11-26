@@ -7,12 +7,12 @@ import 'package:movify/core/paging/widgets/sliver_paged_grid.dart';
 import 'package:movify/core/routing/route_name.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/home/presentation/extensions/main_vertical_card_extention.dart';
-import 'package:movify/features/home/presentation/widgets/rows/poster_row_metrics.dart';
 import 'package:movify/features/search/domain/entities/search_history_entity.dart';
 import 'package:movify/features/search/presentation/cubits/search_cubit/search_cubit.dart';
 import 'package:movify/features/search/presentation/widgets/search_empty_state.dart';
 import 'package:movify/features/see_all/presentation/widgets/grid/see_all_grid_skeleton.dart';
 import 'package:movify/shared/presentation/models/card_display_mappers.dart';
+import 'package:movify/shared/presentation/widgets/poster_grid_layout.dart';
 import 'package:movify/shared/presentation/models/card_display_model.dart';
 
 /// Paginated poster grid for Search results (Movies & Series, Movies, Series).
@@ -48,26 +48,13 @@ class SearchPosterGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.widthOf(context);
-    final int columns = screenWidth >= 900 ? 4 : (screenWidth >= 600 ? 4 : 3);
-    final double cardWidth =
-        (screenWidth - (Space.lg * 2) - ((columns - 1) * Space.md)) / columns;
-    final double cardHeight = PosterRowMetrics.height(
-      context,
-      width: cardWidth,
-    );
-    final double childAspectRatio = cardWidth / cardHeight;
+    final layout = PosterGridLayout.of(context);
 
     return SliverPagedGrid<CardDisplayModel>(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: columns,
-        crossAxisSpacing: Space.md,
-        mainAxisSpacing: Space.lg,
-        childAspectRatio: childAspectRatio,
-      ),
+      gridDelegate: layout.delegate,
       loadingBuilder: (context) => SeeAllGridSkeleton(
-        columns: columns,
-        childAspectRatio: childAspectRatio,
+        columns: layout.columns,
+        childAspectRatio: layout.childAspectRatio,
       ),
       emptyBuilder: (context) => const SearchEmptyState(),
       itemBuilder: (context, item, index) {

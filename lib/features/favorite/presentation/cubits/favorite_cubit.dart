@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movify/core/network/utils/safe_emit_state.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/auth/presentation/cubits/session_state.dart';
 import 'package:movify/features/favorite/domain/entities/favorite_entity.dart';
@@ -13,11 +11,24 @@ import 'package:movify/features/favorite/domain/use_cases/pull_cloud_favorites_u
 import 'package:movify/features/favorite/domain/use_cases/remove_favorite_use_case.dart';
 import 'package:movify/features/favorite/presentation/cubits/favorite_state.dart';
 
-/// Favorites Cubit — Simplified Local-First
+/// Global favorites, local-first.
 ///
-/// All reads from Hive. Firestore is fire-and-forget backup.
-/// Zero Firestore reads during normal usage.
+/// Every read comes from Hive. Firestore is a fire-and-forget backup that is
+/// only read on explicit sign-in and on pull-to-refresh.
 class FavoriteCubit extends Cubit<FavoriteState> {
+  FavoriteCubit({
+    required this.mergeGuestFavoritesUseCase,
+    required this.pullCloudFavoritesUseCase,
+    required this.getFavoritesUseCase,
+    required this.addFavoriteUseCase,
+    required this.removeFavoriteUseCase,
+    required this.sessionStream,
+    required SessionState initialSessionState,
+  }) : super(const FavoriteInitial()) {
+    _sessionSub = sessionStream.listen(_onSessionChanged);
+    _onSessionChanged(initialSessionState);
+  }
+
   final MergeGuestFavoritesUseCase mergeGuestFavoritesUseCase;
   final PullCloudFavoritesUseCase pullCloudFavoritesUseCase;
   final GetFavoritesUseCase getFavoritesUseCase;
@@ -29,54 +40,33 @@ class FavoriteCubit extends Cubit<FavoriteState> {
   String _currentUserId = 'guest';
   bool _initialized = false;
 
-  FavoriteCubit({
-    required this.mergeGuestFavoritesUseCase,
-    required this.pullCloudFavoritesUseCase,
-    required this.getFavoritesUseCase,
-    required this.addFavoriteUseCase,
-    required this.removeFavoriteUseCase,
-    required this.sessionStream,
-    required SessionState initialSessionState,
-  }) : super(const FavoriteInitial()) {
-    _sessionSub = sessionStream.listen(_onSessionChanged);
-    // ✅ Initialize synchronously using the provided initial state. No race conditions!
-    _onSessionChanged(initialSessionState);
-  }
+  String get currentUserId => _currentUserId;
 
-  Future<void> _onSessionChanged(SessionState state) async {
-    if (state is SessionAuthenticated) {
+  Future<void> _onSessionChanged(SessionState session) async {
+    if (session is SessionAuthenticated) {
       await _handleSignIn(
-        userId: state.user.uid!,
-        isFirstSignIn: state.isExplicitSignIn,
+        userId: session.user.uid!,
+        isExplicitSignIn: session.isExplicitSignIn,
       );
-    } else if (state is SessionGuest) {
+    } else if (session is SessionGuest) {
       _initialized = false;
       _currentUserId = 'guest';
       await loadFavorites();
-    } else if (state is SessionUnauthenticated) {
+    } else if (session is SessionUnauthenticated) {
       _initialized = false;
       _currentUserId = 'guest';
-      safeEmit(const FavoriteInitial());
+      if (!isClosed) {
+        emit(const FavoriteInitial());
+      }
     }
   }
 
-  String get currentUserId => _currentUserId;
-
-  // ═══════════════════════════════════════════════════════════════════
-  // USER MANAGEMENT
-  // ═══════════════════════════════════════════════════════════════════
-
-  /// Sign-in flow: merge guest data + pull cloud + load.
-  ///
-  /// Called ONCE on explicit sign-in.
-  /// This is the ONLY path that reads from Firestore.
+  /// Merges guest favorites into the account on an explicit sign-in only, not
+  /// on app restart. This is the only path that reads Firestore on its own.
   Future<void> _handleSignIn({
     required String userId,
-    required bool isFirstSignIn,
+    required bool isExplicitSignIn,
   }) async {
-    // ✅ Guard now works correctly
-    // _currentUserId starts as 'guest' so first call passes
-    // second call with same userId is blocked
     if (_initialized && _currentUserId == userId) {
       return;
     }
@@ -84,161 +74,120 @@ class FavoriteCubit extends Cubit<FavoriteState> {
     _initialized = true;
     _currentUserId = userId;
 
-    // ✅ Only merge on explicit sign in — NOT on app restart
-    if (isFirstSignIn) {
-      final result = await mergeGuestFavoritesUseCase(userId);
-      result.fold(
-        (failure) => debugPrint('⚠️ Merge failed: ${failure.errorMessage}'),
-        (_) => debugPrint('✅ Merge complete'),
-      );
-    } else {
-      debugPrint('🔄 App restart — skipping merge, loading from Hive only');
+    if (isExplicitSignIn) {
+      // A failed merge keeps the guest items in Hive; the next sign-in retries.
+      await mergeGuestFavoritesUseCase(userId);
     }
 
-    await loadFavorites(); // always load from Hive
+    await loadFavorites();
   }
 
-  // ═══════════════════════════════════════════════════════════════════
-  // LOAD FAVORITES — Always from Hive
-  // ═══════════════════════════════════════════════════════════════════
-
-  Future<void> loadFavorites({ContentType? contentType}) async {
-    safeEmit(const FavoriteLoading());
+  /// Reads Hive. [showLoading] is false for refreshes so the list stays on
+  /// screen instead of flashing a spinner.
+  Future<void> loadFavorites({bool showLoading = true}) async {
+    if (showLoading && !isClosed) {
+      emit(const FavoriteLoading());
+    }
 
     final result = await getFavoritesUseCase(
       userId: _currentUserId,
-      contentType: contentType,
+      // ignore: avoid_redundant_argument_values
+      contentType: null,
     );
 
+    if (isClosed) {
+      return;
+    }
     result.fold(
-      (failure) {
-        safeEmit(FavoriteError(message: failure.errorMessage));
-      },
-      (favorites) {
-        final statuses = <String, bool>{};
-        for (final f in favorites) {
-          statuses[_key(f.specificId, f.contentType)] = true;
-        }
-
-        safeEmit(
-          FavoriteLoaded(
-            favoriteStatuses: statuses,
-            currentUserId: _currentUserId,
-          ),
-        );
-
-        debugPrint('✅ Loaded ${favorites.length} favorites from Hive');
-      },
+      (failure) => emit(FavoriteError(message: failure.errorMessage)),
+      (items) => emit(
+        FavoriteLoaded(items: items, currentUserId: _currentUserId),
+      ),
     );
   }
 
-  /// Get favorites by type (for tab views).
-  Future<List<FavoriteEntity>> getFavoritesByType(ContentType type) async {
-    final result = await getFavoritesUseCase(
-      userId: _currentUserId,
-      contentType: type,
-    );
-    return result.fold((_) => [], (list) => list);
+  bool isFavorite(int specificId, ContentType contentType) {
+    final current = state;
+    return current is FavoriteLoaded &&
+        current.contains(specificId, contentType);
   }
 
-  // ═══════════════════════════════════════════════════════════════════
-  // TOGGLE FAVORITE — Optimistic update
-  // ═══════════════════════════════════════════════════════════════════
-
+  /// Adds or removes [favorite]. The list updates first; the write follows and
+  /// is rolled back if it fails.
   Future<void> toggleFavorite(FavoriteEntity favorite) async {
     final current = state;
     if (current is! FavoriteLoaded) {
       return;
     }
 
-    final key = _key(favorite.specificId, favorite.contentType);
-    final isCurrentlyFav = current.favoriteStatuses[key] ?? false;
-
-    debugPrint(
-      '💫 Toggle: ${favorite.title} (${isCurrentlyFav ? "remove" : "add"})',
+    final wasFavorite = current.contains(
+      favorite.specificId,
+      favorite.contentType,
+    );
+    final saved = favorite.copyWith(
+      userId: _currentUserId,
+      addedAt: DateTime.now(),
     );
 
-    // 1. Optimistic UI update
-    final newStatuses = Map<String, bool>.from(current.favoriteStatuses);
-    if (isCurrentlyFav) {
-      newStatuses.remove(key);
-    } else {
-      newStatuses[key] = true;
-    }
+    // A failed removal puts back the original, with its original date.
+    final original = wasFavorite
+        ? current.items.firstWhere(
+            (f) =>
+                f.specificId == favorite.specificId &&
+                f.contentType == favorite.contentType,
+          )
+        : saved;
 
-    safeEmit(
-      FavoriteLoaded(
-        favoriteStatuses: newStatuses,
-        currentUserId: _currentUserId,
-      ),
-    );
+    emit(_withItem(current, saved, add: !wasFavorite));
 
-    // 2. Persist to Hive + fire-and-forget Firestore
-    final result = isCurrentlyFav
+    final result = wasFavorite
         ? await removeFavoriteUseCase(
             specificId: favorite.specificId,
             contentType: favorite.contentType,
             userId: _currentUserId,
           )
-        : await addFavoriteUseCase(favorite.copyWith(userId: _currentUserId));
+        : await addFavoriteUseCase(saved);
 
-    result.fold((failure) {
-      // Rollback on failure
-      debugPrint('❌ Toggle failed: ${failure.errorMessage}');
-      safeEmit(
-        FavoriteLoaded(
-          favoriteStatuses: current.favoriteStatuses,
-          currentUserId: _currentUserId,
-        ),
-      );
-    }, (_) => debugPrint('✅ Toggle persisted'));
+    // Undo only this item on the latest state, so a toggle made in the
+    // meantime is not lost.
+    result.fold((_) {
+      final latest = state;
+      if (!isClosed && latest is FavoriteLoaded) {
+        emit(_withItem(latest, original, add: wasFavorite));
+      }
+    }, (_) {});
   }
 
-  // ═══════════════════════════════════════════════════════════════════
-  // CHECK STATUS — For heart icon (instant, from state map)
-  // ═══════════════════════════════════════════════════════════════════
-
-  bool isFavorite(int specificId, ContentType contentType) {
-    if (state is FavoriteLoaded) {
-      final key = _key(specificId, contentType);
-      return (state as FavoriteLoaded).favoriteStatuses[key] ?? false;
-    }
-    return false;
-  }
-
-  // ═══════════════════════════════════════════════════════════════════
-  // PULL-TO-REFRESH — Manual cloud sync
-  // ═══════════════════════════════════════════════════════════════════
-
-  Future<void> refreshFromCloud() async {
-    if (_currentUserId == 'guest') {
-      return;
-    }
-
-    final result = await pullCloudFavoritesUseCase(_currentUserId);
-
-    result.fold(
-      (failure) => debugPrint('⚠️ Refresh failed: ${failure.errorMessage}'),
-      (_) => debugPrint('✅ Cloud refresh complete'),
+  FavoriteLoaded _withItem(
+    FavoriteLoaded from,
+    FavoriteEntity item, {
+    required bool add,
+  }) {
+    final others = from.items
+        .where(
+          (f) =>
+              f.specificId != item.specificId ||
+              f.contentType != item.contentType,
+        )
+        .toList();
+    return FavoriteLoaded(
+      items: add ? [item, ...others] : others,
+      currentUserId: from.currentUserId,
     );
+  }
 
-    await loadFavorites();
+  /// Pull-to-refresh: re-reads the cloud copy for signed-in users.
+  Future<void> refreshFromCloud() async {
+    if (_currentUserId != 'guest') {
+      // A failed pull keeps what is already in Hive.
+      await pullCloudFavoritesUseCase(_currentUserId);
+    }
+    await loadFavorites(showLoading: false);
   }
 
   @override
   Future<void> close() {
     _sessionSub.cancel();
-
     return super.close();
   }
-  // ═══════════════════════════════════════════════════════════════════
-  // HELPERS
-  // ═══════════════════════════════════════════════════════════════════
-
-  Future<List<FavoriteEntity>> getAllFavorites() async {
-    final result = await getFavoritesUseCase(userId: _currentUserId);
-    return result.fold((_) => [], (list) => list);
-  }
-
-  String _key(int id, ContentType type) => '${type.name}_$id';
 }

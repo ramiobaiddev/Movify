@@ -25,6 +25,7 @@ class PosterCard extends StatefulWidget {
     this.rating,
     this.actionButton,
     this.onTap,
+    this.onLongPress,
     this.width,
     this.borderRadius = Radii.lg,
     this.aspectRatio = 2 / 3,
@@ -41,6 +42,7 @@ class PosterCard extends StatefulWidget {
   final Widget? actionButton;
 
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final double? width;
   final double borderRadius;
   final double aspectRatio;
@@ -102,6 +104,7 @@ class _PosterCardState extends State<PosterCard> {
       onTap: widget.onTap,
       child: GestureDetector(
         onTap: widget.onTap,
+        onLongPress: widget.onLongPress,
         onTapDown: (_) => setState(() => _isPressed = true),
         onTapUp: (_) => setState(() => _isPressed = false),
         onTapCancel: () => setState(() => _isPressed = false),

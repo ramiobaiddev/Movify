@@ -1,22 +1,48 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
+import 'package:movify/core/utils/enums/content_type.dart';
+import 'package:movify/features/favorite/domain/entities/favorite_entity.dart';
 
-part 'favorite_state.freezed.dart';
+sealed class FavoriteState extends Equatable {
+  const FavoriteState();
 
-/// Favorite state — minimal.
-///
-/// No sync fields, no unsynced count, no last-sync time.
-/// Hive is truth; UI only needs the status map.
-@freezed
-class FavoriteState with _$FavoriteState {
-  const factory FavoriteState.initial() = FavoriteInitial;
+  @override
+  List<Object?> get props => [];
+}
 
-  const factory FavoriteState.loading() = FavoriteLoading;
+final class FavoriteInitial extends FavoriteState {
+  const FavoriteInitial();
+}
 
-  /// Map of "contentType_id" → true for fast heart-icon lookup.
-  const factory FavoriteState.loaded({
-    required Map<String, bool> favoriteStatuses,
-    required String currentUserId,
-  }) = FavoriteLoaded;
+final class FavoriteLoading extends FavoriteState {
+  const FavoriteLoading();
+}
 
-  const factory FavoriteState.error({required String message}) = FavoriteError;
+/// Everything the current user has saved, in no particular order (the screen
+/// sorts). The heart icons and the Favorites screen both read from this list.
+final class FavoriteLoaded extends FavoriteState {
+  const FavoriteLoaded({required this.items, required this.currentUserId});
+
+  final List<FavoriteEntity> items;
+  final String currentUserId;
+
+  bool get isGuest => currentUserId == 'guest';
+
+  bool contains(int specificId, ContentType type) => items.any(
+    (f) => f.specificId == specificId && f.contentType == type,
+  );
+
+  List<FavoriteEntity> ofType(ContentType type) =>
+      items.where((f) => f.contentType == type).toList();
+
+  @override
+  List<Object?> get props => [items, currentUserId];
+}
+
+final class FavoriteError extends FavoriteState {
+  const FavoriteError({required this.message});
+
+  final String message;
+
+  @override
+  List<Object?> get props => [message];
 }
