@@ -30,6 +30,7 @@ class FavoriteModelAdapter extends TypeAdapter<FavoriteModel> {
       isSynced: fields[12] == null ? false : fields[12] as bool,
       lastSyncedAt: fields[13] as DateTime?,
       tmbdId: fields[14] == null ? 0 : fields[14] as int,
+      addedAt: fields[15] as DateTime?,
       contentType: fields[2] as ContentType,
     );
   }
@@ -37,7 +38,7 @@ class FavoriteModelAdapter extends TypeAdapter<FavoriteModel> {
   @override
   void write(BinaryWriter writer, FavoriteModel obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(15)
       ..writeByte(1)
       ..write(obj.specificId)
       ..writeByte(3)
@@ -64,6 +65,8 @@ class FavoriteModelAdapter extends TypeAdapter<FavoriteModel> {
       ..write(obj.lastSyncedAt)
       ..writeByte(14)
       ..write(obj.tmbdId)
+      ..writeByte(15)
+      ..write(obj.addedAt)
       ..writeByte(2)
       ..write(obj.contentType);
   }
@@ -102,6 +105,9 @@ _$FavoriteModelImpl _$$FavoriteModelImplFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['lastSyncedAt'] as String),
       tmbdId: (json['tmbdId'] as num?)?.toInt() ?? 0,
+      addedAt: json['addedAt'] == null
+          ? null
+          : DateTime.parse(json['addedAt'] as String),
       contentType: $enumDecode(_$ContentTypeEnumMap, json['contentType']),
     );
 
@@ -120,6 +126,7 @@ Map<String, dynamic> _$$FavoriteModelImplToJson(_$FavoriteModelImpl instance) =>
       'isSynced': instance.isSynced,
       'lastSyncedAt': instance.lastSyncedAt?.toIso8601String(),
       'tmbdId': instance.tmbdId,
+      'addedAt': instance.addedAt?.toIso8601String(),
       'contentType': _$ContentTypeEnumMap[instance.contentType]!,
     };
 

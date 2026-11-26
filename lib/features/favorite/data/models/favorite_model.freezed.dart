@@ -63,6 +63,8 @@ mixin _$FavoriteModel {
   DateTime? get lastSyncedAt => throw _privateConstructorUsedError;
   @HiveField(14)
   int get tmbdId => throw _privateConstructorUsedError;
+  @HiveField(15)
+  DateTime? get addedAt => throw _privateConstructorUsedError;
 
   /// Type of content (movie, series, season, episode)
   @HiveField(2)
@@ -99,6 +101,7 @@ abstract class $FavoriteModelCopyWith<$Res> {
     @HiveField(12) bool isSynced,
     @HiveField(13) DateTime? lastSyncedAt,
     @HiveField(14) int tmbdId,
+    @HiveField(15) DateTime? addedAt,
     @HiveField(2) ContentType contentType,
   });
 }
@@ -131,6 +134,7 @@ class _$FavoriteModelCopyWithImpl<$Res, $Val extends FavoriteModel>
     Object? isSynced = null,
     Object? lastSyncedAt = freezed,
     Object? tmbdId = null,
+    Object? addedAt = freezed,
     Object? contentType = null,
   }) {
     return _then(
@@ -187,6 +191,10 @@ class _$FavoriteModelCopyWithImpl<$Res, $Val extends FavoriteModel>
                 ? _value.tmbdId
                 : tmbdId // ignore: cast_nullable_to_non_nullable
                       as int,
+            addedAt: freezed == addedAt
+                ? _value.addedAt
+                : addedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
             contentType: null == contentType
                 ? _value.contentType
                 : contentType // ignore: cast_nullable_to_non_nullable
@@ -220,6 +228,7 @@ abstract class _$$FavoriteModelImplCopyWith<$Res>
     @HiveField(12) bool isSynced,
     @HiveField(13) DateTime? lastSyncedAt,
     @HiveField(14) int tmbdId,
+    @HiveField(15) DateTime? addedAt,
     @HiveField(2) ContentType contentType,
   });
 }
@@ -251,6 +260,7 @@ class __$$FavoriteModelImplCopyWithImpl<$Res>
     Object? isSynced = null,
     Object? lastSyncedAt = freezed,
     Object? tmbdId = null,
+    Object? addedAt = freezed,
     Object? contentType = null,
   }) {
     return _then(
@@ -307,6 +317,10 @@ class __$$FavoriteModelImplCopyWithImpl<$Res>
             ? _value.tmbdId
             : tmbdId // ignore: cast_nullable_to_non_nullable
                   as int,
+        addedAt: freezed == addedAt
+            ? _value.addedAt
+            : addedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
         contentType: null == contentType
             ? _value.contentType
             : contentType // ignore: cast_nullable_to_non_nullable
@@ -334,6 +348,7 @@ class _$FavoriteModelImpl extends _FavoriteModel {
     @HiveField(12) this.isSynced = false,
     @HiveField(13) this.lastSyncedAt,
     @HiveField(14) this.tmbdId = 0,
+    @HiveField(15) this.addedAt,
     @HiveField(2) required this.contentType,
   }) : _genres = genres,
        super._();
@@ -420,6 +435,10 @@ class _$FavoriteModelImpl extends _FavoriteModel {
   @HiveField(14)
   final int tmbdId;
 
+  @override
+  @HiveField(15)
+  final DateTime? addedAt;
+
   /// Type of content (movie, series, season, episode)
   @override
   @HiveField(2)
@@ -427,7 +446,7 @@ class _$FavoriteModelImpl extends _FavoriteModel {
 
   @override
   String toString() {
-    return 'FavoriteModel(specificId: $specificId, title: $title, posterImage: $posterImage, backdropImage: $backdropImage, genres: $genres, date: $date, rating: $rating, seasonNumber: $seasonNumber, episodeNumber: $episodeNumber, userId: $userId, isSynced: $isSynced, lastSyncedAt: $lastSyncedAt, tmbdId: $tmbdId, contentType: $contentType)';
+    return 'FavoriteModel(specificId: $specificId, title: $title, posterImage: $posterImage, backdropImage: $backdropImage, genres: $genres, date: $date, rating: $rating, seasonNumber: $seasonNumber, episodeNumber: $episodeNumber, userId: $userId, isSynced: $isSynced, lastSyncedAt: $lastSyncedAt, tmbdId: $tmbdId, addedAt: $addedAt, contentType: $contentType)';
   }
 
   @override
@@ -455,6 +474,7 @@ class _$FavoriteModelImpl extends _FavoriteModel {
             (identical(other.lastSyncedAt, lastSyncedAt) ||
                 other.lastSyncedAt == lastSyncedAt) &&
             (identical(other.tmbdId, tmbdId) || other.tmbdId == tmbdId) &&
+            (identical(other.addedAt, addedAt) || other.addedAt == addedAt) &&
             (identical(other.contentType, contentType) ||
                 other.contentType == contentType));
   }
@@ -476,6 +496,7 @@ class _$FavoriteModelImpl extends _FavoriteModel {
     isSynced,
     lastSyncedAt,
     tmbdId,
+    addedAt,
     contentType,
   );
 
@@ -508,6 +529,7 @@ abstract class _FavoriteModel extends FavoriteModel {
     @HiveField(12) final bool isSynced,
     @HiveField(13) final DateTime? lastSyncedAt,
     @HiveField(14) final int tmbdId,
+    @HiveField(15) final DateTime? addedAt,
     @HiveField(2) required final ContentType contentType,
   }) = _$FavoriteModelImpl;
   const _FavoriteModel._() : super._();
@@ -569,6 +591,9 @@ abstract class _FavoriteModel extends FavoriteModel {
   @override
   @HiveField(14)
   int get tmbdId;
+  @override
+  @HiveField(15)
+  DateTime? get addedAt;
   @override
   /// Type of content (movie, series, season, episode)
   @HiveField(2)

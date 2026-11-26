@@ -46,7 +46,9 @@ class FavoritesRepositoryImpl implements FavoriteRepo {
   @override
   Future<Either<Failure, Unit>> addFavorite(FavoriteEntity favorite) async {
     try {
-      final model = FavoriteModel.fromEntity(favorite);
+      final model = FavoriteModel.fromEntity(
+        favorite,
+      ).copyWith(addedAt: favorite.addedAt ?? DateTime.now());
 
       // 1. Save to Hive immediately
       await localDataSource.addFavorite(model);

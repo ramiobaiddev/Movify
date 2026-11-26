@@ -25,6 +25,10 @@ class FavoriteEntity extends Equatable {
   // ── Owner ──
   final String userId;
 
+  /// When the user saved it. Null for items saved before this was tracked.
+  /// Not part of identity.
+  final DateTime? addedAt;
+
   const FavoriteEntity({
     required this.specificId,
     required this.contentType,
@@ -38,6 +42,7 @@ class FavoriteEntity extends Equatable {
     this.episodeNumber = 0,
     this.tmbdId = 0,
     this.userId = 'guest',
+    this.addedAt,
   });
 
   FavoriteEntity copyWith({
@@ -53,6 +58,7 @@ class FavoriteEntity extends Equatable {
     int? episodeNumber,
     int? tmbdId,
     String? userId,
+    DateTime? addedAt,
   }) => FavoriteEntity(
     specificId: specificId ?? this.specificId,
     contentType: contentType ?? this.contentType,
@@ -66,6 +72,7 @@ class FavoriteEntity extends Equatable {
     episodeNumber: episodeNumber ?? this.episodeNumber,
     tmbdId: tmbdId ?? this.tmbdId,
     userId: userId ?? this.userId,
+    addedAt: addedAt ?? this.addedAt,
   );
 
   @override

@@ -73,6 +73,10 @@ class FavoriteModel with _$FavoriteModel {
     /// Stored as DateTime in Hive, Timestamp in Firestore
     @HiveField(13) DateTime? lastSyncedAt,
     @HiveField(14) @Default(0) int tmbdId,
+
+    /// When the user added this favorite. Null for items saved before this
+    /// field existed. Used for the "Recently added" sort.
+    @HiveField(15) DateTime? addedAt,
   }) = _FavoriteModel;
 
   // ========== FACTORY CONSTRUCTORS ==========
@@ -95,6 +99,7 @@ class FavoriteModel with _$FavoriteModel {
     episodeNumber: entity.episodeNumber,
     tmbdId: entity.tmbdId,
     userId: entity.userId,
+    addedAt: entity.addedAt,
   );
 
   // ========== INSTANCE METHODS ==========
@@ -113,6 +118,7 @@ class FavoriteModel with _$FavoriteModel {
     episodeNumber: episodeNumber,
     tmbdId: tmbdId,
     userId: userId,
+    addedAt: addedAt,
   );
   String get firestoreDocId => '${specificId}_${contentType.name}';
 }

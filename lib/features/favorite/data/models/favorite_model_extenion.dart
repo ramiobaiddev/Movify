@@ -75,6 +75,10 @@ extension FavoriteModelFirestoreX on FavoriteModel {
       data['lastSyncedAt'] = Timestamp.fromDate(lastSyncedAt!);
     }
 
+    if (addedAt != null) {
+      data['addedAt'] = Timestamp.fromDate(addedAt!);
+    }
+
     // ========== NEVER INCLUDE ==========
     // userId: Redundant (already in document path: users/{userId}/favorites/...)
     // isSynced: Hive-only field (meaningless in Firestore - presence = synced)
@@ -126,6 +130,7 @@ extension FavoriteModelFirestoreX on FavoriteModel {
 
       // Convert Firestore Timestamp → DateTime
       lastSyncedAt: _parseTimestamp(data['lastSyncedAt']),
+      addedAt: _parseTimestamp(data['addedAt']),
     );
   }
 
