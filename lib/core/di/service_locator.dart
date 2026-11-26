@@ -86,6 +86,13 @@ import 'package:movify/features/home/domian/use_cases/get_series_use_case.dart';
 import 'package:movify/features/home/presentation/blocs/movie_bloc.dart';
 import 'package:movify/features/home/presentation/blocs/series_bloc.dart';
 import 'package:movify/features/home/presentation/feeds/feed_fetchers.dart';
+import 'package:movify/features/people/data/data_sources/remote_people_data_source.dart';
+import 'package:movify/features/people/data/data_sources/remote_people_data_source_impl.dart';
+import 'package:movify/features/people/data/repos/people_repo_impl.dart';
+import 'package:movify/features/people/domain/repo/people_repo.dart';
+import 'package:movify/features/people/domain/use_cases/get_person_details_use_case.dart';
+import 'package:movify/features/people/domain/use_cases/get_popular_people_use_case.dart';
+import 'package:movify/features/people/presentation/cubits/person_details_cubit.dart';
 import 'package:movify/features/search/data/data_sources/local/local_search_history_data_source.dart';
 import 'package:movify/features/search/data/data_sources/local/local_search_history_data_source_impl.dart';
 import 'package:movify/features/search/data/data_sources/remote/remote_search_data_source.dart';
@@ -203,6 +210,9 @@ void _registerDataSources() {
   getIt.registerLazySingleton<RemoteSearchDataSource>(
     () => RemoteSearchDataSourceImpl(apiService: getIt<ApiService>()),
   );
+  getIt.registerLazySingleton<RemotePeopleDataSource>(
+    () => RemotePeopleDataSourceImpl(apiService: getIt<ApiService>()),
+  );
   getIt.registerLazySingleton<RemoteMovieDetailsDataSource>(
     () => RemoteMovieDetailsDataSourceImpl(apiService: getIt<ApiService>()),
   );
@@ -250,6 +260,15 @@ void _registerRepositories() {
   );
   getIt.registerLazySingleton<SearchRepo>(
     () => SearchRepoImpl(remoteDataSource: getIt<RemoteSearchDataSource>()),
+  );
+  getIt.registerLazySingleton<PeopleRepo>(
+    () => PeopleRepoImpl(remoteDataSource: getIt<RemotePeopleDataSource>()),
+  );
+  getIt.registerLazySingleton<GetPopularPeopleUseCase>(
+    () => GetPopularPeopleUseCase(getIt<PeopleRepo>()),
+  );
+  getIt.registerLazySingleton<GetPersonDetailsUseCase>(
+    () => GetPersonDetailsUseCase(getIt<PeopleRepo>()),
   );
   getIt.registerLazySingleton<SearchHistoryRepo>(
     () => SearchHistoryRepoImpl(
@@ -470,6 +489,9 @@ void _registerCubits() {
       fetchMovieDetailsUseCase: getIt<FetchMovieDetailsUseCase>(),
       fetchTvShowDetailsUseCase: getIt<FetchTvShowDetailsUseCase>(),
     ),
+  );
+  getIt.registerFactory<PersonDetailsCubit>(
+    () => PersonDetailsCubit(getIt<GetPersonDetailsUseCase>()),
   );
   getIt.registerFactory<SearchCubit>(
     () => SearchCubit(

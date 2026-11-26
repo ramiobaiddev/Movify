@@ -1,6 +1,6 @@
 import 'package:movify/core/pagination/domain/entites/page_result.dart';
 import 'package:movify/features/search/data/models/keyword_model.dart';
-import 'package:movify/features/search/data/models/person_item_model.dart';
+import 'package:movify/shared/data/models/person_item_model.dart';
 import 'package:movify/shared/data/models/media_item_model.dart';
 
 abstract interface class RemoteSearchDataSource {

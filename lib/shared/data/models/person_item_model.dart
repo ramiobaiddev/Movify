@@ -38,6 +38,13 @@ class PersonItemModel {
     );
   }
 
+  /// Null when the person has no photo: a list of faces with holes is worse
+  /// than a shorter list.
+  static PersonItemModel? tryFromJson(Map<String, dynamic> json) {
+    final person = PersonItemModel.fromJson(json);
+    return person.profilePath == null ? null : person;
+  }
+
   PersonItem toEntity() => PersonItem(
     id: id,
     name: name,

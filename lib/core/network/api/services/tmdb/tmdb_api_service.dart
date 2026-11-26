@@ -3,6 +3,7 @@ import 'package:movify/core/network/api/services/tmdb/tmdb_base_client.dart';
 import 'package:movify/core/network/api/services/tmdb/tmdb_configration.dart';
 import 'package:movify/core/network/api/services/tmdb/tmdb_content_api.dart';
 import 'package:movify/core/network/api/services/tmdb/tmdb_details_api.dart';
+import 'package:movify/core/network/api/services/tmdb/tmdb_people_api.dart';
 import 'package:movify/core/network/api/services/tmdb/tmdb_search_api.dart';
 import 'package:movify/core/network/client/dio_client.dart';
 
@@ -14,12 +15,14 @@ class TmdbApiService {
   late final TmdbContentApi content; // Unified for movies & TV
   late final TmdbSearchApi search;
   late final TmdbDetailsApi details;
+  late final TmdbPeopleApi people;
 
   TmdbApiService({required DioClient dioClient, required String language})
     : _client = TmdbBaseClient(dioClient: dioClient, language: language) {
     content = TmdbContentApi(_client);
     search = TmdbSearchApi(_client);
     details = TmdbDetailsApi(_client);
+    people = TmdbPeopleApi(_client);
   }
 
   String get language => _client.language;

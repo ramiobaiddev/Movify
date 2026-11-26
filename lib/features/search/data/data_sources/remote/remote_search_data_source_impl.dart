@@ -3,7 +3,7 @@ import 'package:movify/core/pagination/domain/entites/page_result.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/search/data/data_sources/remote/remote_search_data_source.dart';
 import 'package:movify/features/search/data/models/keyword_model.dart';
-import 'package:movify/features/search/data/models/person_item_model.dart';
+import 'package:movify/shared/data/models/person_item_model.dart';
 import 'package:movify/shared/data/mappers/map_paged_response.dart';
 import 'package:movify/shared/data/models/media_item_model.dart';
 
@@ -45,10 +45,7 @@ class RemoteSearchDataSourceImpl implements RemoteSearchDataSource {
     int page = 1,
   }) async => mapPagedItems(
     data: await apiService.tmdb.search.searchActors(query, page: page),
-    parse: (json) {
-      final person = PersonItemModel.fromJson(json);
-      return person.profilePath == null ? null : person;
-    },
+    parse: PersonItemModel.tryFromJson,
   );
 
   @override
