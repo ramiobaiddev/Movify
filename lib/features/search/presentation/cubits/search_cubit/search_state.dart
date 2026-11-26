@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:movify/core/paging/paged_cubit.dart';
+import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/search/domain/entities/search_history_entity.dart';
 import 'package:movify/features/search/presentation/models/search_tab.dart';
 import 'package:movify/shared/domain/entites/keyword.dart';
@@ -40,6 +41,7 @@ final class SearchActive extends SearchState {
     required this.query,
     required this.tab,
     required this.revision,
+    this.mediaKind = ContentType.movies,
     this.mediaList,
     this.peopleList,
     this.keywordList,
@@ -48,6 +50,9 @@ final class SearchActive extends SearchState {
   final String query;
   final SearchTab tab;
   final int revision;
+
+  /// Kind a keyword result opens See all in (the last movies or series tab).
+  final ContentType mediaKind;
   final PagedCubit<CardDisplayModel>? mediaList;
   final PagedCubit<PersonItem>? peopleList;
   final PagedCubit<Keyword>? keywordList;
@@ -57,6 +62,7 @@ final class SearchActive extends SearchState {
     query,
     tab,
     revision,
+    mediaKind,
     mediaList,
     peopleList,
     keywordList,

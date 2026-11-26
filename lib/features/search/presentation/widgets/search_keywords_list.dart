@@ -13,13 +13,16 @@ import 'package:movify/shared/domain/entites/keyword.dart';
 
 /// Paginated list of keyword results. Tapping opens SeeAll filtered by this keyword.
 class SearchKeywordsList extends StatelessWidget {
-  const SearchKeywordsList({super.key});
+  const SearchKeywordsList({super.key, required this.kind});
+
+  /// Opens See all in this kind.
+  final ContentType kind;
 
   void _onKeywordTap(BuildContext context, Keyword keyword) {
     context.pushNamed(
       RouteName.seeAll,
       extra: SeeAllArgs.discover(
-        kind: ContentType.movies,
+        kind: kind,
         filters: DiscoverFilters(keywords: {keyword}),
         title: keyword.name,
       ),

@@ -54,10 +54,16 @@ class SeeAllFilterBar extends StatelessWidget {
       return 'Genres';
     }
     final id = filters.genreIds.first;
-    final name = kind == ContentType.movies
-        ? MovieGenre.values.where((g) => g.id == id).firstOrNull
-        : TvGenre.values.where((g) => g.id == id).firstOrNull;
-    return _firstPlusMore(name?.name ?? '', filters.genreIds.length);
+    final label = kind == ContentType.movies
+        ? MovieGenre.values
+              .where((g) => g.id == id)
+              .firstOrNull
+              ?.localizedText(context)
+        : TvGenre.values
+              .where((g) => g.id == id)
+              .firstOrNull
+              ?.localizedText(context);
+    return _firstPlusMore(label ?? '', filters.genreIds.length);
   }
 
   String _ratingLabel() => filters.minRating == null

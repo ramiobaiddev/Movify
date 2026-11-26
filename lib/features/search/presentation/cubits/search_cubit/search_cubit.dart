@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movify/core/paging/paged_cubit.dart';
+import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/search/domain/entities/search_history_entity.dart';
 import 'package:movify/features/search/domain/repo/search_history.dart';
 import 'package:movify/features/search/domain/repo/search_repo.dart';
@@ -27,6 +28,10 @@ class SearchCubit extends Cubit<SearchState> {
   SearchTab _currentTab = SearchTab.moviesAndSeries;
   String _query = '';
 
+  /// Last movies or series tab the user picked. Keyword results open See all
+  /// in this kind.
+  ContentType _mediaKind = ContentType.movies;
+
   void onQueryChanged(String newQuery) {
     _debounceTimer?.cancel();
     _query = newQuery.trim();
@@ -44,6 +49,14 @@ class SearchCubit extends Cubit<SearchState> {
       return;
     }
     _currentTab = newTab;
+    switch (newTab) {
+      case SearchTab.movies:
+        _mediaKind = ContentType.movies;
+      case SearchTab.series:
+        _mediaKind = ContentType.series;
+      case SearchTab.moviesAndSeries || SearchTab.people || SearchTab.keywords:
+        break;
+    }
     _debounceTimer?.cancel();
     if (_query.isNotEmpty) {
       _triggerSearch();
@@ -65,6 +78,7 @@ class SearchCubit extends Cubit<SearchState> {
         query: query,
         tab: tab,
         revision: revision,
+        mediaKind: _mediaKind,
         mediaList: PagedCubit<CardDisplayModel>(_mediaFetcher(tab, query))
           ..load(),
       ),
@@ -72,6 +86,7 @@ class SearchCubit extends Cubit<SearchState> {
         query: query,
         tab: tab,
         revision: revision,
+        mediaKind: _mediaKind,
         peopleList: PagedCubit<PersonItem>(
           (page) => _searchRepo.searchPeople(query: query, page: page),
         )..load(),
@@ -80,6 +95,7 @@ class SearchCubit extends Cubit<SearchState> {
         query: query,
         tab: tab,
         revision: revision,
+        mediaKind: _mediaKind,
         keywordList: PagedCubit<Keyword>(
           (page) => _searchRepo.searchKeywords(query: query, page: page),
         )..load(),

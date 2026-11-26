@@ -62,7 +62,7 @@ class SearchResultsView extends StatelessWidget {
           ),
           SearchTab.keywords => _results(
             state.keywordList,
-            const SearchKeywordsList(),
+            SearchKeywordsList(kind: state.mediaKind),
           ),
         },
       ),

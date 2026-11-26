@@ -2,12 +2,14 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:movify/core/pagination/domain/entites/page_result.dart';
+import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/search/domain/entities/search_history_entity.dart';
 import 'package:movify/features/search/domain/repo/search_history.dart';
 import 'package:movify/features/search/domain/repo/search_repo.dart';
 import 'package:movify/features/search/presentation/cubits/search_cubit/search_cubit.dart';
 import 'package:movify/features/search/presentation/cubits/search_cubit/search_state.dart';
 import 'package:movify/features/search/presentation/models/search_tab.dart';
+import 'package:movify/shared/domain/entites/keyword.dart';
 import 'package:movify/shared/domain/entites/media_item.dart';
 
 class _SearchRepo extends Mock implements SearchRepo {}
@@ -92,6 +94,39 @@ void main() {
     expect(second.revision, first.revision + 1);
     expect(second.mediaList, isNot(same(first.mediaList)));
     expect(first.mediaList!.isClosed, isTrue);
+  });
+
+  test('keywords open See all in the last movies or series tab', () async {
+    when(
+      () => search.searchSeries(
+        query: any(named: 'query'),
+        page: any(named: 'page'),
+      ),
+    ).thenAnswer((_) async => const Right(_empty));
+    when(
+      () => search.searchKeywords(
+        query: any(named: 'query'),
+        page: any(named: 'page'),
+      ),
+    ).thenAnswer(
+      (_) async => const Right(
+        PageResult<Keyword>(
+          page: 1,
+          totalPages: 1,
+          totalResults: 0,
+          results: [],
+        ),
+      ),
+    );
+    cubit.onQueryChanged('space');
+    await Future<void>.delayed(const Duration(milliseconds: 400));
+
+    cubit.onTabChanged(SearchTab.keywords);
+    expect((cubit.state as SearchActive).mediaKind, ContentType.movies);
+
+    cubit.onTabChanged(SearchTab.series);
+    cubit.onTabChanged(SearchTab.keywords);
+    expect((cubit.state as SearchActive).mediaKind, ContentType.series);
   });
 
   test('clearing the query goes back to history', () async {
