@@ -36,10 +36,7 @@ class FilterActionButtons extends StatelessWidget {
             ),
             child: Text(
               'Apply Filters',
-              style: textTheme.labelLarge?.copyWith(
-                color: colors.textOnImage,
-                fontWeight: FontWeight.w700,
-              ),
+              style: textTheme.labelLarge?.copyWith(color: colors.textOnImage),
             ),
           ),
         ),
@@ -56,10 +53,7 @@ class FilterActionButtons extends StatelessWidget {
             ),
             child: Text(
               'Reset',
-              style: textTheme.labelLarge?.copyWith(
-                color: colors.textPrimary,
-                fontWeight: FontWeight.w600,
-              ),
+              style: textTheme.labelLarge?.copyWith(color: colors.textPrimary),
             ),
           ),
         ),

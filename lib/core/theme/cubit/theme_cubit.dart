@@ -17,6 +17,8 @@ class ThemeCubit extends HydratedCubit<ThemeState> {
     ),
   );
 
+  void setThemeMode(ThemeMode mode) => emit(state.copyWith(mode: mode));
+
   void setAccentColor(Color color) => emit(state.copyWith(accentColor: color));
   void setFontSize(double size) => emit(state.copyWith(fontSize: size));
 

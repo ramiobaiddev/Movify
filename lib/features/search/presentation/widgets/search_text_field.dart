@@ -26,7 +26,7 @@ class SearchTextField extends StatelessWidget {
     return Container(
       height: 48,
       decoration: BoxDecoration(
-        color: colors.surfaceGenre,
+        color: colors.surfaceBottomSheet,
         borderRadius: BorderRadius.circular(Radii.lg),
         border: Border.all(
           color: colors.surfaceDivider.withValues(alpha: 0.15),

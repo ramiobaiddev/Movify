@@ -51,11 +51,13 @@ class SliverPagedGrid<T> extends StatelessWidget {
           );
         }
         if (state.isEmpty) {
-          return SliverToBoxAdapter(
-            child: emptyBuilder?.call(context) ?? const SizedBox.shrink(),
+          return SliverFillRemaining(
+            hasScrollBody: false,
+            child: Center(
+              child: emptyBuilder?.call(context) ?? const SizedBox.shrink(),
+            ),
           );
         }
-
         return SliverMainAxisGroup(
           slivers: [
             SliverGrid(

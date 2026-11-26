@@ -1,19 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:movify/core/utils/app_styles.dart';
 import 'package:movify/features/profile/presentation/views/profile_body.dart';
-import 'package:movify/l10n/app_localizations.dart';
 
+/// Profile screen following Figma node `413:3939`.
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.profile, style: AppStyles.textStyle24(context)),
-      ),
-      body: const SafeArea(bottom: false, child: ProfileViewBody()),
-    );
-  }
+  Widget build(BuildContext context) =>
+      const Scaffold(body: SafeArea(bottom: false, child: ProfileViewBody()));
 }

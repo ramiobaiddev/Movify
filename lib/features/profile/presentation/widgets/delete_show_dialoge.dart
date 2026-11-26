@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movify/core/utils/app_colors.dart';
-import 'package:movify/core/utils/app_styles.dart';
+import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/features/auth/presentation/cubits/session_cubit.dart';
 import 'package:movify/l10n/app_localizations.dart';
 import 'package:movify/shared/presentation/utils/show_snack_bar.dart';
-import 'package:movify/shared/presentation/widgets/size_config.dart';
 
 class DeleteShowDialoge extends StatelessWidget {
   const DeleteShowDialoge({super.key});
@@ -14,50 +12,72 @@ class DeleteShowDialoge extends StatelessWidget {
   Widget build(BuildContext context) {
     final sessionCubit = context.read<SessionCubit>();
     final l10n = AppLocalizations.of(context)!;
-    final width = MediaQuery.widthOf(context);
-    final isMobile = width < SizeConfig.tablet;
+    final colors = context.colors;
+    final textTheme = Theme.of(context).textTheme;
 
     return AlertDialog(
-      backgroundColor: Theme.of(context).dialogTheme.backgroundColor,
+      backgroundColor: colors.surfaceContainerTonal,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Radii.lg),
+      ),
       actionsAlignment: MainAxisAlignment.center,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24),
+      insetPadding: const EdgeInsets.symmetric(horizontal: Space.xl),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.delete_forever_outlined,
-            size: isMobile ? 32 : 48,
-            color: AppPrimaryColors.blueAccent,
+            size: 28,
+            color: colors.surfaceError,
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: Space.sm),
           Flexible(
             child: Text(
               l10n.areYouSureYouWantToDelete,
-              style: AppStyles.textStyle20(context),
+              style: textTheme.titleMedium?.copyWith(
+                color: colors.textPrimary,
+              ),
             ),
           ),
         ],
       ),
       content: Text(
         l10n.thisActionCannotBeUndone,
-        style: AppStyles.textStyle16(context),
-        textAlign: .center,
+        style: textTheme.bodyMedium?.copyWith(
+          color: colors.textSecondary,
+        ),
+        textAlign: TextAlign.center,
       ),
       actions: [
         OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: colors.textSecondary,
+            side: BorderSide(color: colors.surfaceDivider),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Radii.md),
+            ),
+          ),
           onPressed: () => Navigator.pop(context),
-          child: Text(l10n.cancel, style: AppStyles.textStyle16(context)),
+          child: Text(l10n.cancel),
         ),
         OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: colors.surfaceError,
+            side: BorderSide(color: colors.surfaceError),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Radii.md),
+            ),
+          ),
           onPressed: () {
             Navigator.pop(context);
             sessionCubit.deleteAccount();
-            showSnackBar(context, color: Colors.red, text: l10n.accountDeleted);
+            showSnackBar(
+              context,
+              color: colors.surfaceError,
+              text: l10n.accountDeleted,
+            );
           },
-          child: Text(
-            l10n.delete,
-            style: AppStyles.textStyle16(context).copyWith(color: Colors.red),
-          ),
+          child: Text(l10n.delete),
         ),
       ],
     );

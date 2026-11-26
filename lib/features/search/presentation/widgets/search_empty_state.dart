@@ -26,25 +26,17 @@ class SearchEmptyState extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
-              Assets.theaterIcon,
-              width: 92,
-              height: 92,
-            ),
+            SvgPicture.asset(Assets.theaterIcon, width: 92, height: 92),
             const SizedBox(height: Space.lg),
             Text(
               title,
-              style: textTheme.titleMedium?.copyWith(
-                color: colors.textPrimary,
-              ),
+              style: textTheme.titleMedium?.copyWith(color: colors.textPrimary),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: Space.sm),
             Text(
               message,
-              style: textTheme.bodySmall?.copyWith(
-                color: colors.textSecondary,
-              ),
+              style: textTheme.bodySmall?.copyWith(color: colors.textContrast),
               textAlign: TextAlign.center,
             ),
           ],
