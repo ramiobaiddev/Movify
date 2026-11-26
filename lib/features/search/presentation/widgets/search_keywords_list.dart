@@ -33,7 +33,6 @@ class SearchKeywordsList extends StatelessWidget {
       mainAxisExtent: 52,
       mainAxisSpacing: Space.xsm,
     ),
-    padding: EdgeInsets.zero,
     loadingBuilder: (context) => const SearchListSkeleton(),
     emptyBuilder: (context) => const SearchEmptyState(
       title: 'No keywords found',

@@ -6,9 +6,7 @@ import 'package:movify/features/search/data/data_sources/remote/remote_search_da
 import 'package:movify/features/search/domain/repo/search_repo.dart';
 import 'package:movify/shared/domain/entites/keyword.dart';
 import 'package:movify/shared/domain/entites/media_item.dart';
-import 'package:movify/shared/domain/entites/movie_entity.dart';
 import 'package:movify/shared/domain/entites/person_item.dart';
-import 'package:movify/shared/domain/entites/series_entity.dart';
 
 class SearchRepoImpl implements SearchRepo {
   const SearchRepoImpl({required this.remoteDataSource});
@@ -27,7 +25,7 @@ class SearchRepoImpl implements SearchRepo {
   );
 
   @override
-  Future<Either<Failure, PageResult<MovieEntity>>> searchMovies({
+  Future<Either<Failure, PageResult<MediaItem>>> searchMovies({
     required String query,
     int page = 1,
   }) => safeApiCall(
@@ -38,7 +36,7 @@ class SearchRepoImpl implements SearchRepo {
   );
 
   @override
-  Future<Either<Failure, PageResult<SeriesEntity>>> searchSeries({
+  Future<Either<Failure, PageResult<MediaItem>>> searchSeries({
     required String query,
     int page = 1,
   }) => safeApiCall(

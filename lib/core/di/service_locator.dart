@@ -97,9 +97,6 @@ import 'package:movify/features/search/domain/use_cases/add_to_history_use_case.
 import 'package:movify/features/search/domain/use_cases/clear_search_history_use_case.dart';
 import 'package:movify/features/search/domain/use_cases/delete_from_search_history_use_case.dart';
 import 'package:movify/features/search/domain/use_cases/get_search_history_use_case.dart';
-import 'package:movify/features/search/domain/use_cases/search_movie_use_case.dart';
-import 'package:movify/features/search/domain/use_cases/search_tv_show_use_case.dart';
-import 'package:movify/features/search/presentation/blocs/search_bloc.dart';
 import 'package:movify/features/search/presentation/cubits/search_cubit/search_cubit.dart';
 import 'package:movify/features/search/presentation/cubits/search_history_cubit.dart';
 import 'package:movify/features/settings/data/data_sources/local/settings_local_data_source.dart';
@@ -290,7 +287,6 @@ void _registerUseCases() {
   _registerAuthUseCases();
   _registerHomeUseCases();
   _registerDetailsUseCases();
-  _registerSearchUseCases();
   _registerSearchHistoryUseCases();
   _registerDiscoverUseCases();
   _registerFavoriteUseCases();
@@ -386,15 +382,6 @@ void _registerDetailsUseCases() {
   );
 }
 
-void _registerSearchUseCases() {
-  getIt.registerLazySingleton<SearchMovieUseCase>(
-    () => SearchMovieUseCase(searchRepo: getIt<SearchRepo>()),
-  );
-  getIt.registerLazySingleton<SearchSeriesUseCase>(
-    () => SearchSeriesUseCase(searchRepo: getIt<SearchRepo>()),
-  );
-}
-
 void _registerSearchHistoryUseCases() {
   getIt.registerLazySingleton<GetSearchHistoryUseCase>(
     () =>
@@ -476,12 +463,6 @@ void _registerCubits() {
     () => FetchDetailsCubit(
       fetchMovieDetailsUseCase: getIt<FetchMovieDetailsUseCase>(),
       fetchTvShowDetailsUseCase: getIt<FetchTvShowDetailsUseCase>(),
-    ),
-  );
-  getIt.registerFactory<SearchBloc>(
-    () => SearchBloc(
-      searchMovieUseCase: getIt<SearchMovieUseCase>(),
-      searchSeriesUseCase: getIt<SearchSeriesUseCase>(),
     ),
   );
   getIt.registerFactory<SearchCubit>(

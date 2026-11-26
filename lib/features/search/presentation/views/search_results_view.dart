@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movify/core/design_system/design_system.dart';
+import 'package:movify/core/paging/paged_cubit.dart';
 import 'package:movify/features/search/presentation/cubits/search_cubit/search_cubit.dart';
 import 'package:movify/features/search/presentation/cubits/search_cubit/search_state.dart';
 import 'package:movify/features/search/presentation/models/search_tab.dart';
@@ -15,6 +16,27 @@ class SearchResultsView extends StatelessWidget {
 
   final SearchActive state;
 
+  /// Provides the tab's list to its grid. The key changes with every search,
+  /// so a new query or tab gets a fresh subtree.
+  Widget _results<T>(PagedCubit<T>? list, Widget sliver) {
+    if (list == null) {
+      return const SizedBox.shrink();
+    }
+    return BlocProvider<PagedCubit<T>>.value(
+      key: ValueKey('${state.tab.name}_${state.revision}'),
+      value: list,
+      child: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.only(bottom: Space.x2xl),
+            sliver: sliver,
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) => Column(
     children: [
@@ -26,86 +48,22 @@ class SearchResultsView extends StatelessWidget {
       const SizedBox(height: Space.x2xl),
       Expanded(
         child: switch (state.tab) {
-          SearchTab.moviesAndSeries =>
-            state.mediaList == null
-                ? const SizedBox.shrink()
-                : BlocProvider.value(
-                    key: ValueKey('media_${state.revision}'),
-                    value: state.mediaList!,
-                    child: const CustomScrollView(
-                      physics: BouncingScrollPhysics(),
-                      slivers: [
-                        SliverPadding(
-                          padding: EdgeInsets.only(bottom: Space.x2xl),
-                          sliver: SearchPosterGrid(isMulti: true),
-                        ),
-                      ],
-                    ),
-                  ),
-          SearchTab.movies =>
-            state.mediaList == null
-                ? const SizedBox.shrink()
-                : BlocProvider.value(
-                    key: ValueKey('movies_${state.revision}'),
-                    value: state.mediaList!,
-                    child: const CustomScrollView(
-                      physics: BouncingScrollPhysics(),
-                      slivers: [
-                        SliverPadding(
-                          padding: EdgeInsets.only(bottom: Space.x2xl),
-                          sliver: SearchPosterGrid(),
-                        ),
-                      ],
-                    ),
-                  ),
-          SearchTab.series =>
-            state.mediaList == null
-                ? const SizedBox.shrink()
-                : BlocProvider.value(
-                    key: ValueKey('series_${state.revision}'),
-                    value: state.mediaList!,
-                    child: const CustomScrollView(
-                      physics: BouncingScrollPhysics(),
-                      slivers: [
-                        SliverPadding(
-                          padding: EdgeInsets.only(bottom: Space.x2xl),
-                          sliver: SearchPosterGrid(),
-                        ),
-                      ],
-                    ),
-                  ),
-          SearchTab.people =>
-            state.peopleList == null
-                ? const SizedBox.shrink()
-                : BlocProvider.value(
-                    key: ValueKey('people_${state.revision}'),
-                    value: state.peopleList!,
-                    child: const CustomScrollView(
-                      physics: BouncingScrollPhysics(),
-                      slivers: [
-                        SliverPadding(
-                          padding: EdgeInsets.only(bottom: Space.x2xl),
-                          sliver: SearchPeopleList(),
-                        ),
-                      ],
-                    ),
-                  ),
-          SearchTab.keywords =>
-            state.keywordList == null
-                ? const SizedBox.shrink()
-                : BlocProvider.value(
-                    key: ValueKey('keywords_${state.revision}'),
-                    value: state.keywordList!,
-                    child: const CustomScrollView(
-                      physics: BouncingScrollPhysics(),
-                      slivers: [
-                        SliverPadding(
-                          padding: EdgeInsets.only(bottom: Space.x2xl),
-                          sliver: SearchKeywordsList(),
-                        ),
-                      ],
-                    ),
-                  ),
+          SearchTab.moviesAndSeries => _results(
+            state.mediaList,
+            const SearchPosterGrid(isMulti: true),
+          ),
+          SearchTab.movies || SearchTab.series => _results(
+            state.mediaList,
+            const SearchPosterGrid(),
+          ),
+          SearchTab.people => _results(
+            state.peopleList,
+            const SearchPeopleList(),
+          ),
+          SearchTab.keywords => _results(
+            state.keywordList,
+            const SearchKeywordsList(),
+          ),
         },
       ),
     ],

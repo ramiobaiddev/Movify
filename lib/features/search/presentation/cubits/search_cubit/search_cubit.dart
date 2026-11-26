@@ -25,112 +25,83 @@ class SearchCubit extends Cubit<SearchState> {
   final SearchHistoryRepo _historyRepo;
   Timer? _debounceTimer;
   SearchTab _currentTab = SearchTab.moviesAndSeries;
+  String _query = '';
 
   void onQueryChanged(String newQuery) {
     _debounceTimer?.cancel();
-    if (newQuery.trim().isEmpty) {
+    _query = newQuery.trim();
+    if (_query.isEmpty) {
       _closeActiveLists();
       loadHistory();
       return;
     }
 
-    _debounceTimer = Timer(const Duration(milliseconds: 350), () {
-      _triggerSearch(query: newQuery, tab: _currentTab);
-    });
+    _debounceTimer = Timer(const Duration(milliseconds: 350), _triggerSearch);
   }
 
   void onTabChanged(SearchTab newTab) {
-    if (newTab == _currentTab) return;
+    if (newTab == _currentTab) {
+      return;
+    }
     _currentTab = newTab;
     _debounceTimer?.cancel();
-    final currentState = state;
-    if (currentState is SearchActive) {
-      _triggerSearch(query: currentState.query, tab: newTab);
+    if (_query.isNotEmpty) {
+      _triggerSearch();
     }
   }
 
-  void _triggerSearch({required String query, required SearchTab tab}) {
+  void _triggerSearch() {
     _closeActiveLists();
-    final currentRevision = state is SearchActive
+    final revision = state is SearchActive
         ? (state as SearchActive).revision + 1
         : 1;
+    final query = _query;
+    final tab = _currentTab;
 
-    switch (tab) {
-      case SearchTab.moviesAndSeries:
-        final list = PagedCubit<CardDisplayModel>(
-          (page) async => (await _searchRepo.searchMulti(
-            query: query,
-            page: page,
-          )).map((p) => p.map((m) => m.toCardDisplay())),
-        )..load();
-        emit(
-          SearchActive(
-            query: query,
-            tab: tab,
-            revision: currentRevision,
-            mediaList: list,
-          ),
-        );
-
-      case SearchTab.movies:
-        final list = PagedCubit<CardDisplayModel>(
-          (page) async => (await _searchRepo.searchMovies(
-            query: query,
-            page: page,
-          )).map((p) => p.map((m) => m.toCardDisplay())),
-        )..load();
-        emit(
-          SearchActive(
-            query: query,
-            tab: tab,
-            revision: currentRevision,
-            mediaList: list,
-          ),
-        );
-
-      case SearchTab.series:
-        final list = PagedCubit<CardDisplayModel>(
-          (page) async => (await _searchRepo.searchSeries(
-            query: query,
-            page: page,
-          )).map((p) => p.map((m) => m.toCardDisplay())),
-        )..load();
-        emit(
-          SearchActive(
-            query: query,
-            tab: tab,
-            revision: currentRevision,
-            mediaList: list,
-          ),
-        );
-
-      case SearchTab.people:
-        final list = PagedCubit<PersonItem>(
+    emit(switch (tab) {
+      SearchTab.moviesAndSeries ||
+      SearchTab.movies ||
+      SearchTab.series => SearchActive(
+        query: query,
+        tab: tab,
+        revision: revision,
+        mediaList: PagedCubit<CardDisplayModel>(_mediaFetcher(tab, query))
+          ..load(),
+      ),
+      SearchTab.people => SearchActive(
+        query: query,
+        tab: tab,
+        revision: revision,
+        peopleList: PagedCubit<PersonItem>(
           (page) => _searchRepo.searchPeople(query: query, page: page),
-        )..load();
-        emit(
-          SearchActive(
-            query: query,
-            tab: tab,
-            revision: currentRevision,
-            peopleList: list,
-          ),
-        );
-
-      case SearchTab.keywords:
-        final list = PagedCubit<Keyword>(
+        )..load(),
+      ),
+      SearchTab.keywords => SearchActive(
+        query: query,
+        tab: tab,
+        revision: revision,
+        keywordList: PagedCubit<Keyword>(
           (page) => _searchRepo.searchKeywords(query: query, page: page),
-        )..load();
-        emit(
-          SearchActive(
-            query: query,
-            tab: tab,
-            revision: currentRevision,
-            keywordList: list,
-          ),
-        );
-    }
+        )..load(),
+      ),
+    });
   }
+
+  PageFetcher<CardDisplayModel> _mediaFetcher(SearchTab tab, String query) =>
+      (page) async {
+        final result = switch (tab) {
+          SearchTab.movies => await _searchRepo.searchMovies(
+            query: query,
+            page: page,
+          ),
+          SearchTab.series => await _searchRepo.searchSeries(
+            query: query,
+            page: page,
+          ),
+          _ => await _searchRepo.searchMulti(query: query, page: page),
+        };
+        return result.map((p) => p.map((m) => m.toCardDisplay()));
+      };
 
   void _closeActiveLists() {
     final currentState = state;

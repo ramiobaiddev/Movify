@@ -19,7 +19,6 @@ class SliverPagedGrid<T> extends StatelessWidget {
     this.errorBuilder,
     this.emptyBuilder,
     this.prefetchDistance = 6,
-    this.padding = const EdgeInsets.symmetric(horizontal: Space.lg),
   });
 
   final SliverGridDelegate gridDelegate;
@@ -33,7 +32,6 @@ class SliverPagedGrid<T> extends StatelessWidget {
   errorBuilder;
   final WidgetBuilder? emptyBuilder;
   final int prefetchDistance;
-  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {

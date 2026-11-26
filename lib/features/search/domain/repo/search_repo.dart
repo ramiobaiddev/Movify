@@ -3,9 +3,7 @@ import 'package:movify/core/errors/failure.dart';
 import 'package:movify/core/pagination/domain/entites/page_result.dart';
 import 'package:movify/shared/domain/entites/keyword.dart';
 import 'package:movify/shared/domain/entites/media_item.dart';
-import 'package:movify/shared/domain/entites/movie_entity.dart';
 import 'package:movify/shared/domain/entites/person_item.dart';
-import 'package:movify/shared/domain/entites/series_entity.dart';
 
 abstract interface class SearchRepo {
   /// Mixed movies and series (`search/multi`).
@@ -15,13 +13,13 @@ abstract interface class SearchRepo {
   });
 
   /// Movies only (`search/movie`).
-  Future<Either<Failure, PageResult<MovieEntity>>> searchMovies({
+  Future<Either<Failure, PageResult<MediaItem>>> searchMovies({
     required String query,
     int page = 1,
   });
 
   /// Series only (`search/tv`).
-  Future<Either<Failure, PageResult<SeriesEntity>>> searchSeries({
+  Future<Either<Failure, PageResult<MediaItem>>> searchSeries({
     required String query,
     int page = 1,
   });

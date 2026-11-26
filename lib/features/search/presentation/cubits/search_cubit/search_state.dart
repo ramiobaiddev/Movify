@@ -52,22 +52,6 @@ final class SearchActive extends SearchState {
   final PagedCubit<PersonItem>? peopleList;
   final PagedCubit<Keyword>? keywordList;
 
-  SearchActive copyWith({
-    String? query,
-    SearchTab? tab,
-    int? revision,
-    PagedCubit<CardDisplayModel>? Function()? mediaList,
-    PagedCubit<PersonItem>? Function()? peopleList,
-    PagedCubit<Keyword>? Function()? keywordList,
-  }) => SearchActive(
-    query: query ?? this.query,
-    tab: tab ?? this.tab,
-    revision: revision ?? this.revision,
-    mediaList: mediaList != null ? mediaList() : this.mediaList,
-    peopleList: peopleList != null ? peopleList() : this.peopleList,
-    keywordList: keywordList != null ? keywordList() : this.keywordList,
-  );
-
   @override
   List<Object?> get props => [
     query,

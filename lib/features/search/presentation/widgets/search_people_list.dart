@@ -17,7 +17,6 @@ class SearchPeopleList extends StatelessWidget {
       mainAxisExtent: 68,
       mainAxisSpacing: Space.xsm,
     ),
-    padding: EdgeInsets.zero,
     loadingBuilder: (context) => const SearchListSkeleton(),
     emptyBuilder: (context) => const SearchEmptyState(
       title: 'No people found',
