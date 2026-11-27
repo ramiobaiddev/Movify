@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:movify/core/design_system/design_system.dart';
-import 'package:movify/core/network/api/services/tmdb/tmdb_image_size.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
 import 'package:movify/shared/presentation/widgets/expandable_text.dart';
 import 'package:movify/shared/presentation/widgets/person_avatar.dart';
