@@ -1,0 +1,278 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:movify/config/animations/widgets/shimmer_loading.dart';
+import 'package:movify/core/ads/cubits/interstitial_ad_cubit.dart';
+import 'package:movify/core/design_system/design_system.dart';
+import 'package:movify/core/di/service_locator.dart';
+import 'package:movify/core/paging/widgets/paged_error_view.dart';
+import 'package:movify/core/routing/route_name.dart';
+import 'package:movify/core/utils/enums/content_type.dart';
+import 'package:movify/features/details/presentation/core/details_data_navigation.dart';
+import 'package:movify/features/details/presentation/cubits/details_cubit/details_cubit.dart';
+import 'package:movify/features/details/presentation/cubits/details_cubit/details_state.dart';
+import 'package:movify/features/details/presentation/feeds/related_fetchers.dart';
+import 'package:movify/features/details/presentation/mappers/details_content_mapper.dart';
+import 'package:movify/features/details/presentation/mappers/release_countdown.dart';
+import 'package:movify/features/details/presentation/models/details_content.dart';
+import 'package:movify/features/details/presentation/widgets/details_header.dart';
+import 'package:movify/features/details/presentation/widgets/related/related_row.dart';
+import 'package:movify/features/details/presentation/widgets/sections/cast_row.dart';
+import 'package:movify/features/details/presentation/widgets/sections/collection_row.dart';
+import 'package:movify/features/details/presentation/widgets/sections/details_title_block.dart';
+import 'package:movify/features/details/presentation/widgets/sections/genre_chips.dart';
+import 'package:movify/features/details/presentation/widgets/sections/information_section.dart';
+import 'package:movify/features/details/presentation/widgets/sections/reviews_section.dart';
+import 'package:movify/features/details/presentation/widgets/sections/section_title.dart';
+import 'package:movify/features/discover/data/models/genre_see_all_arguments.dart';
+import 'package:movify/features/discover/domain/entities/genre_filter.dart';
+import 'package:movify/shared/presentation/widgets/expandable_text.dart';
+
+/// Movie or series details (Figma "movie details" / "Series details").
+///
+/// Needs a [DetailsCubit] above it. The header and title come from [data] so
+/// they show immediately; everything below fills in when the cubit loads.
+class DetailsScreen extends StatefulWidget {
+  const DetailsScreen({super.key, required this.data});
+
+  final DetailsNavigationData data;
+
+  @override
+  State<DetailsScreen> createState() => _DetailsScreenState();
+}
+
+class _DetailsScreenState extends State<DetailsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Interstitial on enter, after the route transition.
+    Future.delayed(const Duration(milliseconds: 400), () {
+      if (mounted) {
+        context.read<InterstitialAdCubit>().showAd();
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final data = widget.data;
+
+    return PopScope(
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) {
+          context.read<InterstitialAdCubit>().showAd();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: context.colors.surfacePrimary,
+        body: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DetailsHeader(data: data),
+            const SizedBox(height: Space.md),
+            BlocBuilder<DetailsCubit, DetailsState>(
+              builder: (context, state) => switch (state) {
+                DetailsLoading() => _Loading(data: data),
+                DetailsError(:final message) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: Space.x3xl),
+                  child: PagedErrorView(
+                    message: message,
+                    onRetry: () => context.read<DetailsCubit>().load(
+                      data.contentType,
+                      data.tmdbId,
+                    ),
+                  ),
+                ),
+                DetailsMovieLoaded(:final movie) => _Loaded(
+                  content: movie.toContent(),
+                ),
+                DetailsSeriesLoaded(:final series) => _Loaded(
+                  content: series.toContent(),
+                ),
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Loaded extends StatelessWidget {
+  const _Loaded({required this.content});
+
+  final DetailsContent content;
+
+  static const _pad = EdgeInsets.symmetric(horizontal: Space.lg);
+
+  void _openGenre(BuildContext context, DetailsGenre genre) {
+    context.pushNamed(
+      RouteName.genreSeeAll,
+      extra: GenreSeeAllArguments(
+        category: content.kind == ContentType.series
+            ? GenreCategory.tv
+            : GenreCategory.movies,
+        genreId: genre.id,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final today = DateTime.now();
+    final upcoming = content.isUpcoming(today);
+    final release = content.releaseDate;
+    final fetchers = getIt<RelatedFetchers>();
+    final collectionId = content.collectionId;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: _pad,
+          child: DetailsTitleBlock(
+            title: content.title,
+            meta: content.meta,
+            rating: content.rating,
+            comingSoon: upcoming,
+            releaseLine: upcoming && release != null
+                ? releaseCountdown(release, today)
+                : null,
+          ),
+        ),
+        if (content.genres.isNotEmpty) ...[
+          const SizedBox(height: Space.x2xl),
+          Padding(
+            padding: _pad,
+            child: GenreChips(
+              genres: content.genres,
+              onTap: (genre) => _openGenre(context, genre),
+            ),
+          ),
+        ],
+        if (content.overview.isNotEmpty) ...[
+          const SizedBox(height: Space.x2xl),
+          Padding(
+            padding: _pad,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SectionTitle('Storyline'),
+                const SizedBox(height: Space.sm),
+                ExpandableText(text: content.overview),
+              ],
+            ),
+          ),
+        ],
+        const SizedBox(height: Space.x2xl),
+        CastRow(
+          cast: content.cast,
+          onTap: (person) => context.pushNamed(
+            RouteName.person,
+            pathParameters: {'id': person.id.toString()},
+          ),
+        ),
+        const SizedBox(height: Space.x3xl),
+        ReviewsSection(reviews: content.reviews),
+        const SizedBox(height: Space.x3xl),
+        if (collectionId != null) ...[
+          CollectionRow(collectionId: collectionId, movieId: content.id),
+          const SizedBox(height: Space.x3xl),
+        ],
+        InformationSection(rows: content.info),
+        const SizedBox(height: Space.x3xl),
+        RelatedRow(
+          title: 'Recommended',
+          queryKey: 'recommended-${content.kind}-${content.id}',
+          fetcher: fetchers.recommended(content.kind, content.id),
+        ),
+        const SizedBox(height: Space.x3xl),
+        RelatedRow(
+          title: 'Similar',
+          queryKey: 'similar-${content.kind}-${content.id}',
+          fetcher: fetchers.similar(content.kind, content.id),
+        ),
+        SizedBox(height: MediaQuery.paddingOf(context).bottom + Space.x3xl),
+      ],
+    );
+  }
+}
+
+/// Title from the navigation data plus grey blocks where the sections go.
+class _Loading extends StatelessWidget {
+  const _Loading({required this.data});
+
+  final DetailsNavigationData data;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    Widget block(double width, double height) => DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.surfaceGenre,
+        borderRadius: BorderRadius.circular(Radii.md),
+      ),
+      child: SizedBox(width: width, height: height),
+    );
+
+    final (title, date, rating) = switch (data) {
+      MovieNavData(:final title, :final date, :final rating) => (
+        title,
+        date,
+        rating,
+      ),
+      SeriesNavData(:final title, :final date, :final rating) => (
+        title,
+        date,
+        rating,
+      ),
+      _ => ('', null, null),
+    };
+    final year = date != null && date.length >= 4 ? date.substring(0, 4) : null;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: Space.lg),
+      child: Column(
+        children: [
+          DetailsTitleBlock(
+            title: title,
+            meta: [if (year != null) year],
+            rating: rating != null && rating > 0 ? rating : null,
+          ),
+          const SizedBox(height: Space.x2xl),
+          ShimmerLoading(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    block(96, 40),
+                    const SizedBox(width: Space.sm),
+                    block(96, 40),
+                    const SizedBox(width: Space.sm),
+                    block(96, 40),
+                  ],
+                ),
+                const SizedBox(height: Space.x2xl),
+                block(140, 24),
+                const SizedBox(height: Space.sm),
+                block(double.infinity, 96),
+                const SizedBox(height: Space.x2xl),
+                block(160, 24),
+                const SizedBox(height: Space.lg),
+                Row(
+                  children: [
+                    for (var i = 0; i < 4; i++) ...[
+                      block(80, 80),
+                      const SizedBox(width: Space.md),
+                    ],
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

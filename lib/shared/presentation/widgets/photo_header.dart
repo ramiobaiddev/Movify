@@ -159,25 +159,35 @@ class HeaderCircleAction extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    return Semantics(
-      button: true,
-      label: label,
-      child: GestureDetector(
-        onTap: onTap,
-        behavior: HitTestBehavior.opaque,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: colors.surfaceBlurBackground,
-            borderRadius: BorderRadius.circular(Radii.lg),
-          ),
-          child: SizedBox.square(
-            dimension: 36,
-            child: Icon(icon, size: 18, color: colors.iconPrimary),
-          ),
-        ),
+  Widget build(BuildContext context) => Semantics(
+    button: true,
+    label: label,
+    child: GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: HeaderCircle(
+        child: Icon(icon, size: 18, color: context.colors.iconPrimary),
       ),
-    );
-  }
+    ),
+  );
+}
+
+/// The dark round 36 px background alone, for buttons that bring their own tap
+/// handling (e.g. the favorite heart).
+class HeaderCircle extends StatelessWidget {
+  const HeaderCircle({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: BoxDecoration(
+      color: context.colors.surfaceBlurBackground,
+      borderRadius: BorderRadius.circular(Radii.lg),
+    ),
+    child: SizedBox.square(
+      dimension: 36,
+      child: Center(child: child),
+    ),
+  );
 }

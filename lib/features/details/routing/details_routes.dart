@@ -5,11 +5,11 @@ import 'package:movify/core/di/service_locator.dart';
 import 'package:movify/core/routing/route_name.dart';
 import 'package:movify/core/routing/route_paths.dart';
 import 'package:movify/core/routing/transition/app_transition.dart';
-import 'package:movify/features/details/domain/use_cases/details_params.dart';
+import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/details/presentation/core/details_data_navigation.dart';
-import 'package:movify/features/details/presentation/cubits/fetch_details_cubit/fetch_details_cubit.dart';
+import 'package:movify/features/details/presentation/cubits/details_cubit/details_cubit.dart';
 import 'package:movify/features/details/presentation/cubits/fetch_series_season_details_cubit/fetch_series_season_details_cubit.dart';
-import 'package:movify/features/details/presentation/views/details_view.dart';
+import 'package:movify/features/details/presentation/views/details_screen.dart';
 import 'package:movify/features/details/presentation/views/episode_view.dart';
 import 'package:movify/features/details/presentation/views/season_view.dart';
 
@@ -43,14 +43,9 @@ class DetailsRoutes {
       builder: (context, state) {
         final id = int.parse(state.pathParameters['id']!);
         return BlocProvider(
-          key: ValueKey('movie-$id'), // 🔑 guarantees disposal
-          create: (_) =>
-              getIt<FetchDetailsCubit>()
-                ..fetchDetails(DetailsParams(id: id, type: 'movie')),
-          child: DetailsView(
-            data: state.extra as MovieNavData,
-            heroTag: state.uri.queryParameters['heroTag'],
-          ),
+          key: ValueKey('movie-$id'), // guarantees disposal
+          create: (_) => getIt<DetailsCubit>()..load(ContentType.movies, id),
+          child: DetailsScreen(data: state.extra! as MovieNavData),
         );
       },
     ),
@@ -65,13 +60,8 @@ class DetailsRoutes {
           state: state,
           child: BlocProvider(
             key: ValueKey('tv-$id'),
-            create: (_) =>
-                getIt<FetchDetailsCubit>()
-                  ..fetchDetails(DetailsParams(id: id, type: 'tv')),
-            child: DetailsView(
-              data: state.extra as SeriesNavData,
-              heroTag: state.uri.queryParameters['heroTag'],
-            ),
+            create: (_) => getIt<DetailsCubit>()..load(ContentType.series, id),
+            child: DetailsScreen(data: state.extra! as SeriesNavData),
           ),
         );
       },
