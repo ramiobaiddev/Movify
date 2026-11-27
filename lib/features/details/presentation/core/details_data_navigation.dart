@@ -1,4 +1,5 @@
 import 'package:movify/core/utils/enums/content_type.dart';
+import 'package:movify/features/details/presentation/models/details_content.dart';
 
 sealed class DetailsNavigationData {
   final int tmdbId;
@@ -58,16 +59,38 @@ class SeasonNavData extends DetailsNavigationData {
   final double? rating;
   final String? date;
 
+  /// Every season of the series, for the previous / next bar.
+  final List<SeasonItem> seasons;
+
   const SeasonNavData({
     required super.tmdbId,
     required this.seasonNumber,
     this.seasonName,
     this.rating,
     this.date,
+    this.seasons = const [],
     required super.posterImage,
     super.backdropImage,
     required super.specificId,
   }) : super(contentType: ContentType.seasons);
+
+  factory SeasonNavData.fromItem(
+    SeasonItem season, {
+    required int tmdbId,
+    required String? seriesPosterPath,
+    required String? backdropPath,
+    required List<SeasonItem> seasons,
+  }) => SeasonNavData(
+    tmdbId: tmdbId,
+    seasonNumber: season.number,
+    seasonName: season.name,
+    rating: season.rating,
+    date: season.airDate,
+    seasons: seasons,
+    posterImage: season.posterPath ?? seriesPosterPath ?? '',
+    backdropImage: backdropPath,
+    specificId: season.id,
+  );
 }
 
 class EpisodeNavData extends DetailsNavigationData {

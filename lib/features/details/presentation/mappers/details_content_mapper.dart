@@ -2,6 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/details/domain/entites/movie_details_entity.dart';
 import 'package:movify/features/details/domain/entites/series_details_entity.dart';
+import 'package:movify/features/details/domain/entites/series_season_details_entitiy.dart';
 import 'package:movify/features/details/domain/value_objects/cast.dart';
 import 'package:movify/features/details/domain/value_objects/genre.dart';
 import 'package:movify/features/details/domain/value_objects/last_episode_to_air.dart';
@@ -12,6 +13,7 @@ import 'package:movify/features/details/domain/value_objects/result.dart';
 import 'package:movify/features/details/domain/value_objects/season.dart';
 import 'package:movify/features/details/domain/value_objects/review_results.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
+import 'package:movify/features/details/presentation/models/season_content.dart';
 
 const int _maxCast = 20;
 const int _maxReviews = 20;
@@ -161,6 +163,52 @@ List<SeasonItem> _seasons(List<Season> seasons) => [
         episodeCount: season.episodeCount,
       ),
 ];
+
+extension SeasonDetailsContent on SeriesSeasonDetailsEntity {
+  SeasonContent toSeasonContent() {
+    final first = _parseDate(seasonDate);
+    final episodes = [
+      for (final episode in seasonEpisodes)
+        if (episode.id != null && episode.episodeNumber != null)
+          EpisodeItem(
+            id: episode.id!,
+            seasonNumber: episode.seasonNumber ?? seasonNum,
+            number: episode.episodeNumber!,
+            name: _nonEmpty(episode.name) ?? 'Episode ${episode.episodeNumber}',
+            airDate: _parseDate(episode.airDate),
+            runtime: (episode.runtime ?? 0) > 0 ? episode.runtime : null,
+            stillPath: _nonEmpty(episode.stillPath),
+            rating: _rating(episode.voteAverage),
+          ),
+    ]..sort((a, b) => a.number.compareTo(b.number));
+    final totalMinutes = episodes.fold<int>(0, (sum, e) => sum + (e.runtime ?? 0));
+
+    return SeasonContent(
+      id: seasonId,
+      number: seasonNum,
+      title: _nonEmpty(seasonName) ?? 'Season $seasonNum',
+      posterPath: _nonEmpty(seasonPosterPath),
+      rating: _rating(seasonRating),
+      meta: [
+        if (first != null) '${first.year}',
+        if (episodes.isNotEmpty)
+          '${episodes.length} ${episodes.length == 1 ? 'Episode' : 'Episodes'}',
+      ],
+      overview: seasonOverView,
+      cast: _cast(seasonCredits?.cast ?? const []),
+      videos: _videos(seasonVideos?.results),
+      episodes: episodes,
+      info: [
+        if (episodes.isNotEmpty)
+          InfoRow(label: 'Episodes', value: '${episodes.length}'),
+        if (_runtime(totalMinutes) case final runtime?)
+          InfoRow(label: 'Total runtime', value: runtime),
+        if (first != null)
+          InfoRow(label: 'First air date', value: _date(first)),
+      ],
+    );
+  }
+}
 
 String? _nonEmpty(String? value) =>
     value == null || value.trim().isEmpty ? null : value.trim();

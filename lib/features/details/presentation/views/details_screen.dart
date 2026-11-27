@@ -135,15 +135,12 @@ class _Loaded extends StatelessWidget {
   void _openSeason(BuildContext context, SeasonItem season) {
     context.pushNamed(
       RouteName.season,
-      extra: SeasonNavData(
+      extra: SeasonNavData.fromItem(
+        season,
         tmdbId: content.id,
-        seasonNumber: season.number,
-        seasonName: season.name,
-        rating: season.rating,
-        date: season.airDate,
-        posterImage: season.posterPath ?? content.posterPath ?? '',
-        backdropImage: content.backdropPath,
-        specificId: season.id,
+        seriesPosterPath: content.posterPath,
+        backdropPath: content.backdropPath,
+        seasons: content.seasons,
       ),
     );
   }

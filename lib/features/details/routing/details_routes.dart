@@ -13,7 +13,7 @@ import 'package:movify/features/details/presentation/views/details_screen.dart';
 import 'package:movify/features/details/presentation/views/episode_view.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
 import 'package:movify/features/details/presentation/views/reviews_view.dart';
-import 'package:movify/features/details/presentation/views/season_view.dart';
+import 'package:movify/features/details/presentation/views/season_screen.dart';
 
 class DetailsRoutes {
   static List<GoRoute> get routes => [
@@ -21,10 +21,7 @@ class DetailsRoutes {
       path: RoutePaths.season,
       name: RouteName.season,
       pageBuilder: (context, state) => AppTransitions.fadeThrough(
-        child: BlocProvider(
-          create: (context) => getIt.get<FetchSeriesSeasonDetailsCubit>(),
-          child: SeasonView(seasonDataNav: state.extra as SeasonNavData),
-        ),
+        child: SeasonScreen(data: state.extra! as SeasonNavData),
         state: state,
       ),
     ),

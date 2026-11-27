@@ -24,8 +24,13 @@ class DetailsHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final backdrop = data.backdropImage ?? data.posterImage;
     final path = switch (data.contentType) {
-      ContentType.series => 'tv',
+      ContentType.series || ContentType.seasons || ContentType.episodes => 'tv',
       _ => 'movie',
+    };
+    final shareUrl = switch (data) {
+      SeasonNavData(:final seasonNumber) =>
+        'https://www.themoviedb.org/tv/${data.tmdbId}/season/$seasonNumber',
+      _ => 'https://www.themoviedb.org/$path/${data.tmdbId}',
     };
 
     return PhotoHeader(
@@ -52,7 +57,7 @@ class DetailsHeader extends StatelessWidget {
           icon: Icons.ios_share_rounded,
           label: 'Share',
           onTap: () => SharePlus.instance.share(
-            ShareParams(text: 'https://www.themoviedb.org/$path/${data.tmdbId}'),
+            ShareParams(text: shareUrl),
           ),
         ),
         HeaderCircleAction(
