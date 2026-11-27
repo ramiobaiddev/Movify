@@ -22,6 +22,9 @@ class DetailsContent extends Equatable {
     this.videos = const [],
     this.info = const [],
     this.collectionId,
+    this.nextEpisode,
+    this.lastEpisode,
+    this.seasons = const [],
   });
 
   final int id;
@@ -48,6 +51,11 @@ class DetailsContent extends Equatable {
 
   /// Movie collection this film belongs to, if any.
   final int? collectionId;
+
+  /// Series only: the episode that airs next and the one aired last.
+  final EpisodeSummary? nextEpisode;
+  final EpisodeSummary? lastEpisode;
+  final List<SeasonItem> seasons;
 
   /// The best video to play from the header: an official trailer if there is
   /// one (the mapper sorts them first), otherwise whatever else is available.
@@ -143,4 +151,71 @@ class InfoRow extends Equatable {
 
   @override
   List<Object?> get props => [label, value];
+}
+
+class EpisodeSummary extends Equatable {
+  const EpisodeSummary({
+    required this.id,
+    required this.name,
+    required this.seasonNumber,
+    required this.episodeNumber,
+    this.airDate,
+    this.stillPath,
+    this.rating,
+  });
+
+  final int id;
+  final String name;
+  final int seasonNumber;
+  final int episodeNumber;
+  final DateTime? airDate;
+  final String? stillPath;
+  final double? rating;
+
+  /// `S07 · E08`.
+  String get code =>
+      'S${seasonNumber.toString().padLeft(2, '0')} · '
+      'E${episodeNumber.toString().padLeft(2, '0')}';
+
+  @override
+  List<Object?> get props => [
+    id,
+    name,
+    seasonNumber,
+    episodeNumber,
+    airDate,
+    stillPath,
+    rating,
+  ];
+}
+
+class SeasonItem extends Equatable {
+  const SeasonItem({
+    required this.id,
+    required this.number,
+    required this.name,
+    this.posterPath,
+    this.rating,
+    this.airDate,
+    this.episodeCount,
+  });
+
+  final int id;
+  final int number;
+  final String name;
+  final String? posterPath;
+  final double? rating;
+  final String? airDate;
+  final int? episodeCount;
+
+  @override
+  List<Object?> get props => [
+    id,
+    number,
+    name,
+    posterPath,
+    rating,
+    airDate,
+    episodeCount,
+  ];
 }

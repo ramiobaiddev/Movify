@@ -6,11 +6,14 @@ import 'package:movify/features/details/domain/value_objects/author_details.dart
 import 'package:movify/features/details/domain/value_objects/belongs_to_collection.dart';
 import 'package:movify/features/details/domain/value_objects/cast.dart';
 import 'package:movify/features/details/domain/value_objects/genre.dart';
+import 'package:movify/features/details/domain/value_objects/last_episode_to_air.dart';
+import 'package:movify/features/details/domain/value_objects/next_episode_to_air.dart';
 import 'package:movify/features/details/domain/value_objects/production_company.dart';
 import 'package:movify/features/details/domain/value_objects/production_country.dart';
 import 'package:movify/features/details/domain/value_objects/result.dart';
 import 'package:movify/features/details/domain/value_objects/review_results.dart';
 import 'package:movify/features/details/domain/value_objects/reviews.dart';
+import 'package:movify/features/details/domain/value_objects/season.dart';
 import 'package:movify/features/details/domain/value_objects/videos.dart';
 import 'package:movify/features/details/presentation/mappers/details_content_mapper.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
@@ -159,12 +162,19 @@ void main() {
   });
 
   group('series', () {
-    SeriesDetailsEntity series({String? firstDate = '2019-03-01'}) =>
+    SeriesDetailsEntity series({
+      String? firstDate = '2019-03-01',
+      List<Season> seasons = const [],
+      NextEpisodeToAir? next,
+      LastEpisodeToAir? last,
+    }) =>
         SeriesDetailsEntity(
           numOfEpisoide: 48,
           seiresId: 3,
           numOfSeason: 1,
-          season: const [],
+          season: seasons,
+          nextEpisodeAir: next,
+          lastEpisodeAir: last,
           rating: 0,
           actorDetails: null,
           videoKey: null,
@@ -176,6 +186,34 @@ void main() {
           seriesStatus: 'Returning Series',
           kLastAirDate: '2024-07-15',
         );
+
+    test('maps episodes and drops specials from seasons', () {
+      final content = series(
+        seasons: [
+          Season(id: 1, seasonNumber: 0, name: 'Specials'),
+          Season(id: 2, seasonNumber: 1, name: 'Season 1', episodeCount: 8),
+        ],
+        next: NextEpisodeToAir(
+          id: 10,
+          name: 'Peter',
+          seasonNumber: 7,
+          episodeNumber: 8,
+          airDate: '2026-11-14',
+        ),
+        last: LastEpisodeToAir(id: 9, seasonNumber: 7, episodeNumber: 7),
+      ).toContent();
+
+      expect(content.seasons.map((s) => s.number), [1]);
+      expect(content.nextEpisode?.code, 'S07 · E08');
+      expect(content.nextEpisode?.airDate, DateTime(2026, 11, 14));
+      expect(content.lastEpisode?.name, 'Episode 7');
+    });
+
+    test('episodes without ids are dropped', () {
+      final content = series(next: NextEpisodeToAir(name: 'x')).toContent();
+
+      expect(content.nextEpisode, isNull);
+    });
 
     test('maps counts, singular and plural', () {
       final content = series().toContent();

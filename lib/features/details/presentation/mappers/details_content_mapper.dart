@@ -4,9 +4,12 @@ import 'package:movify/features/details/domain/entites/movie_details_entity.dart
 import 'package:movify/features/details/domain/entites/series_details_entity.dart';
 import 'package:movify/features/details/domain/value_objects/cast.dart';
 import 'package:movify/features/details/domain/value_objects/genre.dart';
+import 'package:movify/features/details/domain/value_objects/last_episode_to_air.dart';
+import 'package:movify/features/details/domain/value_objects/next_episode_to_air.dart';
 import 'package:movify/features/details/domain/value_objects/production_company.dart';
 import 'package:movify/features/details/domain/value_objects/production_country.dart';
 import 'package:movify/features/details/domain/value_objects/result.dart';
+import 'package:movify/features/details/domain/value_objects/season.dart';
 import 'package:movify/features/details/domain/value_objects/review_results.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
 
@@ -77,6 +80,9 @@ extension SeriesDetailsContent on SeriesDetailsEntity {
       cast: _cast(actorDetails ?? const []),
       reviews: _reviews(kReviews?.results),
       videos: _videos(videoKey ?? kVideos?.results),
+      nextEpisode: _nextEpisode(nextEpisodeAir),
+      lastEpisode: _lastEpisode(lastEpisodeAir),
+      seasons: _seasons(season),
       info: [
         if (_nonEmpty(seriesStatus) case final status?)
           InfoRow(label: 'Status', value: status),
@@ -92,6 +98,69 @@ extension SeriesDetailsContent on SeriesDetailsEntity {
     );
   }
 }
+
+EpisodeSummary? _nextEpisode(NextEpisodeToAir? e) => e == null
+    ? null
+    : _episode(
+        id: e.id,
+        name: e.name,
+        season: e.seasonNumber,
+        number: e.episodeNumber,
+        airDate: e.airDate,
+        still: e.stillPath,
+        vote: e.voteAverage,
+      );
+
+EpisodeSummary? _lastEpisode(LastEpisodeToAir? e) => e == null
+    ? null
+    : _episode(
+        id: e.id,
+        name: e.name,
+        season: e.seasonNumber,
+        number: e.episodeNumber,
+        airDate: e.airDate,
+        still: e.stillPath,
+        vote: e.voteAverage,
+      );
+
+EpisodeSummary? _episode({
+  required int? id,
+  required String? name,
+  required int? season,
+  required int? number,
+  required String? airDate,
+  required String? still,
+  required double? vote,
+}) {
+  if (id == null || season == null || number == null) {
+    return null;
+  }
+
+  return EpisodeSummary(
+    id: id,
+    name: _nonEmpty(name) ?? 'Episode $number',
+    seasonNumber: season,
+    episodeNumber: number,
+    airDate: _parseDate(airDate),
+    stillPath: _nonEmpty(still),
+    rating: _rating(vote),
+  );
+}
+
+/// Real seasons only; TMDB lists "Specials" as season 0.
+List<SeasonItem> _seasons(List<Season> seasons) => [
+  for (final season in seasons)
+    if (season.id != null && (season.seasonNumber ?? 0) > 0)
+      SeasonItem(
+        id: season.id!,
+        number: season.seasonNumber!,
+        name: _nonEmpty(season.name) ?? 'Season ${season.seasonNumber}',
+        posterPath: _nonEmpty(season.posterPath),
+        rating: _rating(season.voteAverage),
+        airDate: season.airDate,
+        episodeCount: season.episodeCount,
+      ),
+];
 
 String? _nonEmpty(String? value) =>
     value == null || value.trim().isEmpty ? null : value.trim();

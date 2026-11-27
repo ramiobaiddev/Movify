@@ -22,6 +22,9 @@ import 'package:movify/features/details/presentation/widgets/sections/collection
 import 'package:movify/features/details/presentation/widgets/sections/details_title_block.dart';
 import 'package:movify/features/details/presentation/widgets/sections/genre_chips.dart';
 import 'package:movify/features/details/presentation/widgets/sections/information_section.dart';
+import 'package:movify/features/details/presentation/widgets/sections/last_aired_card.dart';
+import 'package:movify/features/details/presentation/widgets/sections/next_episode_card.dart';
+import 'package:movify/features/details/presentation/widgets/sections/seasons_row.dart';
 import 'package:movify/features/details/presentation/widgets/sections/reviews_section.dart';
 import 'package:movify/features/details/presentation/widgets/sections/section_title.dart';
 import 'package:movify/features/details/presentation/widgets/sections/videos_section.dart';
@@ -129,9 +132,42 @@ class _Loaded extends StatelessWidget {
     );
   }
 
+  void _openSeason(BuildContext context, SeasonItem season) {
+    context.pushNamed(
+      RouteName.season,
+      extra: SeasonNavData(
+        tmdbId: content.id,
+        seasonNumber: season.number,
+        seasonName: season.name,
+        rating: season.rating,
+        date: season.airDate,
+        posterImage: season.posterPath ?? content.posterPath ?? '',
+        backdropImage: content.backdropPath,
+        specificId: season.id,
+      ),
+    );
+  }
+
+  void _openEpisode(BuildContext context, EpisodeSummary episode) {
+    context.pushNamed(
+      RouteName.episode,
+      extra: EpisodeNavData(
+        tmdbId: content.id,
+        seasonNumber: episode.seasonNumber,
+        episodeNumber: episode.episodeNumber,
+        rating: episode.rating,
+        posterImage: content.backdropPath ?? content.posterPath ?? '',
+        seriesPosterPath: content.posterPath,
+        specificId: episode.id,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final today = DateTime.now();
+    final nextEpisode = content.nextEpisode;
+    final lastEpisode = content.lastEpisode;
     final upcoming = content.isUpcoming(today);
     final release = content.releaseDate;
     final fetchers = getIt<RelatedFetchers>();
@@ -152,6 +188,13 @@ class _Loaded extends StatelessWidget {
                 : null,
           ),
         ),
+        if (nextEpisode != null) ...[
+          const SizedBox(height: Space.x2xl),
+          Padding(
+            padding: _pad,
+            child: NextEpisodeCard(episode: nextEpisode, today: today),
+          ),
+        ],
         if (content.genres.isNotEmpty) ...[
           const SizedBox(height: Space.x2xl),
           Padding(
@@ -184,6 +227,24 @@ class _Loaded extends StatelessWidget {
             pathParameters: {'id': person.id.toString()},
           ),
         ),
+        if (lastEpisode != null) ...[
+          const SizedBox(height: Space.x2xl),
+          Padding(
+            padding: _pad,
+            child: LastAiredCard(
+              episode: lastEpisode,
+              onTap: () => _openEpisode(context, lastEpisode),
+            ),
+          ),
+        ],
+        if (content.seasons.isNotEmpty) ...[
+          const SizedBox(height: Space.x3xl),
+          SeasonsRow(
+            seasons: content.seasons,
+            fallbackPosterPath: content.posterPath,
+            onTap: (season) => _openSeason(context, season),
+          ),
+        ],
         const SizedBox(height: Space.x3xl),
         ReviewsSection(reviews: content.reviews),
         const SizedBox(height: Space.x3xl),
