@@ -11,27 +11,18 @@ class AboutViewBody extends StatelessWidget {
   const AboutViewBody({super.key});
 
   @override
-  Widget build(BuildContext context) => const Column(
-    children: [
+  Widget build(BuildContext context) => ListView(
+    children: const [
       AboutTopBar(),
-      Expanded(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: Space.lg),
-          child: Column(
-            children: [
-              SizedBox(height: Space.lg),
-              AboutAppIdentity(),
-              SizedBox(height: Space.x2xl),
-              AboutDeveloperCard(),
-              SizedBox(height: Space.lg),
-              AboutTmdbCreditsCard(),
-              SizedBox(height: Space.lg),
-              AboutLegalSection(),
-              SizedBox(height: Space.x2xl),
-            ],
-          ),
-        ),
-      ),
+      SizedBox(height: Space.lg),
+      AboutAppIdentity(),
+      SizedBox(height: Space.x2xl),
+      AboutDeveloperCard(),
+      SizedBox(height: Space.lg),
+      AboutTmdbCreditsCard(),
+      SizedBox(height: Space.lg),
+      AboutLegalSection(),
+      SizedBox(height: Space.x2xl),
     ],
   );
 }

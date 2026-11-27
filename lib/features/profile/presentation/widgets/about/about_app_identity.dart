@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movify/constants/assets.dart';
 import 'package:movify/core/design_system/design_system.dart';
+import 'package:movify/core/di/service_locator.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 /// App identity header matching Figma node `573:4346`.
@@ -13,6 +14,15 @@ class AboutAppIdentity extends StatelessWidget {
     final colors = context.colors;
     final textTheme = Theme.of(context).textTheme;
 
+    final packageInfo = getIt.isRegistered<PackageInfo>()
+        ? getIt<PackageInfo>()
+        : null;
+    final version = packageInfo?.version ?? '1.0.1';
+    final build = packageInfo?.buildNumber;
+    final label = build != null && build.isNotEmpty
+        ? 'Version $version ($build)'
+        : 'Version $version';
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -23,7 +33,7 @@ class AboutAppIdentity extends StatelessWidget {
             width: 80,
             height: 80,
             fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => Container(
+            errorBuilder: (_, _, _) => Container(
               width: 80,
               height: 80,
               decoration: BoxDecoration(
@@ -39,27 +49,11 @@ class AboutAppIdentity extends StatelessWidget {
           ),
         ),
         const SizedBox(height: Space.md),
-        Text(
-          'Movify',
-          style: textTheme.titleLarge,
-        ),
+        Text('Movify', style: textTheme.titleLarge),
         const SizedBox(height: Space.xsm),
-        FutureBuilder<PackageInfo>(
-          future: PackageInfo.fromPlatform(),
-          builder: (context, snapshot) {
-            final version = snapshot.data?.version ?? '1.0.1';
-            final build = snapshot.data?.buildNumber;
-            final label = build != null && build.isNotEmpty
-                ? 'Version $version ($build)'
-                : 'Version $version';
-
-            return Text(
-              label,
-              style: textTheme.bodySmall?.copyWith(
-                color: colors.textContrast,
-              ),
-            );
-          },
+        Text(
+          label,
+          style: textTheme.bodySmall?.copyWith(color: colors.textContrast),
         ),
       ],
     );

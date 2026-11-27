@@ -23,6 +23,7 @@ import 'package:movify/core/notification/settings/presentation/notification_sett
 import 'package:movify/core/routing/app_router.dart';
 import 'package:movify/core/services/app_review_service.dart';
 import 'package:movify/core/theme/cubit/theme_cubit.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:movify/features/auth/data/data_sources/local/auth_local_data_source.dart';
 import 'package:movify/features/auth/data/data_sources/local/auth_local_data_source_impl.dart';
 import 'package:movify/features/auth/data/data_sources/remote/auth_remote_data_source.dart';
@@ -148,6 +149,10 @@ Future<void> _registerCoreSync() async {
   final sharedPrefs = await SharedPreferences.getInstance();
   if (!getIt.isRegistered<SharedPreferences>()) {
     getIt.registerSingleton<SharedPreferences>(sharedPrefs);
+  }
+  final packageInfo = await PackageInfo.fromPlatform();
+  if (!getIt.isRegistered<PackageInfo>()) {
+    getIt.registerSingleton<PackageInfo>(packageInfo);
   }
   if (!getIt.isRegistered<ConnectivityCubit>()) {
     getIt.registerLazySingleton<ConnectivityCubit>(() => ConnectivityCubit());

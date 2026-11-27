@@ -30,4 +30,5 @@ class Assets {
   static const String theaterIcon = "assets/images/theater.svg";
   static const String popcornIcon = "assets/images/popcorn-icon.svg";
   static const String manSitIcon = "assets/images/man-sit-drink-icon.svg";
+  static const String tmdbIcon = "assets/icons/tmdb_logo.svg";
 }

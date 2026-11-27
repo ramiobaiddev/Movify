@@ -24,7 +24,7 @@ class ParticleHeartButton extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final heartColor = context.colors.surfaceError;
+    final heartColor = context.colors.textOnImage;
 
     final scaleController = useAnimationController(
       duration: const Duration(milliseconds: 200),
@@ -104,10 +104,7 @@ class _ParticleBurst extends StatelessWidget {
     children: [
       for (var i = 0; i < count; i++)
         Transform.translate(
-          offset: Offset.fromDirection(
-            2 * pi * i / count,
-            radius * progress,
-          ),
+          offset: Offset.fromDirection(2 * pi * i / count, radius * progress),
           child: Opacity(
             opacity: 1 - progress,
             child: DecoratedBox(

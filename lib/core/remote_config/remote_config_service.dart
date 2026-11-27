@@ -1,4 +1,5 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:movify/core/di/service_locator.dart';
 import 'package:movify/core/utils/app_logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -11,7 +12,9 @@ class RemoteConfigService {
 
   Future<void> init() async {
     try {
-      final packageInfo = await PackageInfo.fromPlatform();
+      final packageInfo = getIt.isRegistered<PackageInfo>()
+          ? getIt<PackageInfo>()
+          : await PackageInfo.fromPlatform();
       _currentAppVersion = packageInfo.version;
 
       await _remoteConfig.setConfigSettings(

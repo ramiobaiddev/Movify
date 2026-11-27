@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:movify/constants/assets.dart';
 import 'package:movify/core/design_system/design_system.dart';
 
 /// Credits card matching Figma node `573:4341`.
@@ -44,11 +46,7 @@ class AboutTmdbCreditsCard extends StatelessWidget {
                   color: colors.surfaceDivider.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(Radii.sm),
                 ),
-                child: Icon(
-                  Icons.movie_outlined,
-                  size: 16,
-                  color: colors.buttonPrimary,
-                ),
+                child: SvgPicture.asset(Assets.tmdbIcon),
               ),
               const SizedBox(width: Space.md),
               Expanded(
