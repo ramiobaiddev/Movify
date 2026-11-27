@@ -53,6 +53,7 @@ import 'package:movify/features/details/domain/use_cases/tv/fetch_series_recomme
 import 'package:movify/features/details/domain/use_cases/tv/fetch_series_season_details.dart';
 import 'package:movify/features/details/domain/use_cases/tv/fetch_similar_series_use_case.dart';
 import 'package:movify/features/details/domain/use_cases/tv/fetch_tv_show_details_use_case.dart';
+import 'package:movify/features/details/presentation/cubits/details_cubit/details_cubit.dart';
 import 'package:movify/features/details/presentation/cubits/fetch_collection_cubit/fetch_collection_cubit.dart';
 import 'package:movify/features/details/presentation/cubits/fetch_details_cubit/fetch_details_cubit.dart';
 import 'package:movify/features/details/presentation/cubits/fetch_series_season_details_cubit/fetch_series_season_details_cubit.dart';
@@ -498,6 +499,12 @@ void _registerCubits() {
     () => FetchDetailsCubit(
       fetchMovieDetailsUseCase: getIt<FetchMovieDetailsUseCase>(),
       fetchTvShowDetailsUseCase: getIt<FetchTvShowDetailsUseCase>(),
+    ),
+  );
+  getIt.registerFactory<DetailsCubit>(
+    () => DetailsCubit(
+      fetchMovie: getIt<FetchMovieDetailsUseCase>(),
+      fetchSeries: getIt<FetchTvShowDetailsUseCase>(),
     ),
   );
   getIt.registerFactory<PersonDetailsCubit>(
