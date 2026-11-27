@@ -197,7 +197,7 @@ class MovieDetailsModel {
     kBudget: budget ?? 0,
     kRevenue: revenue ?? 0,
     kVideos: videos,
-    movieTitle: originalTitle ?? '',
+    movieTitle: title ?? originalTitle ?? '',
     movieId: id ?? 0,
     kReviews: reviews,
     kImages: images,
