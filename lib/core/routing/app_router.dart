@@ -12,6 +12,7 @@ import 'package:movify/features/auth/routing/auth_routes.dart';
 import 'package:movify/features/details/routing/details_routes.dart';
 import 'package:movify/features/discover/routing/discover_routing.dart';
 import 'package:movify/features/onboarding/routing/on_boarding_routes.dart';
+import 'package:movify/features/people/routing/people_routes.dart';
 import 'package:movify/features/search/routing/search_routes.dart';
 import 'package:movify/features/settings/presentation/cubits/settings_cubit.dart';
 import 'package:movify/features/settings/presentation/cubits/settings_state.dart';
@@ -125,6 +126,7 @@ class AppRouters {
     ...MainRoutes.routes,
     ...DetailsRoutes.routes,
     ...SearchRoutes.routes,
+    ...PeopleRoutes.routes,
     ...DiscoverRouting.routes,
     ...OnBoardingRoutes.routes,
   ];

@@ -10,6 +10,7 @@ import 'package:movify/features/home/presentation/widgets/home_hero_section.dart
 import 'package:movify/features/home/presentation/widgets/home_top_bar.dart';
 import 'package:movify/features/home/presentation/widgets/rows/home_chip_row.dart';
 import 'package:movify/features/home/presentation/widgets/rows/home_fixed_row.dart';
+import 'package:movify/features/people/presentation/widgets/popular_people_row.dart';
 import 'package:movify/features/see_all/presentation/models/see_all_args.dart';
 import 'package:movify/shared/domain/entites/discover_filters.dart';
 import 'package:movify/shared/domain/enums/discover_sort.dart';
@@ -89,6 +90,11 @@ class HomeFeedViewBody extends StatelessWidget {
                 ),
               ),
             ),
+
+            const SizedBox(height: Space.xl),
+
+            // "Popular actors"
+            const PopularPeopleRow(),
 
             const SizedBox(height: Space.xl),
 
