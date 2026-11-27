@@ -141,6 +141,7 @@ class _Loaded extends StatelessWidget {
         seriesPosterPath: content.posterPath,
         backdropPath: content.backdropPath,
         seasons: content.seasons,
+        seriesTitle: content.title,
       ),
     );
   }
@@ -155,6 +156,7 @@ class _Loaded extends StatelessWidget {
         rating: episode.rating,
         posterImage: content.backdropPath ?? content.posterPath ?? '',
         seriesPosterPath: content.posterPath,
+        seriesTitle: content.title,
         specificId: episode.id,
       ),
     );

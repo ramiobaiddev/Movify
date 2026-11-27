@@ -14,6 +14,8 @@ class EpisodeTile extends StatelessWidget {
     required this.episode,
     required this.today,
     required this.onTap,
+    this.selected = false,
+    this.showDivider = true,
   });
 
   static const double _stillWidth = 106;
@@ -22,6 +24,10 @@ class EpisodeTile extends StatelessWidget {
   final EpisodeItem episode;
   final DateTime today;
   final VoidCallback onTap;
+
+  /// Highlights the row (the episode being watched in the picker).
+  final bool selected;
+  final bool showDivider;
 
   @override
   Widget build(BuildContext context) {
@@ -38,98 +44,113 @@ class EpisodeTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
-      child: Column(
-        children: [
-          Row(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: selected
+              ? colors.primaryDefault.withValues(alpha: 0.15)
+              : null,
+          borderRadius: BorderRadius.circular(Radii.md),
+        ),
+        child: Padding(
+          padding: selected
+              ? const EdgeInsets.all(Space.sm)
+              : EdgeInsets.zero,
+          child: Column(
             children: [
-              Stack(
+              Row(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(Radii.sm),
-                    child: SizedBox(
-                      width: _stillWidth,
-                      height: _stillHeight,
-                      child: ColoredBox(
-                        color: colors.surfaceGenre,
-                        child: path == null
-                            ? null
-                            : CachedNetworkImage(
-                                imageUrl: tmdbImageSize(TmdbImageSize.w300, path),
-                                fit: BoxFit.cover,
-                                errorWidget: (_, _, _) =>
-                                    const SizedBox.shrink(),
-                              ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: Space.xsm,
-                    bottom: Space.xsm,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: colors.surfacePrimary.withValues(alpha: 0.75),
-                        borderRadius: BorderRadius.circular(Radii.md),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: Space.sm,
-                        ),
-                        child: Text(
-                          'E${episode.number}',
-                          style: text.labelSmall?.copyWith(
-                            color: colors.iconPrimary,
+                  Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(Radii.sm),
+                        child: SizedBox(
+                          width: _stillWidth,
+                          height: _stillHeight,
+                          child: ColoredBox(
+                            color: colors.surfaceGenre,
+                            child: path == null
+                                ? null
+                                : CachedNetworkImage(
+                                    imageUrl: tmdbImageSize(TmdbImageSize.w300, path),
+                                    fit: BoxFit.cover,
+                                    errorWidget: (_, _, _) =>
+                                        const SizedBox.shrink(),
+                                  ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(width: Space.md),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      episode.name,
-                      style: text.titleSmall?.copyWith(
-                        color: colors.textPrimary,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (details.isNotEmpty) ...[
-                      const SizedBox(height: Space.xsm),
-                      Text(
-                        details,
-                        style: text.bodySmall?.copyWith(
-                          color: colors.textContrast,
+                      Positioned(
+                        left: Space.xsm,
+                        bottom: Space.xsm,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: colors.surfacePrimary.withValues(alpha: 0.75),
+                            borderRadius: BorderRadius.circular(Radii.md),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: Space.sm,
+                            ),
+                            child: Text(
+                              'E${episode.number}',
+                              style: text.labelSmall?.copyWith(
+                                color: colors.iconPrimary,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ],
-                  ],
-                ),
-              ),
-              if (date != null && episode.isUpcoming(today)) ...[
-                const SizedBox(width: Space.sm),
-                Icon(
-                  Icons.schedule_rounded,
-                  size: 16,
-                  color: colors.primaryDefault,
-                ),
-                const SizedBox(width: Space.sm),
-                Text(
-                  daysUntil(date, today),
-                  style: text.labelMedium?.copyWith(
-                    color: colors.primaryDefault,
                   ),
-                ),
+                  const SizedBox(width: Space.md),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          episode.name,
+                          style: text.titleSmall?.copyWith(
+                            color: colors.textPrimary,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        if (details.isNotEmpty) ...[
+                          const SizedBox(height: Space.xsm),
+                          Text(
+                            details,
+                            style: text.bodySmall?.copyWith(
+                              color: colors.textContrast,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  if (date != null && episode.isUpcoming(today)) ...[
+                    const SizedBox(width: Space.sm),
+                    Icon(
+                      Icons.schedule_rounded,
+                      size: 16,
+                      color: colors.primaryDefault,
+                    ),
+                    const SizedBox(width: Space.sm),
+                    Text(
+                      daysUntil(date, today),
+                      style: text.labelMedium?.copyWith(
+                        color: colors.primaryDefault,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              if (showDivider) ...[
+                const SizedBox(height: Space.md),
+                Divider(height: 1, thickness: 1, color: colors.surfaceDivider),
               ],
             ],
           ),
-          const SizedBox(height: Space.md),
-          Divider(height: 1, thickness: 1, color: colors.surfaceDivider),
-        ],
+        ),
       ),
     );
   }

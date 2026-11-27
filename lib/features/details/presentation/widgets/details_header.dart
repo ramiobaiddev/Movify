@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/network/api/services/tmdb/tmdb_image_size.dart';
 import 'package:movify/core/routing/route_name.dart';
-import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/details/presentation/core/details_data_navigation.dart';
 import 'package:movify/features/details/presentation/core/mappers/favorite_mappers.dart';
 import 'package:movify/features/favorite/presentation/widgets/favorite_button.dart';
@@ -23,15 +22,6 @@ class DetailsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final backdrop = data.backdropImage ?? data.posterImage;
-    final path = switch (data.contentType) {
-      ContentType.series || ContentType.seasons || ContentType.episodes => 'tv',
-      _ => 'movie',
-    };
-    final shareUrl = switch (data) {
-      SeasonNavData(:final seasonNumber) =>
-        'https://www.themoviedb.org/tv/${data.tmdbId}/season/$seasonNumber',
-      _ => 'https://www.themoviedb.org/$path/${data.tmdbId}',
-    };
 
     return PhotoHeader(
       backdropUrl: backdrop.isEmpty
@@ -45,29 +35,42 @@ class DetailsHeader extends StatelessWidget {
           ? null
           : _PlayButton(onTap: onPlayTrailer!),
       onBack: () => Navigator.of(context).maybePop(),
-      actions: [
-        HeaderCircle(
-          child: FavoriteButton(
-            favoriteEntity: FavoriteMapper.fromNavigationData(data),
-            size: 18,
-            shaded: false,
-          ),
-        ),
-        HeaderCircleAction(
-          icon: Icons.ios_share_rounded,
-          label: 'Share',
-          onTap: () => SharePlus.instance.share(
-            ShareParams(text: shareUrl),
-          ),
-        ),
-        HeaderCircleAction(
-          icon: Icons.home_rounded,
-          label: 'Home',
-          onTap: () => context.goNamed(RouteName.home),
-        ),
-      ],
+      actions: headerActions(context, data),
     );
   }
+}
+
+/// Heart, share and home buttons for a movie, series, season or episode.
+List<Widget> headerActions(BuildContext context, DetailsNavigationData data) {
+  final shareUrl = switch (data) {
+    EpisodeNavData(:final seasonNumber, :final episodeNumber) =>
+      'https://www.themoviedb.org/tv/${data.tmdbId}/season/$seasonNumber'
+          '/episode/$episodeNumber',
+    SeasonNavData(:final seasonNumber) =>
+      'https://www.themoviedb.org/tv/${data.tmdbId}/season/$seasonNumber',
+    SeriesNavData() => 'https://www.themoviedb.org/tv/${data.tmdbId}',
+    _ => 'https://www.themoviedb.org/movie/${data.tmdbId}',
+  };
+
+  return [
+    HeaderCircle(
+      child: FavoriteButton(
+        favoriteEntity: FavoriteMapper.fromNavigationData(data),
+        size: 18,
+        shaded: false,
+      ),
+    ),
+    HeaderCircleAction(
+      icon: Icons.ios_share_rounded,
+      label: 'Share',
+      onTap: () => SharePlus.instance.share(ShareParams(text: shareUrl)),
+    ),
+    HeaderCircleAction(
+      icon: Icons.home_rounded,
+      label: 'Home',
+      onTap: () => context.goNamed(RouteName.home),
+    ),
+  ];
 }
 
 class _PlayButton extends StatelessWidget {

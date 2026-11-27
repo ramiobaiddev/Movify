@@ -179,6 +179,8 @@ extension SeasonDetailsContent on SeriesSeasonDetailsEntity {
             runtime: (episode.runtime ?? 0) > 0 ? episode.runtime : null,
             stillPath: _nonEmpty(episode.stillPath),
             rating: _rating(episode.voteAverage),
+            overview: _nonEmpty(episode.overview) ?? '',
+            guestStars: _cast(episode.guestStars ?? const []),
           ),
     ]..sort((a, b) => a.number.compareTo(b.number));
     final totalMinutes = episodes.fold<int>(0, (sum, e) => sum + (e.runtime ?? 0));

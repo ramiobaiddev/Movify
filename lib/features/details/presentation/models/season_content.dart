@@ -61,6 +61,8 @@ class EpisodeItem extends Equatable {
     this.runtime,
     this.stillPath,
     this.rating,
+    this.overview = '',
+    this.guestStars = const [],
   });
 
   final int id;
@@ -73,6 +75,15 @@ class EpisodeItem extends Equatable {
   final int? runtime;
   final String? stillPath;
   final double? rating;
+  final String overview;
+  final List<CastMember> guestStars;
+
+  /// `E02`.
+  String get code => 'E${number.toString().padLeft(2, '0')}';
+
+  /// `S04 · E01`.
+  String get fullCode =>
+      'S${seasonNumber.toString().padLeft(2, '0')} · $code';
 
   /// Not aired yet on [today].
   bool isUpcoming(DateTime today) {
@@ -93,5 +104,7 @@ class EpisodeItem extends Equatable {
     runtime,
     stillPath,
     rating,
+    overview,
+    guestStars,
   ];
 }

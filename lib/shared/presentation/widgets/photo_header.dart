@@ -124,20 +124,7 @@ class PhotoHeader extends StatelessWidget {
             top: MediaQuery.paddingOf(context).top + Space.sm,
             left: Space.lg,
             right: Space.lg,
-            child: Row(
-              children: [
-                HeaderCircleAction(
-                  icon: Icons.arrow_back_ios_new_rounded,
-                  label: 'Back',
-                  onTap: onBack,
-                ),
-                const Spacer(),
-                for (var i = 0; i < actions.length; i++) ...[
-                  if (i > 0) const SizedBox(width: Space.sm),
-                  actions[i],
-                ],
-              ],
-            ),
+            child: HeaderButtonRow(onBack: onBack, actions: actions),
           ),
         ],
       ),
@@ -189,5 +176,29 @@ class HeaderCircle extends StatelessWidget {
       dimension: 36,
       child: Center(child: child),
     ),
+  );
+}
+
+/// Back button on the left, [actions] on the right, laid over a photo.
+class HeaderButtonRow extends StatelessWidget {
+  const HeaderButtonRow({super.key, required this.onBack, this.actions = const []});
+
+  final VoidCallback onBack;
+  final List<Widget> actions;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    children: [
+      HeaderCircleAction(
+        icon: Icons.arrow_back_ios_new_rounded,
+        label: 'Back',
+        onTap: onBack,
+      ),
+      const Spacer(),
+      for (var i = 0; i < actions.length; i++) ...[
+        if (i > 0) const SizedBox(width: Space.sm),
+        actions[i],
+      ],
+    ],
   );
 }

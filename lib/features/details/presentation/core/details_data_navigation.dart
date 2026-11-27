@@ -61,6 +61,7 @@ class SeasonNavData extends DetailsNavigationData {
 
   /// Every season of the series, for the previous / next bar.
   final List<SeasonItem> seasons;
+  final String? seriesTitle;
 
   const SeasonNavData({
     required super.tmdbId,
@@ -69,6 +70,7 @@ class SeasonNavData extends DetailsNavigationData {
     this.rating,
     this.date,
     this.seasons = const [],
+    this.seriesTitle,
     required super.posterImage,
     super.backdropImage,
     required super.specificId,
@@ -80,6 +82,7 @@ class SeasonNavData extends DetailsNavigationData {
     required String? seriesPosterPath,
     required String? backdropPath,
     required List<SeasonItem> seasons,
+    String? seriesTitle,
   }) => SeasonNavData(
     tmdbId: tmdbId,
     seasonNumber: season.number,
@@ -87,6 +90,7 @@ class SeasonNavData extends DetailsNavigationData {
     rating: season.rating,
     date: season.airDate,
     seasons: seasons,
+    seriesTitle: seriesTitle,
     posterImage: season.posterPath ?? seriesPosterPath ?? '',
     backdropImage: backdropPath,
     specificId: season.id,
@@ -99,6 +103,7 @@ class EpisodeNavData extends DetailsNavigationData {
   final String? date;
   final double? rating;
   final String? seriesPosterPath;
+  final String? seriesTitle;
 
   const EpisodeNavData({
     required super.tmdbId,
@@ -107,6 +112,7 @@ class EpisodeNavData extends DetailsNavigationData {
     this.date,
     this.rating,
     this.seriesPosterPath,
+    this.seriesTitle,
     required super.posterImage,
     super.backdropImage,
     required super.specificId,

@@ -73,6 +73,7 @@ class _SeasonBodyState extends State<_SeasonBody> {
         seriesPosterPath: _data.posterImage,
         backdropPath: _data.backdropImage,
         seasons: _data.seasons,
+        seriesTitle: _data.seriesTitle,
       ),
     );
   }
@@ -109,6 +110,7 @@ class _SeasonBodyState extends State<_SeasonBody> {
         rating: episode.rating,
         posterImage: episode.stillPath ?? _data.backdropImage ?? '',
         seriesPosterPath: _data.posterImage,
+        seriesTitle: _data.seriesTitle,
         specificId: episode.id,
       ),
     );

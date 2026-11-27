@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:movify/core/design_system/theme/movify_theme.dart';
 import 'package:movify/features/details/domain/entites/series_season_details_entitiy.dart';
+import 'package:movify/features/details/domain/value_objects/cast.dart';
 import 'package:movify/features/details/domain/value_objects/episode.dart';
 import 'package:movify/features/details/presentation/mappers/details_content_mapper.dart';
 import 'package:movify/features/details/presentation/models/season_content.dart';
 import 'package:movify/features/details/presentation/widgets/sections/episode_tile.dart';
+import 'package:movify/features/details/presentation/widgets/episodes_sheet.dart';
 import 'package:movify/features/details/presentation/widgets/sections/episodes_section.dart';
 import 'package:movify/shared/presentation/widgets/sequence_nav_bar.dart';
 
@@ -60,6 +62,24 @@ void main() {
         content.info.map((r) => '${r.label}: ${r.value}'),
         contains('Total runtime: 1hr 15min'),
       );
+    });
+
+    test('maps overview and guest stars', () {
+      final content = season([
+        Episode(
+          id: 1,
+          episodeNumber: 1,
+          seasonNumber: 4,
+          overview: ' Plot ',
+          guestStars: [Cast(id: 7, name: 'Ana', character: 'Mia')],
+        ),
+      ]).toSeasonContent();
+
+      final episode = content.episodes.single;
+      expect(episode.overview, 'Plot');
+      expect(episode.guestStars.single.name, 'Ana');
+      expect(episode.fullCode, 'S04 · E01');
+      expect(episode.code, 'E01');
     });
 
     test('episode without a name gets a numbered one', () {
@@ -181,6 +201,45 @@ void main() {
 
       expect(next, 1);
       expect(center, 1);
+    });
+  });
+
+  group('showEpisodesSheet', () {
+    testWidgets('lists the season and returns the tapped episode', (
+      tester,
+    ) async {
+      final episodes = _episodes(3);
+      EpisodeItem? picked;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: MovifyTheme.dark(),
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: TextButton(
+                onPressed: () async => picked = await showEpisodesSheet(
+                  context,
+                  episodes: episodes,
+                  current: episodes[0],
+                  today: DateTime(2026, 11, 28),
+                ),
+                child: const Text('open'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('All episodes'), findsOneWidget);
+      expect(find.text('Season 01'), findsOneWidget);
+      expect(find.text('Watching episode 01'), findsOneWidget);
+
+      await tester.tap(find.text('Episode title 3'));
+      await tester.pumpAndSettle();
+
+      expect(picked, episodes[2]);
     });
   });
 }
