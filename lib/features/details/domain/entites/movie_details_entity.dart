@@ -10,7 +10,6 @@ import 'package:movify/features/details/domain/value_objects/production_country.
 import 'package:movify/features/details/domain/value_objects/reviews.dart';
 import 'package:movify/features/details/domain/value_objects/translations.dart';
 import 'package:movify/features/details/domain/value_objects/videos.dart';
-import 'package:movify/features/details/domain/value_objects/watch_providers.dart';
 
 class MovieDetailsEntity {
   final int movieId;
@@ -46,7 +45,6 @@ class MovieDetailsEntity {
   final Reviews? kReviews;
   final Images? kImages;
   final Keywords? kKeywords;
-  final WatchProviders? kWatchProviders;
   final ExternalIds? kExternalIds;
   final Translations? kTranslations;
   final BelongsToCollection? kBelongsToCollection;
@@ -69,7 +67,6 @@ class MovieDetailsEntity {
     required this.kReviews,
     this.kImages,
     this.kKeywords,
-    this.kWatchProviders,
     this.kExternalIds,
     this.kTranslations,
     this.kBelongsToCollection,

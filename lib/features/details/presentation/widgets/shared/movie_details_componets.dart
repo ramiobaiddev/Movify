@@ -22,7 +22,6 @@ class MovieDetailComponets extends StatelessWidget {
   Widget build(BuildContext context) {
     final movieDetailsEntity = context.read<MovieDetailsEntity>();
     final reviews = movieDetailsEntity.kReviews;
-    final watchProviders = movieDetailsEntity.kWatchProviders?.results;
     final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -33,7 +32,6 @@ class MovieDetailComponets extends StatelessWidget {
               overview: movieDetailsEntity.overView,
               genreCategory: GenreCategory.movies,
               geners: movieDetailsEntity.kGeners,
-              watchProviders: watchProviders,
               child: const MovieAboutTabView(),
             ),
           ),

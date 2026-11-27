@@ -13,7 +13,6 @@ import 'package:movify/features/details/domain/value_objects/reviews.dart';
 import 'package:movify/features/details/domain/value_objects/season.dart';
 import 'package:movify/features/details/domain/value_objects/translations.dart';
 import 'package:movify/features/details/domain/value_objects/videos.dart';
-import 'package:movify/features/details/domain/value_objects/watch_providers.dart';
 
 final class SeriesDetailsEntity {
   final int seiresId;
@@ -38,7 +37,6 @@ final class SeriesDetailsEntity {
   final String? backgroundImage;
   final String? posterImage;
   final String? overView;
-  final WatchProviders? kWatchProviders;
   final Translations? kTranslations;
   final ExternalIds? kExternalIds;
   final Reviews? kReviews;
@@ -68,7 +66,6 @@ final class SeriesDetailsEntity {
     required this.seriesTitle,
     required this.overView,
     required this.backgroundImage,
-    this.kWatchProviders,
     this.kTranslations,
     this.kExternalIds,
     this.kReviews,

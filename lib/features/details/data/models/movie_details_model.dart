@@ -11,7 +11,6 @@ import 'package:movify/features/details/domain/value_objects/reviews.dart';
 import 'package:movify/features/details/domain/value_objects/spoken_language.dart';
 import 'package:movify/features/details/domain/value_objects/translations.dart';
 import 'package:movify/features/details/domain/value_objects/videos.dart';
-import 'package:movify/features/details/domain/value_objects/watch_providers.dart';
 
 class MovieDetailsModel {
   bool? adult;
@@ -45,7 +44,6 @@ class MovieDetailsModel {
   Reviews? reviews;
   Images? images;
   Keywords? keywords;
-  WatchProviders? watchProviders;
   ExternalIds? externalIds;
   Translations? translations;
 
@@ -81,7 +79,6 @@ class MovieDetailsModel {
     this.reviews,
     this.images,
     this.keywords,
-    this.watchProviders,
     this.externalIds,
     this.translations,
   });
@@ -142,11 +139,6 @@ class MovieDetailsModel {
     keywords: json['keywords'] == null
         ? null
         : Keywords.fromJson(json['keywords'] as Map<String, dynamic>),
-    watchProviders: json['watch_providers'] == null
-        ? null
-        : WatchProviders.fromJson(
-            json['watch_providers'] as Map<String, dynamic>,
-          ),
     externalIds: json['external_ids'] == null
         ? null
         : ExternalIds.fromJson(json['external_ids'] as Map<String, dynamic>),
@@ -187,7 +179,6 @@ class MovieDetailsModel {
     'reviews': reviews?.toJson(),
     'images': images?.toJson(),
     'keywords': keywords?.toJson(),
-    'watch_providers': watchProviders?.toJson(),
     'external_ids': externalIds?.toJson(),
     'translations': translations?.toJson(),
   };
@@ -211,7 +202,6 @@ class MovieDetailsModel {
     kReviews: reviews,
     kImages: images,
     kKeywords: keywords,
-    kWatchProviders: watchProviders,
     kExternalIds: externalIds,
     kTranslations: translations,
     kBelongsToCollection: belongsToCollection,
