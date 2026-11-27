@@ -14,3 +14,18 @@ extension FavoriteToCardDisplay on FavoriteEntity {
     contentType: contentType,
   );
 }
+
+extension CardDisplayToFavorite on CardDisplayModel {
+  /// What a poster's heart icon saves.
+  FavoriteEntity toFavorite() => FavoriteEntity(
+    specificId: id,
+    tmbdId: id,
+    title: title,
+    posterImage: posterPath,
+    backdropImage: backdropPath ?? posterPath,
+    contentType: contentType,
+    date: date ?? '',
+    rating: rating ?? 0,
+    genres: genreIds ?? const [],
+  );
+}

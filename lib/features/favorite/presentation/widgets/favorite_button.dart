@@ -7,9 +7,14 @@ import 'package:movify/features/favorite/presentation/cubits/favorite_state.dart
 import 'package:movify/features/favorite/presentation/widgets/particle_heart_button.dart';
 
 class FavoriteButton extends StatelessWidget {
-  const FavoriteButton({super.key, required this.favoriteEntity});
+  const FavoriteButton({
+    super.key,
+    required this.favoriteEntity,
+    this.size = 32,
+  });
 
   final FavoriteEntity favoriteEntity;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +26,7 @@ class FavoriteButton extends StatelessWidget {
       ),
       builder: (context, isFavorited) => ParticleHeartButton(
         isFavorited: isFavorited,
+        size: size,
         onTap: () {
           HapticFeedback.heavyImpact();
           cubit.toggleFavorite(favoriteEntity);

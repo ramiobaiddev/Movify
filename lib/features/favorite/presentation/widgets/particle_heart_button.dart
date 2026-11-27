@@ -2,12 +2,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:movify/core/design_system/design_system.dart';
 
+/// Heart toggle with a small particle burst when it becomes a favorite.
+///
+/// The burst is only built while it plays, so a list full of favorited hearts
+/// carries no extra widgets while idle.
 class ParticleHeartButton extends HookWidget {
-  final bool isFavorited;
-  final VoidCallback onTap;
-  final double size;
-
   const ParticleHeartButton({
     super.key,
     required this.isFavorited,
@@ -15,18 +16,22 @@ class ParticleHeartButton extends HookWidget {
     this.size = 32,
   });
 
+  static const int _particleCount = 8;
+
+  final bool isFavorited;
+  final VoidCallback onTap;
+  final double size;
+
   @override
   Widget build(BuildContext context) {
-    // ✅ Auto-managed animation controllers (no dispose needed!)
+    final heartColor = context.colors.surfaceError;
+
     final scaleController = useAnimationController(
       duration: const Duration(milliseconds: 200),
     );
-
     final particleController = useAnimationController(
       duration: const Duration(milliseconds: 600),
     );
-
-    // ✅ Create animations
     final scaleAnimation = useMemoized(
       () => Tween<double>(begin: 1.0, end: 1.2).animate(
         CurvedAnimation(parent: scaleController, curve: Curves.easeOut),
@@ -34,60 +39,42 @@ class ParticleHeartButton extends HookWidget {
       [scaleController],
     );
 
-    // ✅ Auto-trigger animations when isFavorited changes
     final prevIsFavorited = usePrevious(isFavorited);
-
     useEffect(() {
       if (isFavorited && prevIsFavorited == false) {
         scaleController.forward().then((_) => scaleController.reverse());
         particleController.forward(from: 0);
       }
       return null;
-    }, [isFavorited],);
+    }, [isFavorited]);
 
     return GestureDetector(
       onTap: onTap,
+      behavior: HitTestBehavior.opaque,
       child: SizedBox(
         width: size * 2,
         height: size * 2,
         child: Stack(
           alignment: Alignment.center,
           children: [
-            // Particles
-            if (isFavorited)
-              ...List.generate(8, (index) {
-                final angle = (index * 45) * (3.14159 / 180);
-                return AnimatedBuilder(
-                  animation: particleController,
-                  builder: (context, child) {
-                    final offset = Offset(
-                      cos(angle) * 30 * particleController.value,
-                      sin(angle) * 30 * particleController.value,
-                    );
-                    return Transform.translate(
-                      offset: offset,
-                      child: Opacity(
-                        opacity: 1 - particleController.value,
-                        child: Container(
-                          width: 4,
-                          height: 4,
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
+            AnimatedBuilder(
+              animation: particleController,
+              builder: (context, _) => particleController.isAnimating
+                  ? RepaintBoundary(
+                      child: _ParticleBurst(
+                        progress: particleController.value,
+                        radius: size * 0.9,
+                        count: _particleCount,
+                        color: heartColor,
                       ),
-                    );
-                  },
-                );
-              }),
-
-            // Heart icon
+                    )
+                  : const SizedBox.shrink(),
+            ),
             ScaleTransition(
               scale: scaleAnimation,
               child: Icon(
                 isFavorited ? Icons.favorite : Icons.favorite_border,
-                color: isFavorited ? Colors.red : null,
+                color: isFavorited ? heartColor : null,
                 size: size,
               ),
             ),
@@ -96,4 +83,39 @@ class ParticleHeartButton extends HookWidget {
       ),
     );
   }
+}
+
+class _ParticleBurst extends StatelessWidget {
+  const _ParticleBurst({
+    required this.progress,
+    required this.radius,
+    required this.count,
+    required this.color,
+  });
+
+  final double progress;
+  final double radius;
+  final int count;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => Stack(
+    alignment: Alignment.center,
+    children: [
+      for (var i = 0; i < count; i++)
+        Transform.translate(
+          offset: Offset.fromDirection(
+            2 * pi * i / count,
+            radius * progress,
+          ),
+          child: Opacity(
+            opacity: 1 - progress,
+            child: DecoratedBox(
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+              child: const SizedBox(width: 4, height: 4),
+            ),
+          ),
+        ),
+    ],
+  );
 }

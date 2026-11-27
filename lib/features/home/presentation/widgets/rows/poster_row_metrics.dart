@@ -8,6 +8,10 @@ import 'package:movify/core/design_system/tokens/spacing.dart';
 abstract final class PosterRowMetrics {
   static const double posterWidth = 120.0;
 
+  /// Heart icon size on a poster. Its tap box is twice this, so it stays well
+  /// inside a narrow poster.
+  static const double heartSize = 18.0;
+
   /// Height of a poster card of [width] (2:3 aspect ratio), accounting for
   /// image height, spacing, and system font scaling.
   static double height(BuildContext context, {double width = posterWidth}) {
