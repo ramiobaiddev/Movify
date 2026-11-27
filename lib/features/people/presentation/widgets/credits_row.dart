@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
-import 'package:movify/core/network/api/services/tmdb/tmdb_image_size.dart';
-import 'package:movify/features/favorite/presentation/models/favorite_card_mapper.dart';
-import 'package:movify/features/favorite/presentation/widgets/favorite_button.dart';
 import 'package:movify/features/home/presentation/widgets/rows/home_row_header.dart';
 import 'package:movify/features/home/presentation/widgets/rows/poster_row_metrics.dart';
-import 'package:movify/shared/presentation/models/card_display_mappers.dart';
 import 'package:movify/shared/presentation/models/card_display_model.dart';
+import 'package:movify/shared/presentation/widgets/media_poster_card.dart';
 
 /// Header and a horizontal list of poster cards from an in-memory list.
 ///
@@ -49,18 +46,7 @@ class CreditsRow extends StatelessWidget {
             separatorBuilder: (_, _) => const SizedBox(width: Space.md),
             itemBuilder: (context, index) {
               final item = items[index];
-              return PosterCard(
-                width: PosterRowMetrics.posterWidth,
-                imageUrl: tmdbImageSize(TmdbImageSize.w500, item.posterPath),
-                title: item.title,
-                subtitle: item.year,
-                rating: item.rating,
-                actionButton: FavoriteButton(
-                  favoriteEntity: item.toFavorite(),
-                  size: PosterRowMetrics.heartSize,
-                ),
-                onTap: () => onItemTap(item),
-              );
+              return MediaPosterCard(item: item, onTap: () => onItemTap(item));
             },
           ),
         ),

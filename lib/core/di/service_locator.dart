@@ -56,6 +56,7 @@ import 'package:movify/features/details/domain/use_cases/tv/fetch_tv_show_detail
 import 'package:movify/features/details/presentation/cubits/fetch_collection_cubit/fetch_collection_cubit.dart';
 import 'package:movify/features/details/presentation/cubits/fetch_details_cubit/fetch_details_cubit.dart';
 import 'package:movify/features/details/presentation/cubits/fetch_series_season_details_cubit/fetch_series_season_details_cubit.dart';
+import 'package:movify/features/details/presentation/feeds/related_fetchers.dart';
 import 'package:movify/features/discover/data/data_sources/remote_discover_data_source.dart';
 import 'package:movify/features/discover/data/data_sources/remote_discover_data_source_impl.dart';
 import 'package:movify/features/discover/data/repos/discover_repo_impl.dart';
@@ -391,6 +392,14 @@ void _registerDetailsUseCases() {
   getIt.registerLazySingleton<FetchSimilarMoviesUseCase>(
     () =>
         FetchSimilarMoviesUseCase(movieDetailsRepo: getIt<MovieDetailsRepo>()),
+  );
+  getIt.registerLazySingleton<RelatedFetchers>(
+    () => RelatedFetchers(
+      movieRecommendations: getIt<FetchMoviesRecommendationsUseCase>(),
+      movieSimilar: getIt<FetchSimilarMoviesUseCase>(),
+      seriesRecommendations: getIt<FetchSeriesRecommendationsUseCase>(),
+      seriesSimilar: getIt<FetchSimilarSeriesUseCase>(),
+    ),
   );
   getIt.registerLazySingleton<FetchSimilarSeriesUseCase>(
     () => FetchSimilarSeriesUseCase(

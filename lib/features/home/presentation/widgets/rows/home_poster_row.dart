@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movify/core/design_system/design_system.dart';
-import 'package:movify/core/network/api/services/tmdb/tmdb_image_size.dart';
 import 'package:movify/core/paging/paged_cubit.dart';
 import 'package:movify/core/paging/widgets/paged_horizontal_list.dart';
-import 'package:movify/features/favorite/presentation/models/favorite_card_mapper.dart';
-import 'package:movify/features/favorite/presentation/widgets/favorite_button.dart';
 import 'package:movify/features/home/presentation/widgets/rows/home_row_header.dart';
 import 'package:movify/features/home/presentation/widgets/rows/poster_row_metrics.dart';
 import 'package:movify/features/home/presentation/widgets/rows/poster_row_skeleton.dart';
-import 'package:movify/shared/presentation/models/card_display_mappers.dart';
 import 'package:movify/shared/presentation/models/card_display_model.dart';
 import 'package:movify/shared/presentation/widgets/keep_alive_wrapper.dart';
+import 'package:movify/shared/presentation/widgets/media_poster_card.dart';
 
 /// One home row: header + horizontal list of poster cards.
 ///
@@ -56,18 +53,8 @@ class HomePosterRow extends StatelessWidget {
           PagedHorizontalList<CardDisplayModel>(
             height: PosterRowMetrics.height(context),
             loadingBuilder: (_) => const PosterRowSkeleton(),
-            itemBuilder: (context, item, _) => PosterCard(
-              width: PosterRowMetrics.posterWidth,
-              imageUrl: tmdbImageSize(TmdbImageSize.w500, item.posterPath),
-              title: item.title,
-              subtitle: item.year,
-              rating: item.rating,
-              actionButton: FavoriteButton(
-                favoriteEntity: item.toFavorite(),
-                size: PosterRowMetrics.heartSize,
-              ),
-              onTap: () => onItemTap(item),
-            ),
+            itemBuilder: (context, item, _) =>
+                MediaPosterCard(item: item, onTap: () => onItemTap(item)),
           ),
         ],
       ),
