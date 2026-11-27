@@ -22,6 +22,7 @@ class RouteName {
   static const String movieDetail = 'movieDetail';
   static const String tvDetail = 'tvDetail';
   static const String season = 'season';
+  static const String reviews = 'reviews';
   static const String episode = 'episode';
   static const String splash = 'splash';
   static const String youtubePlayer = 'youtubePlayer';

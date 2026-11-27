@@ -11,6 +11,8 @@ import 'package:movify/features/details/presentation/cubits/details_cubit/detail
 import 'package:movify/features/details/presentation/cubits/fetch_series_season_details_cubit/fetch_series_season_details_cubit.dart';
 import 'package:movify/features/details/presentation/views/details_screen.dart';
 import 'package:movify/features/details/presentation/views/episode_view.dart';
+import 'package:movify/features/details/presentation/models/details_content.dart';
+import 'package:movify/features/details/presentation/views/reviews_view.dart';
 import 'package:movify/features/details/presentation/views/season_view.dart';
 
 class DetailsRoutes {
@@ -23,6 +25,14 @@ class DetailsRoutes {
           create: (context) => getIt.get<FetchSeriesSeasonDetailsCubit>(),
           child: SeasonView(seasonDataNav: state.extra as SeasonNavData),
         ),
+        state: state,
+      ),
+    ),
+    GoRoute(
+      path: RoutePaths.reviews,
+      name: RouteName.reviews,
+      pageBuilder: (context, state) => AppTransitions.cupertino(
+        child: ReviewsView(reviews: state.extra! as List<ReviewItem>),
         state: state,
       ),
     ),

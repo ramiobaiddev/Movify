@@ -246,7 +246,11 @@ class _Loaded extends StatelessWidget {
           ),
         ],
         const SizedBox(height: Space.x3xl),
-        ReviewsSection(reviews: content.reviews),
+        ReviewsSection(
+          reviews: content.reviews,
+          onSeeMore: () =>
+              context.pushNamed(RouteName.reviews, extra: content.reviews),
+        ),
         const SizedBox(height: Space.x3xl),
         if (collectionId != null) ...[
           CollectionRow(collectionId: collectionId, movieId: content.id),

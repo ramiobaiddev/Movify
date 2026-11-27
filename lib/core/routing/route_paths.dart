@@ -28,6 +28,7 @@ class RoutePaths {
   static const String movieDetail = '/movie/:id';
   static const String tvDetail = '/tv/:id';
   static const String season = '/tv/season';
+  static const String reviews = '/reviews';
   static const String episode = '/tv/episode';
   // Onboarding Routes
 
