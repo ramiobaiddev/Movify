@@ -40,4 +40,5 @@ class RouteName {
   static const String notificationTesting = 'notificationTesting';
   static const String maintenanceScreen = 'maintenanceScreen';
   static const String forceUpdateScreen = 'forceUpdateScreen';
+  static const String aboutview = 'aboutview';
 }

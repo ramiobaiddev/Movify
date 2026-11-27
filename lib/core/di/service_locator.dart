@@ -481,6 +481,7 @@ void _registerCubits() {
       removeFavoriteUseCase: getIt<RemoveFavoriteUseCase>(),
       sessionStream: getIt<SessionCubit>().stream,
       initialSessionState: getIt<SessionCubit>().state,
+      appReviewService: getIt<AppReviewService>(),
     ),
   );
 

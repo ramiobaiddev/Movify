@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:movify/constant.dart';
-import 'package:movify/core/ads/consent_manager.dart';
+import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/di/service_locator.dart';
+import 'package:movify/core/routing/route_name.dart';
 import 'package:movify/core/services/app_review_service.dart';
 import 'package:movify/features/profile/presentation/widgets/profile_section.dart';
 import 'package:movify/features/profile/presentation/widgets/profile_setting_tile.dart';
@@ -16,7 +18,7 @@ class ProfileSupportSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
+    final colors = context.colors;
     return ProfileSection(
       title: 'Support & legal',
       children: [
@@ -45,8 +47,13 @@ class ProfileSupportSection extends StatelessWidget {
         ProfileSettingTile(
           icon: Icons.privacy_tip_outlined,
           title: l10n.about,
+          trailing: Icon(
+            Icons.arrow_forward_ios_rounded,
+            color: colors.iconSecondary,
+            size: 18,
+          ),
           onTap: () async {
-            await ConsentManager.showPrivacyOptionsForm();
+            context.pushNamed(RouteName.aboutview);
           },
         ),
       ],

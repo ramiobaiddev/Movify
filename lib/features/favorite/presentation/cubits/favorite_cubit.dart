@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movify/core/services/app_review_service.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/auth/presentation/cubits/session_state.dart';
 import 'package:movify/features/favorite/domain/entities/favorite_entity.dart';
@@ -24,7 +25,9 @@ class FavoriteCubit extends Cubit<FavoriteState> {
     required this.removeFavoriteUseCase,
     required this.sessionStream,
     required SessionState initialSessionState,
-  }) : super(const FavoriteInitial()) {
+    AppReviewService? appReviewService,
+  }) : _appReviewService = appReviewService,
+       super(const FavoriteInitial()) {
     _sessionSub = sessionStream.listen(_onSessionChanged);
     _onSessionChanged(initialSessionState);
   }
@@ -35,6 +38,7 @@ class FavoriteCubit extends Cubit<FavoriteState> {
   final AddFavoriteUseCase addFavoriteUseCase;
   final RemoveFavoriteUseCase removeFavoriteUseCase;
   final Stream<SessionState> sessionStream;
+  final AppReviewService? _appReviewService;
 
   late final StreamSubscription<SessionState> _sessionSub;
   String _currentUserId = 'guest';
@@ -150,12 +154,19 @@ class FavoriteCubit extends Cubit<FavoriteState> {
 
     // Undo only this item on the latest state, so a toggle made in the
     // meantime is not lost.
-    result.fold((_) {
-      final latest = state;
-      if (!isClosed && latest is FavoriteLoaded) {
-        emit(_withItem(latest, original, add: wasFavorite));
-      }
-    }, (_) {});
+    result.fold(
+      (_) {
+        final latest = state;
+        if (!isClosed && latest is FavoriteLoaded) {
+          emit(_withItem(latest, original, add: wasFavorite));
+        }
+      },
+      (_) {
+        if (!wasFavorite) {
+          _appReviewService?.recordFavoriteMilestone();
+        }
+      },
+    );
   }
 
   FavoriteLoaded _withItem(

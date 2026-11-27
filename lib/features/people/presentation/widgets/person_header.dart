@@ -54,7 +54,7 @@ class PersonHeader extends StatelessWidget {
                     child: CachedNetworkImage(
                       imageUrl: tmdbImageSize(TmdbImageSize.w185, path),
                       fit: BoxFit.cover,
-                      memCacheWidth: (MediaQuery.widthOf(context) * dpr ~/ 4),
+                      memCacheWidth: MediaQuery.widthOf(context) * dpr ~/ 4,
                     ),
                   ),
                 ),

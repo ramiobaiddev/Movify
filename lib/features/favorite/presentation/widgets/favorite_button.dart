@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movify/features/details/presentation/widgets/shared/shaded_icon_background.dart';
 import 'package:movify/features/favorite/domain/entities/favorite_entity.dart';
 import 'package:movify/features/favorite/presentation/cubits/favorite_cubit.dart';
 import 'package:movify/features/favorite/presentation/cubits/favorite_state.dart';
@@ -24,13 +25,15 @@ class FavoriteButton extends StatelessWidget {
         favoriteEntity.specificId,
         favoriteEntity.contentType,
       ),
-      builder: (context, isFavorited) => ParticleHeartButton(
-        isFavorited: isFavorited,
-        size: size,
-        onTap: () {
-          HapticFeedback.heavyImpact();
-          cubit.toggleFavorite(favoriteEntity);
-        },
+      builder: (context, isFavorited) => ShadedIconBackground(
+        child: ParticleHeartButton(
+          isFavorited: isFavorited,
+          size: size,
+          onTap: () {
+            HapticFeedback.heavyImpact();
+            cubit.toggleFavorite(favoriteEntity);
+          },
+        ),
       ),
     );
   }

@@ -21,26 +21,32 @@ class ProfileDataSection extends StatelessWidget {
       title: 'Your data',
       children: [
         ProfileSettingTile(
-          icon: Icons.history_rounded,
-          title: 'Viewing history',
+          icon: Icons.history,
+          trailing: Icon(
+            Icons.arrow_forward_ios_rounded,
+            color: colors.iconSecondary,
+            size: 18,
+          ),
+          title: l10n.searchHistory,
+          onTap: () {
+            context.pushNamed(RouteName.search);
+          },
+        ),
+        ProfileSettingTile(
+          icon: Icons.delete_outline_rounded,
+
+          title: 'Clear Recent activity',
           onTap: () {
             ClearViewingHistorySheet.show(
               context,
               onConfirmClear: () {
                 showSnackBar(
                   context,
-                  text: 'Viewing history cleared',
+                  text: 'Clear Recent activity',
                   color: colors.surfaceSuccess,
                 );
               },
             );
-          },
-        ),
-        ProfileSettingTile(
-          icon: Icons.history,
-          title: l10n.searchHistory,
-          onTap: () {
-            context.pushNamed(RouteName.search);
           },
         ),
       ],

@@ -52,4 +52,6 @@ class RoutePaths {
   // Remote Config Routes
   static const String maintenance = '/maintenance';
   static const String forceUpdate = '/forceUpdate';
+     static const String aboutview = '/aboutview';
+
 }

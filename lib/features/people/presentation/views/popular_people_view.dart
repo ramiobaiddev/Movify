@@ -31,7 +31,7 @@ class PopularPeopleView extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: Space.lg),
           child: CustomScrollView(
             slivers: [
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: SeeAllTopBar(
                   title: 'Popular actor',
                   showResetButton: false,
