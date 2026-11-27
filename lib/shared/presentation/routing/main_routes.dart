@@ -9,6 +9,7 @@ import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/discover/presentation/views/discover_view.dart';
 import 'package:movify/features/favorite/presentation/views/favorite_view.dart';
 import 'package:movify/features/home/presentation/views/home_feed_view.dart';
+import 'package:movify/features/profile/presentation/views/about_view.dart';
 import 'package:movify/features/profile/presentation/views/profile_view.dart';
 import 'package:movify/features/see_all/presentation/models/see_all_args.dart';
 import 'package:movify/features/see_all/presentation/views/see_all_view.dart';
@@ -40,6 +41,14 @@ class MainRoutes {
           args: state.extra as SeeAllArgs? ??
               const SeeAllArgs.discover(kind: ContentType.movies),
         ),
+        state: state,
+      ),
+    ),
+    GoRoute(
+      path: RoutePaths.aboutview,
+      name: RouteName.aboutview,
+      pageBuilder: (context, state) => AppTransitions.cupertino(
+        child: const AboutView(),
         state: state,
       ),
     ),

@@ -45,14 +45,14 @@ class ProfileSupportSection extends StatelessWidget {
           },
         ),
         ProfileSettingTile(
-          icon: Icons.privacy_tip_outlined,
+          icon: Icons.info_outline_rounded,
           title: l10n.about,
           trailing: Icon(
             Icons.arrow_forward_ios_rounded,
             color: colors.iconSecondary,
             size: 18,
           ),
-          onTap: () async {
+          onTap: () {
             context.pushNamed(RouteName.aboutview);
           },
         ),

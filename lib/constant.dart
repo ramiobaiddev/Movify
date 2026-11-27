@@ -17,4 +17,13 @@ class Constants {
   static const String appLinlk =
       'https://play.google.com/store/apps/details?id=com.rami.movify';
   static const String supportEmail = 'ramiobaid545421@gmail.com';
+  static const String developerWebsite = 'https://ramiobaid.com';
+  static const String developerLinkedIn =
+      'https://www.linkedin.com/in/ramiobaid/';
+  static const String developerTwitter = 'https://x.com/ramiobaid';
+  static const String developerInstagram = 'https://instagram.com/ramiobaid';
+  static const String privacyPolicyUrl =
+      'https://sites.google.com/view/movifyprivacypolicy/home';
+  static const String termsOfUseUrl =
+      'https://sites.google.com/view/movifytermsandconditions/home';
 }
