@@ -67,14 +67,14 @@ class _PersonContent extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       children: [
         PersonHeader(details: details),
-        const SizedBox(height: Space.xl),
+        const SizedBox(height: Space.x2xl),
         CreditsRow(
           title: 'Movies',
           items: movies,
           onItemTap: context.openMediaDetails,
           onSeeAll: () => _seeAll(context, 'Movies', movies),
         ),
-        const SizedBox(height: Space.xl),
+        const SizedBox(height: Space.x3xl),
         CreditsRow(
           title: 'Series',
           items: series,
@@ -112,7 +112,7 @@ class _PersonSkeleton extends StatelessWidget {
                 child: box(44, 44, radius: 22),
               ),
               const SizedBox(height: Space.lg),
-              box(170, 238, radius: Radii.xl),
+              box(148, 223, radius: Radii.lg),
               const SizedBox(height: Space.lg),
               box(180, 24),
               const SizedBox(height: Space.md),

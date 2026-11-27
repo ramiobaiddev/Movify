@@ -1,5 +1,3 @@
-import 'dart:ui' show ImageFilter;
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -11,13 +9,21 @@ import 'package:movify/features/people/domain/entities/person_details.dart';
 import 'package:movify/features/people/presentation/widgets/expandable_biography.dart';
 import 'package:share_plus/share_plus.dart';
 
-/// Blurred photo backdrop, portrait, name, facts and biography.
+/// Actor header (Figma "Actor View"): full-width photo that fades to the
+/// screen colour, a portrait overlapping the fade, name, facts and biography.
+///
+/// The photo is not blurred in the design; the fade is a plain gradient, which
+/// costs nothing compared to a real layer blur.
 class PersonHeader extends StatelessWidget {
   const PersonHeader({super.key, required this.details, DateTime? today})
     : _today = today;
 
-  static const double _backdropHeight = 300;
-  static const double _portraitWidth = 170;
+  static const double _backdropHeight = 420;
+  static const double _fadeHeight = 90;
+  static const double _portraitTop = 251;
+  static const double _portraitWidth = 148;
+  static const double _portraitHeight = 223;
+  static const double _stackHeight = _portraitTop + _portraitHeight;
 
   final PersonDetails details;
   final DateTime? _today;
@@ -37,142 +43,167 @@ class PersonHeader extends StatelessWidget {
     final colors = context.colors;
     final textTheme = Theme.of(context).textTheme;
     final path = details.profilePath;
+    final hasPhoto = path != null && path.isNotEmpty;
+    final photoUrl = hasPhoto ? tmdbImageSize(TmdbImageSize.h632, path) : null;
     final birthLine = _birthLine;
-    final dpr = MediaQuery.devicePixelRatioOf(context);
+    final secondary = textTheme.labelMedium?.copyWith(
+      color: colors.textSecondary,
+    );
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          height: _backdropHeight,
+          height: _stackHeight,
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
-              if (path != null && path.isNotEmpty)
-                Positioned.fill(
-                  child: ImageFiltered(
-                    imageFilter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
-                    child: CachedNetworkImage(
-                      imageUrl: tmdbImageSize(TmdbImageSize.w185, path),
-                      fit: BoxFit.cover,
-                      memCacheWidth: MediaQuery.widthOf(context) * dpr ~/ 4,
-                    ),
+              if (photoUrl != null)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: _backdropHeight,
+                  child: CachedNetworkImage(
+                    imageUrl: photoUrl,
+                    fit: BoxFit.cover,
+                    alignment: Alignment.topCenter,
                   ),
                 ),
-              Positioned.fill(
+              Positioned(
+                left: 0,
+                right: 0,
+                top: _backdropHeight - _fadeHeight,
+                bottom: 0,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        colors.surfacePrimary.withValues(alpha: 0.4),
+                        colors.surfacePrimary.withValues(alpha: 0),
                         colors.surfacePrimary,
+                      ],
+                      stops: const [
+                        0,
+                        _fadeHeight / (_stackHeight - _backdropHeight + _fadeHeight),
                       ],
                     ),
                   ),
                 ),
               ),
-              SafeArea(
-                bottom: false,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: Space.lg,
-                    vertical: Space.md,
-                  ),
-                  child: Row(
-                    children: [
-                      _CircleAction(
-                        icon: Icons.arrow_back_ios_new_rounded,
-                        label: 'Back',
-                        onTap: () => Navigator.of(context).maybePop(),
-                      ),
-                      const Spacer(),
-                      _CircleAction(
-                        icon: Icons.ios_share_rounded,
-                        label: 'Share',
-                        onTap: () => SharePlus.instance.share(
-                          ShareParams(
-                            text:
-                                'https://www.themoviedb.org/person/${details.id}',
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: Space.sm),
-                      _CircleAction(
-                        icon: Icons.home_rounded,
-                        label: 'Home',
-                        onTap: () => context.goNamed(RouteName.home),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
               Positioned(
-                bottom: 0,
+                top: _portraitTop,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(Radii.xl),
+                  borderRadius: BorderRadius.circular(Radii.lg),
                   child: SizedBox(
                     width: _portraitWidth,
-                    height: _portraitWidth * 1.4,
+                    height: _portraitHeight,
                     child: ColoredBox(
                       color: colors.surfaceGenre,
-                      child: path == null || path.isEmpty
+                      child: photoUrl == null
                           ? Icon(
                               Icons.person_rounded,
                               size: 64,
                               color: colors.iconSecondary,
                             )
                           : CachedNetworkImage(
-                              imageUrl: tmdbImageSize(TmdbImageSize.w500, path),
+                              imageUrl: photoUrl,
                               fit: BoxFit.cover,
                             ),
                     ),
                   ),
                 ),
               ),
+              Positioned(
+                top: MediaQuery.paddingOf(context).top + Space.sm,
+                left: Space.lg,
+                right: Space.lg,
+                child: Row(
+                  children: [
+                    _CircleAction(
+                      icon: Icons.arrow_back_ios_new_rounded,
+                      label: 'Back',
+                      onTap: () => Navigator.of(context).maybePop(),
+                    ),
+                    const Spacer(),
+                    _CircleAction(
+                      icon: Icons.ios_share_rounded,
+                      label: 'Share',
+                      onTap: () => SharePlus.instance.share(
+                        ShareParams(
+                          text:
+                              'https://www.themoviedb.org/person/${details.id}',
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: Space.sm),
+                    _CircleAction(
+                      icon: Icons.home_rounded,
+                      label: 'Home',
+                      onTap: () => context.goNamed(RouteName.home),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
-        const SizedBox(height: Space.lg),
+        const SizedBox(height: Space.md),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: Space.lg),
+          child: Center(
+            child: Column(
+              children: [
+                Text(
+                  details.name,
+                  style: textTheme.headlineSmall?.copyWith(
+                    color: colors.textPrimary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: Space.xsm),
+                Text(
+                  '${details.knownForDepartment} · ${details.creditCount} credits',
+                  style: secondary,
+                ),
+                if (birthLine != null) ...[
+                  const SizedBox(height: Space.xsm),
+                  Text(birthLine, style: secondary),
+                ],
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: Space.x3xl),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: Space.lg),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Column(
+              if (details.placeOfBirth.isNotEmpty) ...[
+                Row(
                   children: [
-                    Text(
-                      details.name,
-                      style: textTheme.headlineMedium?.copyWith(
-                        color: colors.textPrimary,
-                      ),
-                      textAlign: TextAlign.center,
+                    Icon(
+                      Icons.location_on_outlined,
+                      size: 24,
+                      color: colors.iconSecondary,
                     ),
-                    const SizedBox(height: Space.xsm),
-                    Text(
-                      '${details.knownForDepartment} · ${details.creditCount} credits',
-                      style: textTheme.bodyMedium?.copyWith(
-                        color: colors.textSecondary,
+                    const SizedBox(width: Space.sm),
+                    Expanded(
+                      child: Text(
+                        details.placeOfBirth,
+                        style: textTheme.labelMedium?.copyWith(
+                          color: colors.textPrimary,
+                        ),
                       ),
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: Space.lg),
-              if (birthLine != null)
-                _FactRow(icon: Icons.cake_outlined, text: birthLine),
-              if (details.placeOfBirth.isNotEmpty)
-                _FactRow(
-                  icon: Icons.place_outlined,
-                  text: details.placeOfBirth,
-                ),
-              if (details.biography.isNotEmpty) ...[
                 const SizedBox(height: Space.md),
-                Text('Biography', style: textTheme.titleMedium),
-                const SizedBox(height: Space.sm),
-                ExpandableBiography(text: details.biography),
               ],
+              if (details.biography.isNotEmpty)
+                ExpandableBiography(text: details.biography),
             ],
           ),
         ),
@@ -181,35 +212,7 @@ class PersonHeader extends StatelessWidget {
   }
 }
 
-class _FactRow extends StatelessWidget {
-  const _FactRow({required this.icon, required this.text});
-
-  final IconData icon;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: Space.sm),
-      child: Row(
-        children: [
-          Icon(icon, size: 20, color: colors.iconSecondary),
-          const SizedBox(width: Space.sm),
-          Expanded(
-            child: Text(
-              text,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: colors.textPrimary),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
+/// 36 px dark circle button on the photo (Figma "icon container").
 class _CircleAction extends StatelessWidget {
   const _CircleAction({
     required this.icon,
@@ -229,14 +232,15 @@ class _CircleAction extends StatelessWidget {
       label: label,
       child: GestureDetector(
         onTap: onTap,
+        behavior: HitTestBehavior.opaque,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: colors.surfaceGenre,
-            shape: BoxShape.circle,
+            color: colors.surfaceBlurBackground,
+            borderRadius: BorderRadius.circular(Radii.lg),
           ),
           child: SizedBox.square(
-            dimension: 44,
-            child: Icon(icon, size: 20, color: colors.iconPrimary),
+            dimension: 36,
+            child: Icon(icon, size: 18, color: colors.iconPrimary),
           ),
         ),
       ),

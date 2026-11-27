@@ -4,7 +4,7 @@ import 'package:movify/core/design_system/design_system.dart';
 /// Biography collapsed to a few lines with a Read more toggle (only shown when
 /// the text actually overflows).
 class ExpandableBiography extends StatefulWidget {
-  const ExpandableBiography({super.key, required this.text, this.maxLines = 4});
+  const ExpandableBiography({super.key, required this.text, this.maxLines = 6});
 
   final String text;
   final int maxLines;
@@ -20,7 +20,7 @@ class _ExpandableBiographyState extends State<ExpandableBiography> {
   Widget build(BuildContext context) {
     final colors = context.colors;
     final textTheme = Theme.of(context).textTheme;
-    final style = textTheme.bodyMedium?.copyWith(color: colors.textSecondary);
+    final style = textTheme.bodySmall?.copyWith(color: colors.textPrimary);
 
     return LayoutBuilder(
       builder: (context, constraints) {
