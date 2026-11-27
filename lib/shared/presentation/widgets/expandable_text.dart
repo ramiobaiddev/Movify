@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
 
-/// Biography collapsed to a few lines with a Read more toggle (only shown when
-/// the text actually overflows).
-class ExpandableBiography extends StatefulWidget {
-  const ExpandableBiography({super.key, required this.text, this.maxLines = 6});
+/// Long text (biography, storyline, review) collapsed to a few lines with a
+/// Read more toggle that only appears when the text actually overflows.
+class ExpandableText extends StatefulWidget {
+  const ExpandableText({super.key, required this.text, this.maxLines = 6,
+    this.style});
 
   final String text;
   final int maxLines;
+  final TextStyle? style;
 
   @override
-  State<ExpandableBiography> createState() => _ExpandableBiographyState();
+  State<ExpandableText> createState() => _ExpandableTextState();
 }
 
-class _ExpandableBiographyState extends State<ExpandableBiography> {
+class _ExpandableTextState extends State<ExpandableText> {
   bool _expanded = false;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
     final textTheme = Theme.of(context).textTheme;
-    final style = textTheme.bodySmall?.copyWith(color: colors.textPrimary);
+    final style =
+        widget.style ??
+        textTheme.bodySmall?.copyWith(color: colors.textPrimary);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -50,8 +54,8 @@ class _ExpandableBiographyState extends State<ExpandableBiography> {
                   padding: const EdgeInsets.only(top: Space.sm),
                   child: Text(
                     _expanded ? 'Show less' : 'Read more',
-                    style: textTheme.labelLarge?.copyWith(
-                      color: colors.textPrimary,
+                    style: textTheme.bodySmall?.copyWith(
+                      color: colors.textSecondary,
                     ),
                   ),
                 ),

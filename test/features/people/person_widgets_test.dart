@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:movify/core/design_system/theme/movify_theme.dart';
 import 'package:movify/features/people/domain/entities/person_details.dart';
-import 'package:movify/features/people/presentation/widgets/expandable_biography.dart';
 import 'package:movify/features/people/presentation/widgets/person_header.dart';
 import 'package:movify/shared/domain/entites/person_item.dart';
+import 'package:movify/shared/presentation/widgets/expandable_text.dart';
 import 'package:movify/shared/presentation/widgets/person_list_tile.dart';
 
 Widget _wrap(Widget child) => MaterialApp(
@@ -41,15 +41,15 @@ void main() {
     });
   });
 
-  group('ExpandableBiography', () {
+  group('ExpandableText', () {
     testWidgets('short text has no toggle', (tester) async {
-      await tester.pumpWidget(_wrap(const ExpandableBiography(text: 'Short.')));
+      await tester.pumpWidget(_wrap(const ExpandableText(text: 'Short.')));
       expect(find.text('Read more'), findsNothing);
     });
 
     testWidgets('long text toggles', (tester) async {
       await tester.pumpWidget(
-        _wrap(ExpandableBiography(text: List.filled(200, 'word').join(' '))),
+        _wrap(ExpandableText(text: List.filled(200, 'word').join(' '))),
       );
       expect(find.text('Read more'), findsOneWidget);
       await tester.tap(find.text('Read more'));

@@ -56,7 +56,7 @@ class PersonListTile extends StatelessWidget {
                       Text(
                         person.knownForDepartment ?? 'Acting',
                         style: textTheme.bodySmall?.copyWith(
-                          color: colors.textSecondary,
+                          color: colors.textContrast,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

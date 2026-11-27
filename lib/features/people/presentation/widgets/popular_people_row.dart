@@ -8,9 +8,9 @@ import 'package:movify/core/paging/widgets/paged_horizontal_list.dart';
 import 'package:movify/core/routing/route_name.dart';
 import 'package:movify/features/home/presentation/widgets/rows/home_row_header.dart';
 import 'package:movify/features/people/domain/use_cases/get_popular_people_use_case.dart';
-import 'package:movify/features/people/presentation/widgets/person_avatar_card.dart';
 import 'package:movify/shared/domain/entites/person_item.dart';
 import 'package:movify/shared/presentation/widgets/keep_alive_wrapper.dart';
+import 'package:movify/shared/presentation/widgets/person_avatar_card.dart';
 
 /// Home row of popular actors. Tapping the header opens the full list.
 class PopularPeopleRow extends StatelessWidget {
@@ -37,7 +37,9 @@ class PopularPeopleRow extends StatelessWidget {
             height: PersonAvatarCard.height,
             loadingBuilder: (_) => const _PopularPeopleSkeleton(),
             itemBuilder: (context, person, _) => PersonAvatarCard(
-              person: person,
+              name: person.name,
+              profilePath: person.profilePath,
+              subtitle: person.knownForDepartment ?? 'Acting',
               onTap: () => context.pushNamed(
                 RouteName.person,
                 pathParameters: {'id': person.id.toString()},
@@ -65,7 +67,7 @@ class _PopularPeopleSkeleton extends StatelessWidget {
       itemBuilder: (_, _) => Align(
         alignment: Alignment.topCenter,
         child: SizedBox.square(
-          dimension: PersonAvatarCard.avatarSize,
+          dimension: 86,
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: colors.surfaceGenre,

@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
-import 'package:movify/shared/domain/entites/person_item.dart';
 import 'package:movify/shared/presentation/widgets/person_avatar.dart';
 
-/// Round photo with name and department underneath, used in the Home row.
+/// Round photo with a name and an optional line underneath. Used by the Home
+/// Popular actors row and the Cast & crew row of a details screen.
 class PersonAvatarCard extends StatelessWidget {
   const PersonAvatarCard({
     super.key,
-    required this.person,
+    required this.name,
     required this.onTap,
+    this.profilePath,
+    this.subtitle,
+    this.avatarSize = 86,
   });
 
-  static const double width = 92;
-  static const double avatarSize = 86;
+  /// Height of a card at the default [avatarSize] (photo, name, subtitle).
   static const double height = 150;
 
-  final PersonItem person;
+  final String name;
+  final String? profilePath;
+
+  /// Second line under the name (department, character...). Hidden when null.
+  final String? subtitle;
+  final double avatarSize;
   final VoidCallback onTap;
 
   @override
@@ -27,25 +34,26 @@ class PersonAvatarCard extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: SizedBox(
-        width: width,
+        width: avatarSize + Space.sm,
         child: Column(
           children: [
-            PersonAvatar(profilePath: person.profilePath, size: avatarSize),
+            PersonAvatar(profilePath: profilePath, size: avatarSize),
             const SizedBox(height: Space.sm),
             Text(
-              person.name,
+              name,
               style: textTheme.titleSmall?.copyWith(color: colors.textPrimary),
               textAlign: TextAlign.center,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            Text(
-              person.knownForDepartment ?? 'Acting',
-              style: textTheme.bodySmall?.copyWith(color: colors.textSecondary),
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+            if (subtitle != null)
+              Text(
+                subtitle!,
+                style: textTheme.bodySmall?.copyWith(color: colors.textContrast),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
           ],
         ),
       ),

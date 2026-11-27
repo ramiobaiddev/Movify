@@ -5,7 +5,7 @@ import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/network/api/services/tmdb/tmdb_image_size.dart';
 import 'package:movify/core/routing/route_name.dart';
 import 'package:movify/features/people/domain/entities/person_details.dart';
-import 'package:movify/features/people/presentation/widgets/expandable_biography.dart';
+import 'package:movify/shared/presentation/widgets/expandable_text.dart';
 import 'package:movify/shared/presentation/widgets/photo_header.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -37,7 +37,7 @@ class PersonHeader extends StatelessWidget {
     final photoUrl = hasPhoto ? tmdbImageSize(TmdbImageSize.h632, path) : null;
     final birthLine = _birthLine;
     final secondary = textTheme.labelMedium?.copyWith(
-      color: colors.textSecondary,
+      color: colors.textContrast,
     );
 
     return Column(
@@ -123,7 +123,7 @@ class PersonHeader extends StatelessWidget {
                 const SizedBox(height: Space.md),
               ],
               if (details.biography.isNotEmpty)
-                ExpandableBiography(text: details.biography),
+                ExpandableText(text: details.biography),
             ],
           ),
         ),
