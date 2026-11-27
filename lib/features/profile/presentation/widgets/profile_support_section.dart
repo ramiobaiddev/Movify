@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:movify/constant.dart';
 import 'package:movify/core/ads/consent_manager.dart';
-import 'package:movify/core/design_system/design_system.dart';
+import 'package:movify/core/di/service_locator.dart';
+import 'package:movify/core/services/app_review_service.dart';
 import 'package:movify/features/profile/presentation/widgets/profile_section.dart';
 import 'package:movify/features/profile/presentation/widgets/profile_setting_tile.dart';
 import 'package:movify/l10n/app_localizations.dart';
-import 'package:movify/shared/presentation/utils/show_snack_bar.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,7 +15,6 @@ class ProfileSupportSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
     final l10n = AppLocalizations.of(context)!;
 
     return ProfileSection(
@@ -24,13 +23,7 @@ class ProfileSupportSection extends StatelessWidget {
         ProfileSettingTile(
           icon: Icons.star_outline_rounded,
           title: 'Rate Movify',
-          onTap: () {
-            showSnackBar(
-              context,
-              text: 'Thank you for your rating!',
-              color: colors.surfaceSuccess,
-            );
-          },
+          onTap: () => getIt<AppReviewService>().openStoreListing(),
         ),
         ProfileSettingTile(
           icon: Icons.share_outlined,

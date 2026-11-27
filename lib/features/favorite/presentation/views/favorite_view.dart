@@ -18,6 +18,7 @@ class FavoriteView extends StatelessWidget {
       create: (_) => SignInPromptCubit(),
       child: Scaffold(
         body: SafeArea(
+          bottom: false,
           child: DefaultTabController(
             length: 2,
             child: Column(

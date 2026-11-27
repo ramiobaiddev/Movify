@@ -40,7 +40,9 @@ class _FavoritesTabState extends State<FavoritesTab> {
     final picked = await AppSelectionBottomSheet.show<FavoriteSort>(
       context,
       title: 'Sort by',
-      options: [for (final s in FavoriteSort.values) (s.label, s)],
+      options: [
+        for (final s in FavoriteSort.values) AppSelectionOption(s.label, s),
+      ],
       selectedValue: _sort,
     );
     if (picked != null && mounted) {

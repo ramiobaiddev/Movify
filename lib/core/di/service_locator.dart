@@ -21,6 +21,7 @@ import 'package:movify/core/notification/settings/domain/usecases/open_notificat
 import 'package:movify/core/notification/settings/domain/usecases/request_notification_permission_usecase.dart';
 import 'package:movify/core/notification/settings/presentation/notification_settings/notification_settings_cubit.dart';
 import 'package:movify/core/routing/app_router.dart';
+import 'package:movify/core/services/app_review_service.dart';
 import 'package:movify/core/theme/cubit/theme_cubit.dart';
 import 'package:movify/features/auth/data/data_sources/local/auth_local_data_source.dart';
 import 'package:movify/features/auth/data/data_sources/local/auth_local_data_source_impl.dart';
@@ -181,6 +182,11 @@ void _registerExternalDependencies() {
   if (!getIt.isRegistered<GoogleSignIn>()) {
     getIt.registerLazySingleton<GoogleSignIn>(
       () => GoogleSignIn(scopes: ['email', 'profile']),
+    );
+  }
+  if (!getIt.isRegistered<AppReviewService>()) {
+    getIt.registerLazySingleton<AppReviewService>(
+      () => AppReviewServiceImpl(),
     );
   }
 }
