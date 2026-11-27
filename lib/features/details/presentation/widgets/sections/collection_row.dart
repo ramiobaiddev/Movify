@@ -52,7 +52,7 @@ class CollectionRow extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: Space.lg),
                   itemCount: parts.length,
-                  separatorBuilder: (_, _) => const SizedBox(width: Space.sm),
+                  separatorBuilder: (_, _) => const SizedBox(width: Space.md),
                   itemBuilder: (context, index) {
                     final item = parts[index].toCardDisplay();
                     return MediaPosterCard(

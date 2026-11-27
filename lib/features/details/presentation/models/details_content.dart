@@ -49,6 +49,10 @@ class DetailsContent extends Equatable {
   /// Movie collection this film belongs to, if any.
   final int? collectionId;
 
+  /// The best video to play from the header: an official trailer if there is
+  /// one (the mapper sorts them first), otherwise whatever else is available.
+  VideoItem? get trailer => videos.isEmpty ? null : videos.first;
+
   /// Not released yet on [today].
   bool isUpcoming(DateTime today) {
     final date = releaseDate;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/network/api/services/tmdb/tmdb_image_size.dart';
 import 'package:movify/core/routing/route_name.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
@@ -12,9 +13,12 @@ import 'package:share_plus/share_plus.dart';
 /// Photo header of a movie or series, built from the navigation data so it is
 /// on screen before the details arrive.
 class DetailsHeader extends StatelessWidget {
-  const DetailsHeader({super.key, required this.data});
+  const DetailsHeader({super.key, required this.data, this.onPlayTrailer});
 
   final DetailsNavigationData data;
+
+  /// Shows a play button on the poster. Null while there is nothing to play.
+  final VoidCallback? onPlayTrailer;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +36,9 @@ class DetailsHeader extends StatelessWidget {
           ? null
           : tmdbImageSize(TmdbImageSize.w500, data.posterImage),
       portraitFallback: const Icon(Icons.movie_outlined, size: 48),
+      portraitOverlay: onPlayTrailer == null
+          ? null
+          : _PlayButton(onTap: onPlayTrailer!),
       onBack: () => Navigator.of(context).maybePop(),
       actions: [
         HeaderCircle(
@@ -56,4 +63,25 @@ class DetailsHeader extends StatelessWidget {
       ],
     );
   }
+}
+
+class _PlayButton extends StatelessWidget {
+  const _PlayButton({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    button: true,
+    label: 'Play trailer',
+    child: GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Icon(
+        Icons.play_circle_fill_rounded,
+        size: 40,
+        color: context.colors.iconPrimary,
+      ),
+    ),
+  );
 }

@@ -24,6 +24,8 @@ import 'package:movify/features/details/presentation/widgets/sections/genre_chip
 import 'package:movify/features/details/presentation/widgets/sections/information_section.dart';
 import 'package:movify/features/details/presentation/widgets/sections/reviews_section.dart';
 import 'package:movify/features/details/presentation/widgets/sections/section_title.dart';
+import 'package:movify/features/details/presentation/widgets/sections/videos_section.dart';
+import 'package:movify/features/details/presentation/widgets/trailer_player.dart';
 import 'package:movify/features/discover/data/models/genre_see_all_arguments.dart';
 import 'package:movify/features/discover/domain/entities/genre_filter.dart';
 import 'package:movify/shared/presentation/widgets/expandable_text.dart';
@@ -65,33 +67,43 @@ class _DetailsScreenState extends State<DetailsScreen> {
       },
       child: Scaffold(
         backgroundColor: context.colors.surfacePrimary,
-        body: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DetailsHeader(data: data),
-            const SizedBox(height: Space.md),
-            BlocBuilder<DetailsCubit, DetailsState>(
-              builder: (context, state) => switch (state) {
-                DetailsLoading() => _Loading(data: data),
-                DetailsError(:final message) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: Space.x3xl),
-                  child: PagedErrorView(
-                    message: message,
-                    onRetry: () => context.read<DetailsCubit>().load(
-                      data.contentType,
-                      data.tmdbId,
+        body: BlocBuilder<DetailsCubit, DetailsState>(
+          builder: (context, state) {
+            final content = switch (state) {
+              DetailsMovieLoaded(:final movie) => movie.toContent(),
+              DetailsSeriesLoaded(:final series) => series.toContent(),
+              _ => null,
+            };
+            final trailer = content?.trailer;
+
+            return ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                DetailsHeader(
+                  data: data,
+                  onPlayTrailer: trailer == null
+                      ? null
+                      : () => showTrailerPlayer(context, trailer),
+                ),
+                const SizedBox(height: Space.md),
+                if (content != null)
+                  _Loaded(content: content)
+                else if (state is DetailsError)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: Space.x3xl),
+                    child: PagedErrorView(
+                      message: state.message,
+                      onRetry: () => context.read<DetailsCubit>().load(
+                        data.contentType,
+                        data.tmdbId,
+                      ),
                     ),
-                  ),
-                ),
-                DetailsMovieLoaded(:final movie) => _Loaded(
-                  content: movie.toContent(),
-                ),
-                DetailsSeriesLoaded(:final series) => _Loaded(
-                  content: series.toContent(),
-                ),
-              },
-            ),
-          ],
+                  )
+                else
+                  _Loading(data: data),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -181,6 +193,13 @@ class _Loaded extends StatelessWidget {
         ],
         InformationSection(rows: content.info),
         const SizedBox(height: Space.x3xl),
+        if (content.videos.isNotEmpty) ...[
+          VideosSection(
+            videos: content.videos,
+            onPlay: (video) => showTrailerPlayer(context, video),
+          ),
+          const SizedBox(height: Space.x3xl),
+        ],
         RelatedRow(
           title: 'Recommended',
           queryKey: 'recommended-${content.kind}-${content.id}',
