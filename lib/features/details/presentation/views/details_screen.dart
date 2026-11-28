@@ -11,7 +11,8 @@ import 'package:movify/features/details/presentation/core/details_data_navigatio
 import 'package:movify/features/details/presentation/cubits/details_cubit/details_cubit.dart';
 import 'package:movify/features/details/presentation/cubits/details_cubit/details_state.dart';
 import 'package:movify/features/details/presentation/feeds/related_fetchers.dart';
-import 'package:movify/features/details/presentation/mappers/details_content_mapper.dart';
+import 'package:movify/features/details/presentation/mappers/movie_content_mapper.dart';
+import 'package:movify/features/details/presentation/mappers/series_content_mapper.dart';
 import 'package:movify/features/details/presentation/mappers/release_countdown.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
 import 'package:movify/features/details/presentation/widgets/details_header.dart';

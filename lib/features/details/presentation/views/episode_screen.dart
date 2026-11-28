@@ -9,7 +9,7 @@ import 'package:movify/core/routing/route_name.dart';
 import 'package:movify/features/details/presentation/core/details_data_navigation.dart';
 import 'package:movify/features/details/presentation/cubits/season_cubit/season_cubit.dart';
 import 'package:movify/features/details/presentation/cubits/season_cubit/season_state.dart';
-import 'package:movify/features/details/presentation/mappers/details_content_mapper.dart';
+import 'package:movify/features/details/presentation/mappers/season_content_mapper.dart';
 import 'package:movify/features/details/presentation/models/season_content.dart';
 import 'package:movify/features/details/presentation/widgets/episode_header.dart';
 import 'package:movify/features/details/presentation/widgets/episodes_sheet.dart';

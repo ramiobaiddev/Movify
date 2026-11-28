@@ -4,7 +4,7 @@ import 'package:movify/core/design_system/theme/movify_theme.dart';
 import 'package:movify/features/details/domain/entites/series_season_details_entitiy.dart';
 import 'package:movify/features/details/domain/value_objects/cast.dart';
 import 'package:movify/features/details/domain/value_objects/episode.dart';
-import 'package:movify/features/details/presentation/mappers/details_content_mapper.dart';
+import 'package:movify/features/details/presentation/mappers/season_content_mapper.dart';
 import 'package:movify/features/details/presentation/models/season_content.dart';
 import 'package:movify/features/details/presentation/widgets/sections/episode_tile.dart';
 import 'package:movify/features/details/presentation/widgets/episodes_sheet.dart';

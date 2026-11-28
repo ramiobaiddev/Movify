@@ -3,7 +3,7 @@ import 'package:movify/core/utils/enums/content_type.dart';
 
 /// Everything the details page shows, in the shape the widgets want.
 ///
-/// Built from a movie or series entity (see `details_content_mapper.dart`) so
+/// Built from a movie or series entity (see the mappers folder) so
 /// one page can render both and the sections never look at raw TMDB objects.
 class DetailsContent extends Equatable {
   const DetailsContent({

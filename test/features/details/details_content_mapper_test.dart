@@ -15,7 +15,9 @@ import 'package:movify/features/details/domain/value_objects/review_results.dart
 import 'package:movify/features/details/domain/value_objects/reviews.dart';
 import 'package:movify/features/details/domain/value_objects/season.dart';
 import 'package:movify/features/details/domain/value_objects/videos.dart';
-import 'package:movify/features/details/presentation/mappers/details_content_mapper.dart';
+import 'package:movify/features/details/presentation/mappers/movie_content_mapper.dart';
+import 'package:movify/features/details/presentation/mappers/series_content_mapper.dart';
+import 'package:movify/features/details/presentation/mappers/season_content_mapper.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
 
 MovieDetailsEntity _movie({
