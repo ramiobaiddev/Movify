@@ -22,6 +22,7 @@ import 'package:movify/core/notification/settings/domain/usecases/request_notifi
 import 'package:movify/core/notification/settings/presentation/notification_settings/notification_settings_cubit.dart';
 import 'package:movify/core/routing/app_router.dart';
 import 'package:movify/core/services/app_review_service.dart';
+import 'package:movify/core/services/app_update_service.dart';
 import 'package:movify/core/theme/cubit/theme_cubit.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:movify/features/auth/data/data_sources/local/auth_local_data_source.dart';
@@ -202,6 +203,11 @@ void _registerExternalDependencies() {
   if (!getIt.isRegistered<AppReviewService>()) {
     getIt.registerLazySingleton<AppReviewService>(
       () => AppReviewServiceImpl(),
+    );
+  }
+  if (!getIt.isRegistered<AppUpdateService>()) {
+    getIt.registerLazySingleton<AppUpdateService>(
+      () => const AppUpdateServiceImpl(),
     );
   }
 }

@@ -24,7 +24,7 @@ class ParticleHeartButton extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final heartColor = context.colors.textOnImage;
+    final heartColor = context.colors.surfaceError;
 
     final scaleController = useAnimationController(
       duration: const Duration(milliseconds: 200),
