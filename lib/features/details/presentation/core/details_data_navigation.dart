@@ -1,5 +1,6 @@
 import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
+import 'package:movify/features/details/presentation/models/season_content.dart';
 
 sealed class DetailsNavigationData {
   final int tmdbId;
@@ -117,4 +118,18 @@ class EpisodeNavData extends DetailsNavigationData {
     super.backdropImage,
     required super.specificId,
   }) : super(contentType: ContentType.episodes);
+
+  /// The same series and season, pointed at [episode].
+  EpisodeNavData forEpisode(EpisodeItem episode) => EpisodeNavData(
+    tmdbId: tmdbId,
+    seasonNumber: episode.seasonNumber,
+    episodeNumber: episode.number,
+    date: episode.airDate?.toIso8601String(),
+    rating: episode.rating,
+    seriesPosterPath: seriesPosterPath,
+    seriesTitle: seriesTitle,
+    posterImage: episode.stillPath ?? posterImage,
+    backdropImage: backdropImage,
+    specificId: episode.id,
+  );
 }
