@@ -7,7 +7,6 @@ import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/di/service_locator.dart';
 import 'package:movify/core/paging/widgets/paged_error_view.dart';
 import 'package:movify/core/routing/route_name.dart';
-import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/details/presentation/core/details_data_navigation.dart';
 import 'package:movify/features/details/presentation/cubits/details_cubit/details_cubit.dart';
 import 'package:movify/features/details/presentation/cubits/details_cubit/details_state.dart';
@@ -26,11 +25,10 @@ import 'package:movify/features/details/presentation/widgets/sections/last_aired
 import 'package:movify/features/details/presentation/widgets/sections/next_episode_card.dart';
 import 'package:movify/features/details/presentation/widgets/sections/reviews_section.dart';
 import 'package:movify/features/details/presentation/widgets/sections/seasons_row.dart';
-import 'package:movify/features/details/presentation/widgets/sections/section_title.dart';
+import 'package:movify/shared/presentation/widgets/section_title.dart';
 import 'package:movify/features/details/presentation/widgets/sections/videos_section.dart';
 import 'package:movify/features/details/presentation/widgets/trailer_player.dart';
-import 'package:movify/features/discover/data/models/genre_see_all_arguments.dart';
-import 'package:movify/features/discover/domain/entities/genre_filter.dart';
+import 'package:movify/features/discover/presentation/models/discover_links.dart';
 import 'package:movify/shared/presentation/widgets/expandable_text.dart';
 
 /// Movie or series details (Figma "movie details" / "Series details").
@@ -120,17 +118,8 @@ class _Loaded extends StatelessWidget {
 
   static const _pad = EdgeInsets.symmetric(horizontal: Space.lg);
 
-  void _openGenre(BuildContext context, DetailsGenre genre) {
-    context.pushNamed(
-      RouteName.genreSeeAll,
-      extra: GenreSeeAllArguments(
-        category: content.kind == ContentType.series
-            ? GenreCategory.tv
-            : GenreCategory.movies,
-        genreId: genre.id,
-      ),
-    );
-  }
+  void _openGenre(BuildContext context, DetailsGenre genre) =>
+      context.openGenre(content.kind, genre.id, genre.name);
 
   void _openSeason(BuildContext context, SeasonItem season) {
     context.pushNamed(

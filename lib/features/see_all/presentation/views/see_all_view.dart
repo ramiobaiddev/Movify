@@ -41,6 +41,7 @@ class SeeAllView extends StatelessWidget {
         child: Scaffold(
           backgroundColor: colors.surfacePrimary,
           body: SafeArea(
+            top: false,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: Space.lg),
               child: SeeAllViewBody(args: args),

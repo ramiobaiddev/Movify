@@ -111,12 +111,13 @@ class SeeAllFilterBar extends StatelessWidget {
       _FilterChipSpec(
         label: _genreLabel(context),
         active: f.genreIds.isNotEmpty,
-        cleared: f.copyWith(genreIds: const {}),
+        cleared: f.copyWith(genreIds: const {}, anyGenre: false),
         onOpen: () => GenreBottomSheet.show(
           context,
           kind: kind,
           initialGenreIds: f.genreIds,
-          onApply: (ids) => onFiltersChanged(f.copyWith(genreIds: ids)),
+          onApply: (ids) =>
+            onFiltersChanged(f.copyWith(genreIds: ids, anyGenre: false)),
         ),
       ),
       _FilterChipSpec(

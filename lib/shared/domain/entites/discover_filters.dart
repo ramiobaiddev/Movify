@@ -9,6 +9,7 @@ class DiscoverFilters extends Equatable {
   const DiscoverFilters({
     this.sort = DiscoverSort.popularity,
     this.genreIds = const {},
+    this.anyGenre = false,
     this.minRating,
     this.fromYear,
     this.toYear,
@@ -21,6 +22,10 @@ class DiscoverFilters extends Equatable {
 
   final DiscoverSort sort;
   final Set<int> genreIds;
+
+  /// Match any of [genreIds] instead of all of them (a mood spans several
+  /// genres; one title rarely carries all of them).
+  final bool anyGenre;
 
   /// 0-10, matches TMDB `vote_average.gte`.
   final double? minRating;
@@ -53,6 +58,7 @@ class DiscoverFilters extends Equatable {
   DiscoverFilters copyWith({
     DiscoverSort? sort,
     Set<int>? genreIds,
+    bool? anyGenre,
     double? Function()? minRating,
     int? Function()? fromYear,
     int? Function()? toYear,
@@ -64,6 +70,7 @@ class DiscoverFilters extends Equatable {
   }) => DiscoverFilters(
     sort: sort ?? this.sort,
     genreIds: genreIds ?? this.genreIds,
+    anyGenre: anyGenre ?? this.anyGenre,
     minRating: minRating != null ? minRating() : this.minRating,
     fromYear: fromYear != null ? fromYear() : this.fromYear,
     toYear: toYear != null ? toYear() : this.toYear,
@@ -78,6 +85,7 @@ class DiscoverFilters extends Equatable {
   List<Object?> get props => [
     sort,
     genreIds,
+    anyGenre,
     minRating,
     fromYear,
     toYear,

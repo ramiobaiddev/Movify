@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
-import 'package:movify/features/details/presentation/widgets/sections/section_title.dart';
+import 'package:movify/shared/presentation/widgets/section_title.dart';
 
 /// Trailers, teasers and clips as thumbnails with their names.
 class VideosSection extends StatelessWidget {

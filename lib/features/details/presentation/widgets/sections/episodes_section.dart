@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/features/details/presentation/models/season_content.dart';
 import 'package:movify/features/details/presentation/widgets/sections/episode_tile.dart';
-import 'package:movify/features/details/presentation/widgets/sections/section_title.dart';
+import 'package:movify/shared/presentation/widgets/section_title.dart';
 
 /// Episodes of a season, newest first by default, with a sort toggle. Shows
 /// the first few and a "Show all episodes" button until [expanded].

@@ -23,7 +23,8 @@ abstract final class DiscoverQuery {
       if (f.sort == DiscoverSort.ratingDesc ||
           f.sort == DiscoverSort.ratingAsc)
         'vote_count.gte': '$ratingVoteFloor',
-      if (f.genreIds.isNotEmpty) 'with_genres': f.genreIds.join(','),
+      if (f.genreIds.isNotEmpty)
+        'with_genres': f.genreIds.join(f.anyGenre ? '|' : ','),
       if (f.minRating != null) 'vote_average.gte': '${f.minRating}',
       if (f.fromYear != null) '$dateField.gte': '${f.fromYear}-01-01',
       if (f.toYear != null) '$dateField.lte': '${f.toYear}-12-31',

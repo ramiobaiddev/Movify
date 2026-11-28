@@ -12,6 +12,7 @@ import 'package:movify/features/see_all/presentation/widgets/filter_bar/see_all_
 import 'package:movify/features/see_all/presentation/widgets/grid/see_all_poster_grid.dart';
 import 'package:movify/features/see_all/presentation/widgets/sheets/sort_bottom_sheet.dart';
 import 'package:movify/features/see_all/presentation/widgets/sort_row/see_all_sort_row.dart';
+import 'package:movify/features/see_all/presentation/widgets/top_bar/see_all_hero.dart';
 import 'package:movify/features/see_all/presentation/widgets/top_bar/see_all_top_bar.dart';
 import 'package:movify/shared/presentation/models/card_display_model.dart';
 
@@ -51,19 +52,42 @@ class SeeAllViewBody extends StatelessWidget {
     final state = cubit.state;
     final title = _resolveTitle(context, state);
     final hasFilters = state.filters.hasFilters;
+    final unchanged = state.kind == args.kind && state.filters == args.filters;
+    final hero = unchanged ? args.hero : null;
 
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
         // ── 1. Top Bar: Back Button, Title, and Reset Button ──
-        SliverToBoxAdapter(
-          child: SeeAllTopBar(
-            title: title,
-            showResetButton: !args.isFixed && hasFilters,
-            onBackTap: () => Navigator.of(context).maybePop(),
-            onResetTap: cubit.reset,
+        // A collection shows its picture instead, until the query changes.
+        if (hero != null)
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: SeeAllHero.height,
+              // The screen pads the list; the picture goes edge to edge.
+              child: OverflowBox(
+                minWidth: MediaQuery.widthOf(context),
+                maxWidth: MediaQuery.widthOf(context),
+                child: SeeAllHero(
+                  title: args.title ?? title,
+                  hero: hero,
+                  onBack: () => Navigator.of(context).maybePop(),
+                ),
+              ),
+            ),
+          )
+        else
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
+              child: SeeAllTopBar(
+                title: title,
+                showResetButton: !args.isFixed && hasFilters,
+                onBackTap: () => Navigator.of(context).maybePop(),
+                onResetTap: cubit.reset,
+              ),
+            ),
           ),
-        ),
 
         // ── 2. Horizontal Filter Bar: Media Switcher & Chips ──
         if (!args.isFixed) ...[

@@ -5,7 +5,7 @@ import 'package:movify/core/di/service_locator.dart';
 import 'package:movify/features/details/presentation/cubits/fetch_collection_cubit/fetch_collection_cubit.dart';
 import 'package:movify/features/details/presentation/cubits/fetch_collection_cubit/fetch_collection_states.dart';
 import 'package:movify/features/details/presentation/extensions/part_extension.dart';
-import 'package:movify/features/details/presentation/widgets/sections/section_title.dart';
+import 'package:movify/shared/presentation/widgets/section_title.dart';
 import 'package:movify/features/home/presentation/widgets/rows/poster_row_metrics.dart';
 import 'package:movify/shared/presentation/extensions/open_media_details.dart';
 import 'package:movify/shared/presentation/widgets/keep_alive_wrapper.dart';

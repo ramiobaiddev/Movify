@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/network/api/services/tmdb/tmdb_image_size.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
-import 'package:movify/features/details/presentation/widgets/sections/section_title.dart';
+import 'package:movify/shared/presentation/widgets/section_title.dart';
 import 'package:movify/features/home/presentation/widgets/rows/poster_row_metrics.dart';
 
 /// One poster per season, with the season count on the right of the title.

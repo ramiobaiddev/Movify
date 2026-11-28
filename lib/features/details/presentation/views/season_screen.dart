@@ -16,7 +16,7 @@ import 'package:movify/features/details/presentation/widgets/sections/cast_row.d
 import 'package:movify/features/details/presentation/widgets/sections/details_title_block.dart';
 import 'package:movify/features/details/presentation/widgets/sections/episodes_section.dart';
 import 'package:movify/features/details/presentation/widgets/sections/information_section.dart';
-import 'package:movify/features/details/presentation/widgets/sections/section_title.dart';
+import 'package:movify/shared/presentation/widgets/section_title.dart';
 import 'package:movify/features/details/presentation/widgets/sections/videos_section.dart';
 import 'package:movify/features/details/presentation/widgets/trailer_player.dart';
 import 'package:movify/shared/presentation/widgets/bottom_sheet/app_selection_bottom_sheet.dart';

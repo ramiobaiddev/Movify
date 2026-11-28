@@ -6,7 +6,7 @@ import 'package:movify/core/routing/screens/force_update_screen.dart';
 import 'package:movify/core/routing/screens/maintenance_screen.dart';
 import 'package:movify/core/routing/transition/app_transition.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
-import 'package:movify/features/discover/presentation/views/discover_view.dart';
+import 'package:movify/features/discover/presentation/views/discover_screen.dart';
 import 'package:movify/features/favorite/presentation/views/favorite_view.dart';
 import 'package:movify/features/home/presentation/views/home_feed_view.dart';
 import 'package:movify/features/profile/presentation/views/about_view.dart';
@@ -73,7 +73,7 @@ class MainRoutes {
             GoRoute(
               path: RoutePaths.discover,
               name: RouteName.discover,
-              builder: (context, state) => const DiscoverView(),
+              builder: (context, state) => const DiscoverScreen(),
             ),
           ],
         ),

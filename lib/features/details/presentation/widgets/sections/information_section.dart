@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
-import 'package:movify/features/details/presentation/widgets/sections/section_title.dart';
+import 'package:movify/shared/presentation/widgets/section_title.dart';
 
 /// Label and value rows with a divider under each.
 class InformationSection extends StatelessWidget {
