@@ -8,13 +8,13 @@ import 'package:movify/features/details/presentation/core/episode_position.dart'
 import 'package:movify/features/details/presentation/cubits/season_cubit/season_cubit.dart';
 import 'package:movify/features/details/presentation/cubits/season_cubit/season_state.dart';
 import 'package:movify/features/details/presentation/models/season_content.dart';
-import 'package:movify/features/details/presentation/widgets/centered_status.dart';
-import 'package:movify/features/details/presentation/widgets/content_error.dart';
-import 'package:movify/features/details/presentation/widgets/episode_bar.dart';
-import 'package:movify/features/details/presentation/widgets/episode_content_view.dart';
-import 'package:movify/features/details/presentation/widgets/episode_header.dart';
-import 'package:movify/features/details/presentation/widgets/pinned_details_bar.dart';
-import 'package:movify/shared/presentation/widgets/pinned_bar_scroll.dart';
+import 'package:movify/features/details/presentation/views/episode_view_body.dart';
+import 'package:movify/features/details/presentation/widgets/common/centered_status.dart';
+import 'package:movify/features/details/presentation/widgets/common/content_error.dart';
+import 'package:movify/features/details/presentation/widgets/common/pinned_details_bar.dart';
+import 'package:movify/features/details/presentation/widgets/episodes/episode_bar.dart';
+import 'package:movify/features/details/presentation/widgets/episodes/episode_header.dart';
+import 'package:movify/shared/presentation/widgets/headers/pinned_bar_scroll.dart';
 
 /// One episode: still, series link, title, facts, overview, guest stars, and
 /// a bar to step to the previous or next episode of the season.
@@ -57,6 +57,15 @@ class _EpisodeBodyState extends State<_EpisodeBody> {
         final current = position.current;
         final nav = current == null ? data : data.forEpisode(current);
 
+        final fallbackImage = (data.backdropImage?.isNotEmpty ?? false)
+            ? data.backdropImage
+            : data.seriesPosterPath;
+        final headerImage = (current?.stillPath?.isNotEmpty ?? false)
+            ? current!.stillPath
+            : data.posterImage.isNotEmpty
+            ? data.posterImage
+            : fallbackImage;
+
         return Scaffold(
           backgroundColor: context.colors.surfacePrimary,
           bottomNavigationBar: current == null
@@ -65,6 +74,7 @@ class _EpisodeBodyState extends State<_EpisodeBody> {
                   episodes: episodes,
                   current: current,
                   position: position,
+                  fallbackStillPath: fallbackImage,
                   onSelect: (episode) =>
                       setState(() => _number = episode.number),
                 ),
@@ -77,12 +87,12 @@ class _EpisodeBodyState extends State<_EpisodeBody> {
               SliverToBoxAdapter(
                 child: EpisodeHeader(
                   data: nav,
-                  imagePath: current?.stillPath ?? data.posterImage,
+                  imagePath: headerImage,
                 ),
               ),
               SliverToBoxAdapter(
                 child: current != null
-                    ? EpisodeContentView(
+                    ? EpisodeViewBody(
                         episode: current,
                         seriesTitle: data.seriesTitle,
                         onSeries: () => context.openSeries(data),

@@ -6,10 +6,10 @@ import 'package:movify/features/details/domain/value_objects/cast.dart';
 import 'package:movify/features/details/domain/value_objects/episode.dart';
 import 'package:movify/features/details/presentation/mappers/season_content_mapper.dart';
 import 'package:movify/features/details/presentation/models/season_content.dart';
-import 'package:movify/features/details/presentation/widgets/sections/episode_tile.dart';
-import 'package:movify/features/details/presentation/widgets/episodes_sheet.dart';
-import 'package:movify/features/details/presentation/widgets/sections/episodes_sliver.dart';
-import 'package:movify/shared/presentation/widgets/sequence_nav_bar.dart';
+import 'package:movify/features/details/presentation/widgets/seasons/episode_tile.dart';
+import 'package:movify/features/details/presentation/widgets/episodes/episodes_sheet.dart';
+import 'package:movify/features/details/presentation/widgets/seasons/episodes_sliver.dart';
+import 'package:movify/shared/presentation/widgets/navigation/sequence_nav_bar.dart';
 
 Widget _wrap(Widget child, {Widget? bar}) => MaterialApp(
   theme: MovifyTheme.dark(),
@@ -78,7 +78,7 @@ void main() {
       final episode = content.episodes.single;
       expect(episode.overview, 'Plot');
       expect(episode.guestStars.single.name, 'Ana');
-      expect(episode.fullCode, 'S04 · E01');
+      expect(episode.fullCode, 'S04 Ã‚Â· E01');
       expect(episode.code, 'E01');
     });
 
@@ -125,7 +125,7 @@ void main() {
     );
 
     expect(find.text('E8'), findsOneWidget);
-    expect(find.text('1 Dec 2026 · 24min'), findsOneWidget);
+    expect(find.text('1 Dec 2026 Ã‚Â· 24min'), findsOneWidget);
     expect(find.text('in 3 days'), findsOneWidget);
   });
 
@@ -203,14 +203,14 @@ void main() {
           bar: SequenceNavBar(
             centerLabel: 'Seasons',
             onCenter: () => center++,
-            nextLabel: 'Next · S2',
+            nextLabel: 'Next Ã‚Â· S2',
             onNext: () => next++,
           ),
         ),
       );
 
       await tester.tap(find.text('Previous'));
-      await tester.tap(find.text('Next · S2'));
+      await tester.tap(find.text('Next Ã‚Â· S2'));
       await tester.tap(find.text('Seasons'));
 
       expect(next, 1);

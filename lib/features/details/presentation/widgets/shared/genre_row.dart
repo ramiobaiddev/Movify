@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:movify/core/routing/route_name.dart';
 import 'package:movify/core/utils/helper/get_gener_name.dart';
 import 'package:movify/features/details/domain/value_objects/genre.dart';
-import 'package:movify/features/details/presentation/widgets/shared/gener_box.dart';
+import 'package:movify/shared/presentation/widgets/common/gener_box.dart';
 import 'package:movify/features/discover/data/models/genre_see_all_arguments.dart';
 import 'package:movify/features/discover/domain/entities/genre_filter.dart';
 

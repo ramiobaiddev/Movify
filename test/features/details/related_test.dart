@@ -11,7 +11,7 @@ import 'package:movify/features/details/domain/use_cases/movies/fetch_similar_mo
 import 'package:movify/features/details/domain/use_cases/tv/fetch_series_recommendations_use_case.dart';
 import 'package:movify/features/details/domain/use_cases/tv/fetch_similar_series_use_case.dart';
 import 'package:movify/features/details/presentation/feeds/related_fetchers.dart';
-import 'package:movify/features/details/presentation/widgets/related/related_row.dart';
+import 'package:movify/features/details/presentation/widgets/details/related_row.dart';
 
 class _MovieRec extends Mock implements FetchMoviesRecommendationsUseCase {}
 

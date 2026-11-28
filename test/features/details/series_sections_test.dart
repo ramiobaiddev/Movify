@@ -3,9 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:movify/core/design_system/theme/movify_theme.dart';
 import 'package:movify/features/details/presentation/mappers/release_countdown.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
-import 'package:movify/features/details/presentation/widgets/sections/last_aired_card.dart';
-import 'package:movify/features/details/presentation/widgets/sections/next_episode_card.dart';
-import 'package:movify/features/details/presentation/widgets/sections/seasons_row.dart';
+import 'package:movify/features/details/presentation/widgets/details/last_aired_card.dart';
+import 'package:movify/features/details/presentation/widgets/details/next_episode_card.dart';
+import 'package:movify/features/details/presentation/widgets/details/seasons_row.dart';
 
 Widget _wrap(Widget child) => MaterialApp(
   theme: MovifyTheme.dark(),
@@ -37,7 +37,7 @@ void main() {
     );
 
     expect(find.text('NEXT EPISODE'), findsOneWidget);
-    expect(find.text('S07 · E08'), findsOneWidget);
+    expect(find.text('S07 Â· E08'), findsOneWidget);
     expect(find.text('Peter griffin'), findsOneWidget);
     expect(find.text('Sat, 14 Nov'), findsOneWidget);
     expect(find.text('in 3 days'), findsOneWidget);

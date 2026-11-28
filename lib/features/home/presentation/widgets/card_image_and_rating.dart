@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movify/features/home/presentation/widgets/card_image.dart';
-import 'package:movify/shared/presentation/widgets/rating.dart';
+import 'package:movify/shared/presentation/widgets/cards/rating.dart';
 
 class CardImageAndRating extends StatelessWidget {
   const CardImageAndRating({

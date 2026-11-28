@@ -20,6 +20,8 @@ class SearchHistoryModel {
   final double rating;
   @HiveField(6)
   final String date;
+  @HiveField(7)
+  final String backdropPath;
 
   SearchHistoryModel({
     required this.query,
@@ -29,6 +31,7 @@ class SearchHistoryModel {
     required this.historyContentType,
     required this.rating,
     required this.date,
+    required this.backdropPath,
   });
   SearchHistoryEntity toEntity() => SearchHistoryEntity(
     id: id,
@@ -38,6 +41,7 @@ class SearchHistoryModel {
     historyContentType: historyContentType,
     rating: rating,
     date: date,
+    backdropPath: backdropPath,
   );
   factory SearchHistoryModel.fromEntity(SearchHistoryEntity entity) =>
       SearchHistoryModel(
@@ -48,5 +52,6 @@ class SearchHistoryModel {
         historyContentType: entity.historyContentType,
         rating: entity.rating,
         date: entity.date,
+        backdropPath: entity.backdropPath,
       );
 }

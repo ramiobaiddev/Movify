@@ -3,10 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:movify/core/design_system/theme/movify_theme.dart';
 import 'package:movify/features/details/presentation/mappers/release_countdown.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
-import 'package:movify/features/details/presentation/widgets/sections/details_title_block.dart';
-import 'package:movify/features/details/presentation/widgets/sections/genre_chips.dart';
-import 'package:movify/features/details/presentation/widgets/sections/information_section.dart';
-import 'package:movify/features/details/presentation/widgets/sections/reviews_section.dart';
+import 'package:movify/features/details/presentation/widgets/common/details_title_block.dart';
+import 'package:movify/features/details/presentation/widgets/details/genre_chips.dart';
+import 'package:movify/features/details/presentation/widgets/common/information_section.dart';
+import 'package:movify/features/details/presentation/widgets/details/reviews_section.dart';
 
 Widget _wrap(Widget child) => MaterialApp(
   theme: MovifyTheme.dark(),
@@ -20,18 +20,18 @@ void main() {
     test('counts days', () {
       expect(
         releaseCountdown(release, DateTime(2026, 11, 13, 18)),
-        'Releases Wed, Nov 25 · in 12 days',
+        'Releases Wed, Nov 25 Â· in 12 days',
       );
     });
 
     test('tomorrow and today', () {
       expect(
         releaseCountdown(release, DateTime(2026, 11, 24, 23)),
-        'Releases Wed, Nov 25 · tomorrow',
+        'Releases Wed, Nov 25 Â· tomorrow',
       );
       expect(
         releaseCountdown(release, DateTime(2026, 11, 25, 9)),
-        'Releases Wed, Nov 25 · today',
+        'Releases Wed, Nov 25 Â· today',
       );
     });
   });
@@ -46,7 +46,7 @@ void main() {
           meta: ['2026', '2hr 42min'],
           rating: 8.26,
           comingSoon: true,
-          releaseLine: 'Releases Wed, Nov 25 · in 12 days',
+          releaseLine: 'Releases Wed, Nov 25 Â· in 12 days',
         ),
       ),
     );
@@ -55,7 +55,7 @@ void main() {
     expect(find.text('2hr 42min'), findsOneWidget);
     expect(find.text('8.3'), findsOneWidget);
     expect(find.text('Coming soon'), findsOneWidget);
-    expect(find.text('Releases Wed, Nov 25 · in 12 days'), findsOneWidget);
+    expect(find.text('Releases Wed, Nov 25 Â· in 12 days'), findsOneWidget);
   });
 
   testWidgets('genre chips report the tapped genre', (tester) async {

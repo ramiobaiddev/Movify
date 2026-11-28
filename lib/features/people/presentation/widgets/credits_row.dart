@@ -3,7 +3,7 @@ import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/features/home/presentation/widgets/rows/home_row_header.dart';
 import 'package:movify/features/home/presentation/widgets/rows/poster_row_metrics.dart';
 import 'package:movify/shared/presentation/models/card_display_model.dart';
-import 'package:movify/shared/presentation/widgets/media_poster_card.dart';
+import 'package:movify/shared/presentation/widgets/cards/media_poster_card.dart';
 
 /// Header and a horizontal list of poster cards from an in-memory list.
 ///

@@ -4,8 +4,8 @@ import 'package:movify/core/design_system/theme/movify_theme.dart';
 import 'package:movify/features/people/domain/entities/person_details.dart';
 import 'package:movify/features/people/presentation/widgets/person_header.dart';
 import 'package:movify/shared/domain/entites/person_item.dart';
-import 'package:movify/shared/presentation/widgets/expandable_text.dart';
-import 'package:movify/shared/presentation/widgets/person_list_tile.dart';
+import 'package:movify/shared/presentation/widgets/common/expandable_text.dart';
+import 'package:movify/shared/presentation/widgets/cards/person_list_tile.dart';
 
 Widget _wrap(Widget child) => MaterialApp(
   theme: MovifyTheme.dark(),
@@ -78,7 +78,7 @@ void main() {
       );
       expect(find.text('Oct 24, 1992 (34)'), findsOneWidget);
       expect(find.text('Cairo, Egypt'), findsOneWidget);
-      expect(find.text('Acting · 0 credits'), findsOneWidget);
+      expect(find.text('Acting Â· 0 credits'), findsOneWidget);
     });
   });
 }

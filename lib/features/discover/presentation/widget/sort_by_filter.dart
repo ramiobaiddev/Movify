@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/utils/app_colors.dart';
 import 'package:movify/features/discover/domain/enums/sort_by_enum.dart';
-import 'package:movify/shared/presentation/widgets/sub_bar.dart';
+import 'package:movify/shared/presentation/widgets/headers/sub_bar.dart';
 
 class SortByFilter extends StatelessWidget {
   const SortByFilter({

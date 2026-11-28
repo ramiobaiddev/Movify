@@ -5,7 +5,7 @@ import 'package:movify/features/home/presentation/blocs/movie_bloc.dart';
 import 'package:movify/features/home/presentation/blocs/series_bloc.dart';
 import 'package:movify/features/home/presentation/views/movie_view.dart';
 import 'package:movify/features/home/presentation/views/series_view.dart';
-import 'package:movify/shared/presentation/widgets/keep_alive_wrapper.dart';
+import 'package:movify/shared/presentation/widgets/layout/keep_alive_wrapper.dart';
 
 class HomeViewBody extends StatelessWidget {
   const HomeViewBody({super.key});

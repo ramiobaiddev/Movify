@@ -9,8 +9,8 @@ import 'package:movify/core/routing/route_name.dart';
 import 'package:movify/features/home/presentation/widgets/rows/home_row_header.dart';
 import 'package:movify/features/people/domain/use_cases/get_popular_people_use_case.dart';
 import 'package:movify/shared/domain/entites/person_item.dart';
-import 'package:movify/shared/presentation/widgets/keep_alive_wrapper.dart';
-import 'package:movify/shared/presentation/widgets/person_avatar_card.dart';
+import 'package:movify/shared/presentation/widgets/layout/keep_alive_wrapper.dart';
+import 'package:movify/shared/presentation/widgets/cards/person_avatar_card.dart';
 
 /// Home row of popular actors. Tapping the header opens the full list.
 class PopularPeopleRow extends StatelessWidget {

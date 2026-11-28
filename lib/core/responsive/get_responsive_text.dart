@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movify/shared/presentation/widgets/size_config.dart';
+import 'package:movify/shared/presentation/widgets/layout/size_config.dart';
 
 double getResponsiveText(BuildContext context, double fontSize) {
   final scaleFactor = getScaleFactor(context);

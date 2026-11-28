@@ -4,7 +4,7 @@ import 'package:movify/core/ads/mrec_ad_widget.dart';
 import 'package:movify/core/pagination/presentation/bloc/category_pagination_bloc.dart';
 import 'package:movify/core/pagination/presentation/bloc/category_pagination_event.dart';
 import 'package:movify/core/pagination/presentation/bloc/category_pagination_state.dart';
-import 'package:movify/shared/presentation/widgets/size_config.dart';
+import 'package:movify/shared/presentation/widgets/layout/size_config.dart';
 
 abstract class BaseHomeScreen<
   B extends CategoryPaginationBloc<CAT, T, P>,

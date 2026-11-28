@@ -5,8 +5,9 @@ import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/network/api/services/tmdb/tmdb_image_size.dart';
 import 'package:movify/core/routing/route_name.dart';
 import 'package:movify/features/people/domain/entities/person_details.dart';
-import 'package:movify/shared/presentation/widgets/expandable_text.dart';
-import 'package:movify/shared/presentation/widgets/photo_header.dart';
+import 'package:movify/shared/presentation/widgets/common/expandable_text.dart';
+import 'package:movify/shared/presentation/widgets/headers/header_circle_action.dart';
+import 'package:movify/shared/presentation/widgets/headers/photo_header.dart';
 import 'package:share_plus/share_plus.dart';
 
 /// Actor header (Figma "Actor View"): the shared photo header, then name,
@@ -84,7 +85,7 @@ class PersonHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: Space.xsm),
                 Text(
-                  '${details.knownForDepartment} · ${details.creditCount} credits',
+                  '${details.knownForDepartment} Â· ${details.creditCount} credits',
                   style: secondary,
                 ),
                 if (birthLine != null) ...[

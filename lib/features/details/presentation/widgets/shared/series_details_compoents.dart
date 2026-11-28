@@ -13,7 +13,7 @@ import 'package:movify/features/details/presentation/widgets/shared/series_about
 import 'package:movify/features/details/presentation/widgets/shared/similar_tab_bar.dart';
 import 'package:movify/features/discover/domain/entities/genre_filter.dart';
 import 'package:movify/l10n/app_localizations.dart';
-import 'package:movify/shared/presentation/widgets/keep_alive_wrapper.dart';
+import 'package:movify/shared/presentation/widgets/layout/keep_alive_wrapper.dart';
 
 class SeriesDetailsCompoents extends StatelessWidget {
   const SeriesDetailsCompoents({super.key});

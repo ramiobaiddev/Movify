@@ -1,33 +1,101 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movify/core/design_system/design_system.dart';
+import 'package:movify/core/di/service_locator.dart';
 import 'package:movify/features/details/presentation/core/details_data_navigation.dart';
-import 'package:movify/features/details/presentation/cubits/fetch_series_season_details_cubit/fetch_series_season_details_cubit.dart';
+import 'package:movify/features/details/presentation/core/details_links.dart';
+import 'package:movify/features/details/presentation/core/season_neighbours.dart';
+import 'package:movify/features/details/presentation/cubits/season_cubit/season_cubit.dart';
+import 'package:movify/features/details/presentation/cubits/season_cubit/season_state.dart';
+import 'package:movify/features/details/presentation/widgets/common/content_error.dart';
+import 'package:movify/features/details/presentation/widgets/common/details_header.dart';
+import 'package:movify/features/details/presentation/widgets/common/trailer_player.dart';
+import 'package:movify/features/details/presentation/widgets/seasons/season_bar.dart';
+import 'package:movify/features/details/presentation/widgets/seasons/season_loading.dart';
 import 'package:movify/features/details/presentation/views/season_view_body.dart';
-import 'package:provider/provider.dart';
 
-class SeasonView extends StatefulWidget {
-  const SeasonView({super.key, required this.seasonDataNav});
-  final SeasonNavData seasonDataNav;
+/// One season of a series: header, story, cast, information, episodes, videos.
+class SeasonView extends StatelessWidget {
+  const SeasonView({super.key, required this.data});
+
+  final SeasonNavData data;
+
   @override
-  State<SeasonView> createState() => _SeasonViewState();
+  Widget build(BuildContext context) => BlocProvider<SeasonCubit>(
+    key: ValueKey('season-${data.tmdbId}-${data.seasonNumber}'),
+    create: (_) => getIt<SeasonCubit>()..load(data.tmdbId, data.seasonNumber),
+    child: _SeasonBody(data: data),
+  );
 }
 
-class _SeasonViewState extends State<SeasonView> {
-  @override
-  void initState() {
-    final int tvid = widget.seasonDataNav.tmdbId;
-    final int season = widget.seasonDataNav.seasonNumber;
-    BlocProvider.of<FetchSeriesSeasonDetailsCubit>(
-      context,
-    ).fetchSeriesSeasonDetail(tvid: tvid, season: season);
-    super.initState();
-  }
+class _SeasonBody extends StatefulWidget {
+  const _SeasonBody({required this.data});
+
+  final SeasonNavData data;
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    body: Provider.value(
-      value: widget.seasonDataNav,
-      child: const SeasonViewBody(),
-    ),
-  );
+  State<_SeasonBody> createState() => _SeasonBodyState();
+}
+
+class _SeasonBodyState extends State<_SeasonBody> {
+  /// Episodes beyond the first few appear once the person asks for them.
+  bool _showAll = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final data = widget.data;
+    final neighbours = SeasonNeighbours(data.seasons, data.seasonNumber);
+
+    return Scaffold(
+      backgroundColor: context.colors.surfacePrimary,
+      bottomNavigationBar: neighbours.hasSeveral
+          ? SeasonBar(
+              neighbours: neighbours,
+              currentNumber: data.seasonNumber,
+              onSelect: (season) => context.replaceWithSeason(data, season),
+            )
+          : null,
+      body: BlocBuilder<SeasonCubit, SeasonState>(
+        builder: (context, state) {
+          final content = state is SeasonLoaded ? state.content : null;
+          final trailer = content?.trailer;
+
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: DetailsHeader(
+                  data: data,
+                  onPlayTrailer: trailer == null
+                      ? null
+                      : () => showTrailerPlayer(context, trailer),
+                ),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: Space.md)),
+              if (content != null)
+                SeasonViewBody(
+                  content: content,
+                  showAll: _showAll,
+                  onShowAll: () => setState(() => _showAll = true),
+                  fallbackStillPath: data.backdropImage ?? data.posterImage,
+                  onEpisode: (episode) =>
+                      context.openSeasonEpisode(data, episode),
+                )
+              else if (state is SeasonError)
+                SliverToBoxAdapter(
+                  child: ContentError(
+                    message: state.message,
+                    onRetry: () => context.read<SeasonCubit>().load(
+                      data.tmdbId,
+                      data.seasonNumber,
+                    ),
+                  ),
+                )
+              else
+                SliverToBoxAdapter(child: SeasonSkeletonLoading(data: data)),
+            ],
+          );
+        },
+      ),
+    );
+  }
 }

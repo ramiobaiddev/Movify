@@ -8,6 +8,7 @@ class SearchHistoryEntity {
   final DateTime searchedAt;
   final double rating;
   final String date;
+  final String backdropPath;
 
   const SearchHistoryEntity({
     required this.id,
@@ -17,5 +18,6 @@ class SearchHistoryEntity {
     required this.searchedAt,
     required this.rating,
     required this.date,
+    required this.backdropPath,
   });
 }

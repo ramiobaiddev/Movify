@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:movify/core/design_system/design_system.dart';
+import 'package:movify/features/favorite/presentation/widgets/particle_burst.dart';
 
 /// Heart toggle with a small particle burst when it becomes a favorite.
 ///
@@ -14,6 +13,7 @@ class ParticleHeartButton extends HookWidget {
     required this.isFavorited,
     required this.onTap,
     this.size = 32,
+    this.color,
   });
 
   static const int _particleCount = 8;
@@ -21,10 +21,12 @@ class ParticleHeartButton extends HookWidget {
   final bool isFavorited;
   final VoidCallback onTap;
   final double size;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     final heartColor = context.colors.surfaceError;
+    final defaultColor = color ?? context.colors.textOnImage;
 
     final scaleController = useAnimationController(
       duration: const Duration(milliseconds: 200),
@@ -61,7 +63,7 @@ class ParticleHeartButton extends HookWidget {
               animation: particleController,
               builder: (context, _) => particleController.isAnimating
                   ? RepaintBoundary(
-                      child: _ParticleBurst(
+                      child: ParticleBurst(
                         progress: particleController.value,
                         radius: size * 0.9,
                         count: _particleCount,
@@ -74,7 +76,7 @@ class ParticleHeartButton extends HookWidget {
               scale: scaleAnimation,
               child: Icon(
                 isFavorited ? Icons.favorite : Icons.favorite_border,
-                color: isFavorited ? heartColor : null,
+                color: isFavorited ? heartColor : defaultColor,
                 size: size,
               ),
             ),
@@ -83,36 +85,4 @@ class ParticleHeartButton extends HookWidget {
       ),
     );
   }
-}
-
-class _ParticleBurst extends StatelessWidget {
-  const _ParticleBurst({
-    required this.progress,
-    required this.radius,
-    required this.count,
-    required this.color,
-  });
-
-  final double progress;
-  final double radius;
-  final int count;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) => Stack(
-    alignment: Alignment.center,
-    children: [
-      for (var i = 0; i < count; i++)
-        Transform.translate(
-          offset: Offset.fromDirection(2 * pi * i / count, radius * progress),
-          child: Opacity(
-            opacity: 1 - progress,
-            child: DecoratedBox(
-              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-              child: const SizedBox(width: 4, height: 4),
-            ),
-          ),
-        ),
-    ],
-  );
 }

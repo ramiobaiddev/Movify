@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:movify/features/details/domain/value_objects/season.dart';
 import 'package:movify/features/details/presentation/widgets/shared/episode_image.dart';
-import 'package:movify/features/details/presentation/widgets/shared/safe_hero_card.dart';
+import 'package:movify/shared/presentation/widgets/cards/safe_hero_card.dart';
 import 'package:movify/features/details/presentation/widgets/shared/season_and_episode.dart';
-import 'package:movify/shared/presentation/widgets/size_config.dart';
+import 'package:movify/shared/presentation/widgets/layout/size_config.dart';
 
 class SeasonInfoSection extends StatelessWidget {
   const SeasonInfoSection({

@@ -7,8 +7,8 @@ import 'package:movify/features/home/presentation/widgets/rows/home_row_header.d
 import 'package:movify/features/home/presentation/widgets/rows/poster_row_metrics.dart';
 import 'package:movify/features/home/presentation/widgets/rows/poster_row_skeleton.dart';
 import 'package:movify/shared/presentation/models/card_display_model.dart';
-import 'package:movify/shared/presentation/widgets/keep_alive_wrapper.dart';
-import 'package:movify/shared/presentation/widgets/media_poster_card.dart';
+import 'package:movify/shared/presentation/widgets/layout/keep_alive_wrapper.dart';
+import 'package:movify/shared/presentation/widgets/cards/media_poster_card.dart';
 
 /// One home row: header + horizontal list of poster cards.
 ///

@@ -6,6 +6,7 @@ extension SearchTileExtensionX on SearchHistoryEntity {
     id: id,
     title: title,
     posterPath: posterPath,
+    backdropPath: backdropPath,
     contentType: historyContentType,
     date: date,
     rating: rating,

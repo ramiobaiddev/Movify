@@ -24,6 +24,7 @@ class SearchHistoryModelAdapter extends TypeAdapter<SearchHistoryModel> {
       historyContentType: fields[4] as ContentType,
       rating: fields[5] as double,
       date: fields[6] as String,
+      backdropPath: fields[7] as String,
     );
   }
 
@@ -44,7 +45,9 @@ class SearchHistoryModelAdapter extends TypeAdapter<SearchHistoryModel> {
       ..writeByte(5)
       ..write(obj.rating)
       ..writeByte(6)
-      ..write(obj.date);
+      ..write(obj.date)
+      ..writeByte(7)
+      ..write(obj.backdropPath);
   }
 
   @override

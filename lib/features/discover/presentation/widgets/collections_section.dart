@@ -4,7 +4,7 @@ import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/network/api/services/tmdb/tmdb_image_size.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/discover/presentation/models/discover_collection.dart';
-import 'package:movify/shared/presentation/widgets/section_title.dart';
+import 'package:movify/shared/presentation/widgets/common/section_title.dart';
 
 /// Two-column grid of picture cards, one per hand-picked collection.
 class CollectionsSection extends StatelessWidget {

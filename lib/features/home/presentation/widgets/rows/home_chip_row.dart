@@ -7,7 +7,7 @@ import 'package:movify/features/home/presentation/widgets/rows/home_poster_row.d
 import 'package:movify/l10n/app_localizations.dart';
 import 'package:movify/shared/domain/entites/discover_filters.dart';
 import 'package:movify/shared/presentation/models/card_display_model.dart';
-import 'package:movify/shared/presentation/widgets/media_kind_sheet.dart';
+import 'package:movify/shared/presentation/widgets/bottom_sheet/media_kind_sheet.dart';
 
 /// "For you" / "All-time favorites": a row whose Movies/Series choice is
 /// remembered per [rowId] and changed from a bottom sheet.

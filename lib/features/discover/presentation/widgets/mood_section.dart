@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/features/discover/presentation/models/mood.dart';
-import 'package:movify/shared/presentation/widgets/section_title.dart';
+import 'package:movify/shared/presentation/widgets/common/section_title.dart';
 
 /// Gradient tiles, two per row, one per [Mood].
 class MoodSection extends StatelessWidget {

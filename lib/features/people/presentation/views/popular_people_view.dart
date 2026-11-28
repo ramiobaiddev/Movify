@@ -10,7 +10,7 @@ import 'package:movify/features/people/domain/use_cases/get_popular_people_use_c
 import 'package:movify/features/search/presentation/widgets/search_list_skeleton.dart';
 import 'package:movify/features/see_all/presentation/widgets/top_bar/see_all_top_bar.dart';
 import 'package:movify/shared/domain/entites/person_item.dart';
-import 'package:movify/shared/presentation/widgets/person_list_tile.dart';
+import 'package:movify/shared/presentation/widgets/cards/person_list_tile.dart';
 
 /// Full list of popular actors.
 class PopularPeopleView extends StatelessWidget {

@@ -16,7 +16,7 @@ import 'package:movify/features/search/presentation/widgets/search_empty_state.d
 import 'package:movify/features/see_all/presentation/widgets/grid/see_all_grid_skeleton.dart';
 import 'package:movify/shared/presentation/models/card_display_mappers.dart';
 import 'package:movify/shared/presentation/models/card_display_model.dart';
-import 'package:movify/shared/presentation/widgets/poster_grid_layout.dart';
+import 'package:movify/shared/presentation/widgets/layout/poster_grid_layout.dart';
 
 /// Paginated poster grid for Search results (Movies & Series, Movies, Series).
 class SearchPosterGrid extends StatelessWidget {
@@ -30,7 +30,9 @@ class SearchPosterGrid extends StatelessWidget {
       SearchHistoryEntity(
         id: item.id,
         title: item.title,
-        posterPath: item.backdropPath ?? item.posterPath,
+        posterPath: item.posterPath,
+        backdropPath: item.backdropPath ?? item.posterPath,
+
         historyContentType: item.contentType,
         searchedAt: DateTime.now(),
         rating: item.rating ?? 0,
@@ -62,7 +64,7 @@ class SearchPosterGrid extends StatelessWidget {
       emptyBuilder: (context) => const SearchEmptyState(),
       itemBuilder: (context, item, index) {
         final subtitle = isMulti
-            ? '${item.contentType == ContentType.movies ? "Movie" : "Series"}${item.year.isNotEmpty ? " · ${item.year}" : ""}'
+            ? '${item.contentType == ContentType.movies ? "Movie" : "Series"}${item.year.isNotEmpty ? " Â· ${item.year}" : ""}'
             : item.year;
 
         return PosterCard(

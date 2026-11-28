@@ -31,6 +31,7 @@ class SearchVerticalCard extends StatelessWidget {
           posterPath: cardModel.posterPath,
           historyContentType: cardModel.contentType,
           rating: cardModel.rating ?? 0,
+          backdropPath: cardModel.backdropPath ?? cardModel.posterPath,
           date: cardModel.date ?? "",
         ),
       );

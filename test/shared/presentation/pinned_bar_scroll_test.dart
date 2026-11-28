@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:movify/shared/presentation/widgets/pinned_bar_scroll.dart';
+import 'package:movify/shared/presentation/widgets/headers/pinned_bar_scroll.dart';
 
 void main() {
   testWidgets('bar fades in once the content scrolls past the toolbar', (

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/network/api/services/tmdb/tmdb_image_size.dart';
 import 'package:movify/features/see_all/presentation/models/see_all_args.dart';
-import 'package:movify/shared/presentation/widgets/photo_header.dart';
+import 'package:movify/shared/presentation/widgets/headers/header_button_row.dart';
 
 /// Picture, back button, title and description above a collection (Figma
-/// "Cartoons · Cinematic hero"). Replaces the plain top bar.
+/// "Cartoons Â· Cinematic hero"). Replaces the plain top bar.
 class SeeAllHero extends StatelessWidget {
   const SeeAllHero({
     super.key,

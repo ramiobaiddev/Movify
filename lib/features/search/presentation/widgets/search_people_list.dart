@@ -6,7 +6,7 @@ import 'package:movify/core/routing/route_name.dart';
 import 'package:movify/features/search/presentation/widgets/search_empty_state.dart';
 import 'package:movify/features/search/presentation/widgets/search_list_skeleton.dart';
 import 'package:movify/shared/domain/entites/person_item.dart';
-import 'package:movify/shared/presentation/widgets/person_list_tile.dart';
+import 'package:movify/shared/presentation/widgets/cards/person_list_tile.dart';
 
 /// Paginated list of people results powered by SliverPagedGrid.
 class SearchPeopleList extends StatelessWidget {

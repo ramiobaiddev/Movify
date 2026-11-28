@@ -3,7 +3,7 @@ import 'package:movify/core/pagination/presentation/bloc/new_pagination_info.dar
 import 'package:movify/core/pagination/widgets/pagination_bottom_slot.dart';
 import 'package:movify/core/pagination/widgets/pagination_error.dart';
 import 'package:movify/core/pagination/widgets/pagination_shimmer.dart';
-import 'package:movify/shared/presentation/widgets/size_config.dart';
+import 'package:movify/shared/presentation/widgets/layout/size_config.dart';
 
 /// A fully generic horizontal paginated list.
 /// Knows nothing about Blocs, Movies, News, or Products.
@@ -21,7 +21,7 @@ class HorizontalPaginatedList<T> extends StatefulWidget {
   /// The current pagination state for this slot
   final PaginationInfo<T, dynamic> info;
 
-  /// How to render each item — widget knows nothing about T
+  /// How to render each item â€” widget knows nothing about T
   final Widget Function(BuildContext context, T item, bool enableHero)
   itemBuilder;
 
@@ -110,12 +110,12 @@ class _HorizontalPaginatedListState<T>
     final info = widget.info;
     final width = MediaQuery.widthOf(context);
 
-    // ── First page loading ──────────────────────────────
+    // â”€â”€ First page loading â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     if (info.isFirstLoad) {
       return widget.loadingWidget ??
           PaginationShimmer(isHorizontal: true, height: widget.height);
     }
-    // ── First page error ────────────────────────────────
+    // â”€â”€ First page error â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     else if (info.firstPageError != null && !info.hasData) {
       return widget.errorBuilder?.call(info.firstPageError!) ??
           PaginationErrorWidget(
@@ -124,12 +124,12 @@ class _HorizontalPaginatedListState<T>
             isCompact: true,
           );
     }
-    // ── Empty ───────────────────────────────────────────
+    // â”€â”€ Empty â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     else if (!info.hasData) {
       return widget.emptyWidget ??
           const Center(child: Text('Nothing here yet'));
     }
-    // ── List ────────────────────────────────────────────
+    // â”€â”€ List â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     else {
       return AspectRatio(
         aspectRatio: width > SizeConfig.mobile ? 4 : 2,

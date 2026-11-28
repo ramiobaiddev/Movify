@@ -62,7 +62,11 @@ extension DetailsLinks on BuildContext {
           seasonNumber: episode.seasonNumber,
           episodeNumber: episode.number,
           rating: episode.rating,
-          posterImage: episode.stillPath ?? season.backdropImage ?? '',
+          posterImage: (episode.stillPath?.isNotEmpty ?? false)
+              ? episode.stillPath!
+              : (season.backdropImage?.isNotEmpty ?? false)
+              ? season.backdropImage!
+              : season.posterImage,
           seriesPosterPath: season.posterImage,
           seriesTitle: season.seriesTitle,
           specificId: episode.id,

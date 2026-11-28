@@ -39,9 +39,9 @@ class SearchHistoryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    final hasPoster = item.posterPath.isNotEmpty;
+    final hasPoster = item.backdropPath.isNotEmpty;
     final imageUrl = hasPoster
-        ? tmdbImageSize(TmdbImageSize.w185, item.posterPath)
+        ? tmdbImageSize(TmdbImageSize.w185, item.backdropPath)
         : null;
 
     return CustomDismisable(

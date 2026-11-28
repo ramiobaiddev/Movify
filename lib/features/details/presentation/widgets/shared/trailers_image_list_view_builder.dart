@@ -5,7 +5,7 @@ import 'package:movify/features/details/presentation/widgets/shared/trailer_thum
 import 'package:movify/features/details/presentation/widgets/shared/tralier_bottom_sheet.dart';
 import 'package:movify/l10n/app_localizations.dart';
 import 'package:movify/shared/presentation/utils/custom_show_modal_bottom_sheet.dart';
-import 'package:movify/shared/presentation/widgets/size_config.dart';
+import 'package:movify/shared/presentation/widgets/layout/size_config.dart';
 
 class TrailersImageListViewBuilder extends StatelessWidget {
   const TrailersImageListViewBuilder({super.key, required this.videos});

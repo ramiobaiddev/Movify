@@ -19,8 +19,8 @@ import 'package:movify/features/home/presentation/extensions/main_vertical_card_
 import 'package:movify/features/see_all/presentation/widgets/grid/see_all_grid_skeleton.dart';
 import 'package:movify/shared/presentation/models/card_display_mappers.dart';
 import 'package:movify/shared/presentation/widgets/bottom_sheet/app_selection_bottom_sheet.dart';
-import 'package:movify/shared/presentation/widgets/keep_alive_wrapper.dart';
-import 'package:movify/shared/presentation/widgets/poster_grid_layout.dart';
+import 'package:movify/shared/presentation/widgets/layout/keep_alive_wrapper.dart';
+import 'package:movify/shared/presentation/widgets/layout/poster_grid_layout.dart';
 
 /// One tab (movies or series) of the Favorites screen. Each tab keeps its own
 /// sort.

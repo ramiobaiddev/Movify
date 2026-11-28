@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:movify/core/design_system/theme/movify_theme.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
-import 'package:movify/features/details/presentation/widgets/sections/videos_section.dart';
+import 'package:movify/features/details/presentation/widgets/common/videos_section.dart';
 
 Widget _wrap(Widget child) => MaterialApp(
   theme: MovifyTheme.dark(),

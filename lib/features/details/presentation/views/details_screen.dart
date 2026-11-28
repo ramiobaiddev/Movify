@@ -7,13 +7,13 @@ import 'package:movify/features/details/presentation/cubits/details_cubit/detail
 import 'package:movify/features/details/presentation/cubits/details_cubit/details_state.dart';
 import 'package:movify/features/details/presentation/mappers/movie_content_mapper.dart';
 import 'package:movify/features/details/presentation/mappers/series_content_mapper.dart';
-import 'package:movify/features/details/presentation/widgets/details_body.dart';
-import 'package:movify/features/details/presentation/widgets/content_error.dart';
-import 'package:movify/features/details/presentation/widgets/details_header.dart';
-import 'package:movify/features/details/presentation/widgets/details_loading.dart';
-import 'package:movify/features/details/presentation/widgets/pinned_details_bar.dart';
-import 'package:movify/features/details/presentation/widgets/trailer_player.dart';
-import 'package:movify/shared/presentation/widgets/pinned_bar_scroll.dart';
+import 'package:movify/features/details/presentation/widgets/details/details_body.dart';
+import 'package:movify/features/details/presentation/widgets/common/content_error.dart';
+import 'package:movify/features/details/presentation/widgets/common/details_header.dart';
+import 'package:movify/features/details/presentation/widgets/details/details_loading.dart';
+import 'package:movify/features/details/presentation/widgets/common/pinned_details_bar.dart';
+import 'package:movify/features/details/presentation/widgets/common/trailer_player.dart';
+import 'package:movify/shared/presentation/widgets/headers/pinned_bar_scroll.dart';
 
 /// Movie or series details (Figma "movie details" / "Series details").
 ///

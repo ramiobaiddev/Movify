@@ -1,19 +1,19 @@
 // test/features/auth/presentation/views/login_view_test.dart
 //
-// Pattern: Widget Testing — State → UI Contract
+// Pattern: Widget Testing â€” State â†’ UI Contract
 //
 // What we test:
-// ┌─────────────────────────────────────────────────────────────┐
-// │ LoginState      │ Expected UI                               │
-// ├─────────────────────────────────────────────────────────────┤
-// │ LoginInitial    │ Google button visible, no loading         │
-// │ LoginLoading    │ Loading indicator, button disabled        │
-// │ LoginSuccess    │ Green snackbar with 'Welcome !'           │
-// │ LoginFailure    │ Red snackbar with error message           │
-// └─────────────────────────────────────────────────────────────┘
+// â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+// â”‚ LoginState      â”‚ Expected UI                               â”‚
+// â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
+// â”‚ LoginInitial    â”‚ Google button visible, no loading         â”‚
+// â”‚ LoginLoading    â”‚ Loading indicator, button disabled        â”‚
+// â”‚ LoginSuccess    â”‚ Green snackbar with 'Welcome !'           â”‚
+// â”‚ LoginFailure    â”‚ Red snackbar with error message           â”‚
+// â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 //
 // What we DO NOT test:
-// - Navigation (router handles it — not LoginView's job)
+// - Navigation (router handles it â€” not LoginView's job)
 // - LoginCubit logic (already tested in unit tests)
 // - SessionCubit (not LoginView's concern)
 
@@ -28,16 +28,16 @@ import 'package:movify/features/auth/presentation/cubits/login_cubit.dart';
 import 'package:movify/features/auth/presentation/cubits/login_state.dart';
 import 'package:movify/features/auth/presentation/views/login_view.dart';
 import 'package:movify/features/auth/presentation/views/login_view_body.dart';
-import 'package:movify/shared/presentation/widgets/size_config.dart';
+import 'package:movify/shared/presentation/widgets/layout/size_config.dart';
 
-// ── Mocks ─────────────────────────────────────────────────────────────────
+// â”€â”€ Mocks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 // Pattern: FAKE BLOC
 // Never use real LoginCubit in widget tests.
-// We control exact states — we are NOT testing Cubit logic here.
+// We control exact states â€” we are NOT testing Cubit logic here.
 class MockLoginCubit extends MockCubit<LoginState> implements LoginCubit {}
 
-// ── Test setup ────────────────────────────────────────────────────────────
+// â”€â”€ Test setup â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 void main() {
   late MockLoginCubit mockLoginCubit;
@@ -46,14 +46,14 @@ void main() {
     mockLoginCubit = MockLoginCubit();
   });
 
-  // ── Builder helper ───────────────────────────────────────────────────────
+  // â”€â”€ Builder helper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   // Pattern: buildWidget() helper
   // Single place to configure the widget tree for all tests.
   // MaterialApp is required for:
   //   - Scaffold (needs Material ancestor)
   //   - ScaffoldMessenger (needed for SnackBar)
   //   - Navigator (needed for any routing side effects)
-  // BlocProvider.value injects our mock — NOT getIt
+  // BlocProvider.value injects our mock â€” NOT getIt
   Widget buildLoginView() => MaterialApp(
     home: BlocProvider<LoginCubit>.value(
       value: mockLoginCubit,
@@ -61,9 +61,9 @@ void main() {
     ),
   );
 
-  // ══════════════════════════════════════════════════════════════════════
-  // GROUP 1 — LoginInitial
-  // ══════════════════════════════════════════════════════════════════════
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // GROUP 1 â€” LoginInitial
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
   void setTheScreenSize(WidgetTester tester) {
     tester.view.physicalSize = const Size(SizeConfig.mobile, SizeConfig.tablet);
     tester.view.devicePixelRatio = 1.0;
@@ -71,7 +71,7 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
   }
 
-  group('1️⃣ LoginInitial — default UI renders correctly', () {
+  group('1ï¸âƒ£ LoginInitial â€” default UI renders correctly', () {
     setUp(() {
       // Arrange: stub initial state
       when(() => mockLoginCubit.state).thenReturn(LoginInitial());
@@ -107,11 +107,11 @@ void main() {
     });
   });
 
-  // ══════════════════════════════════════════════════════════════════════
-  // GROUP 2 — LoginLoading
-  // ══════════════════════════════════════════════════════════════════════
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // GROUP 2 â€” LoginLoading
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-  group('2️⃣ LoginLoading — shows loading UI', () {
+  group('2ï¸âƒ£ LoginLoading â€” shows loading UI', () {
     setUp(() {
       when(() => mockLoginCubit.state).thenReturn(LoginLoading());
     });
@@ -131,11 +131,11 @@ void main() {
     });
   });
 
-  // ══════════════════════════════════════════════════════════════════════
-  // GROUP 3 — LoginSuccess
-  // ══════════════════════════════════════════════════════════════════════
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // GROUP 3 â€” LoginSuccess
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-  group('3️⃣ LoginSuccess — shows welcome snackbar', () {
+  group('3ï¸âƒ£ LoginSuccess â€” shows welcome snackbar', () {
     testWidgets('shows green snackbar with Welcome message', (tester) async {
       // Pattern: whenListen simulates a stream of states
       // Initial: LoginInitial (widget renders first)
@@ -157,8 +157,8 @@ void main() {
       expect(find.byType(SnackBar), findsOneWidget);
     });
 
-    testWidgets('LoginSuccess → NO navigation from LoginView', (tester) async {
-      // Navigation is router's job — LoginView must NOT call goNamed
+    testWidgets('LoginSuccess â†’ NO navigation from LoginView', (tester) async {
+      // Navigation is router's job â€” LoginView must NOT call goNamed
       // This test verifies LoginView doesn't push any route itself
       whenListen(
         mockLoginCubit,
@@ -186,11 +186,11 @@ void main() {
     });
   });
 
-  // ══════════════════════════════════════════════════════════════════════
-  // GROUP 4 — LoginFailure
-  // ══════════════════════════════════════════════════════════════════════
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // GROUP 4 â€” LoginFailure
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-  group('4️⃣ LoginFailure — shows error snackbar', () {
+  group('4ï¸âƒ£ LoginFailure â€” shows error snackbar', () {
     testWidgets('shows red snackbar with error message', (tester) async {
       const errorMessage = 'Sign in failed. Please try again.';
 
@@ -212,7 +212,7 @@ void main() {
     });
 
     testWidgets('shows snackbar with different error messages', (tester) async {
-      // Verify the message is dynamic — not hardcoded
+      // Verify the message is dynamic â€” not hardcoded
       const errorMessage = 'Network error. Check your connection.';
 
       whenListen(
@@ -231,7 +231,7 @@ void main() {
       expect(find.text(errorMessage), findsOneWidget);
     });
 
-    testWidgets('LoginFailure → stays on LoginView (no navigation)', (
+    testWidgets('LoginFailure â†’ stays on LoginView (no navigation)', (
       tester,
     ) async {
       whenListen(
@@ -252,19 +252,19 @@ void main() {
     });
   });
 
-  // ══════════════════════════════════════════════════════════════════════
-  // GROUP 5 — Interactions
-  // Tapping Google button → dispatches signInWithGoogle()
-  // ══════════════════════════════════════════════════════════════════════
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // GROUP 5 â€” Interactions
+  // Tapping Google button â†’ dispatches signInWithGoogle()
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-  group('5️⃣ Interactions — user gestures dispatch correct cubit methods', () {
+  group('5ï¸âƒ£ Interactions â€” user gestures dispatch correct cubit methods', () {
     setUp(() {
       when(() => mockLoginCubit.state).thenReturn(LoginInitial());
       // Stub the method so it doesn't throw when called
       when(() => mockLoginCubit.signInWithGoogle()).thenAnswer((_) async {});
     });
 
-    testWidgets('tapping Google button → calls signInWithGoogle()', (
+    testWidgets('tapping Google button â†’ calls signInWithGoogle()', (
       tester,
     ) async {
       setTheScreenSize(tester);
@@ -278,13 +278,13 @@ void main() {
       verify(() => mockLoginCubit.signInWithGoogle()).called(1);
     });
 
-    testWidgets('Google button not tapped → signInWithGoogle not called', (
+    testWidgets('Google button not tapped â†’ signInWithGoogle not called', (
       tester,
     ) async {
       setTheScreenSize(tester);
       await tester.pumpWidget(buildLoginView());
 
-      // Counterpart rule — verify NOT called without interaction
+      // Counterpart rule â€” verify NOT called without interaction
       verifyNever(() => mockLoginCubit.signInWithGoogle());
     });
   });
@@ -306,7 +306,7 @@ void main() {
   });
 }
 
-// ── Private helpers ───────────────────────────────────────────────────────
+// â”€â”€ Private helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 // Minimal NavigatorObserver mock for verifying no navigation happens
 class _MockNavigatorObserver extends Mock implements NavigatorObserver {}

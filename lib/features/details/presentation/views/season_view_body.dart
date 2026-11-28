@@ -1,64 +1,92 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:movify/core/network/api/services/tmdb/tmdb_image_size.dart';
-import 'package:movify/features/details/domain/enums/tabs_enums.dart';
-import 'package:movify/features/details/presentation/core/details_data_navigation.dart';
-import 'package:movify/features/details/presentation/core/mappers/favorite_mappers.dart';
-import 'package:movify/features/details/presentation/widgets/season/season_tabs_bloc_builder.dart';
-import 'package:movify/features/details/presentation/widgets/shared/custom_notifiacation_listener.dart';
-import 'package:movify/features/details/presentation/widgets/shared/custom_tab_bar.dart';
-import 'package:movify/features/details/presentation/widgets/shared/details_sliver_app_bar.dart';
-import 'package:movify/features/details/presentation/widgets/shared/stacked_details_background.dart';
+import 'package:movify/core/design_system/design_system.dart';
+import 'package:movify/features/details/presentation/core/details_links.dart';
+import 'package:movify/features/details/presentation/models/season_content.dart';
+import 'package:movify/features/details/presentation/widgets/common/cast_row.dart';
+import 'package:movify/features/details/presentation/widgets/common/details_title_block.dart';
+import 'package:movify/features/details/presentation/widgets/common/information_section.dart';
+import 'package:movify/features/details/presentation/widgets/common/storyline_section.dart';
+import 'package:movify/features/details/presentation/widgets/common/trailer_player.dart';
+import 'package:movify/features/details/presentation/widgets/common/videos_section.dart';
+import 'package:movify/features/details/presentation/widgets/seasons/episodes_sliver.dart';
+import 'package:movify/shared/presentation/widgets/layout/screen_gutter.dart';
 
-class SeasonViewBody extends HookWidget {
-  const SeasonViewBody({super.key});
+/// Everything under the header once the season has loaded, as slivers so the
+/// episodes list can build lazily.
+class SeasonViewBody extends StatelessWidget {
+  const SeasonViewBody({
+    super.key,
+    required this.content,
+    required this.showAll,
+    required this.onShowAll,
+    required this.onEpisode,
+    this.fallbackStillPath,
+  });
+
+  final SeasonContent content;
+  final bool showAll;
+  final VoidCallback onShowAll;
+  final ValueChanged<EpisodeItem> onEpisode;
+  final String? fallbackStillPath;
 
   @override
-  Widget build(BuildContext context) {
-    final model = context.read<SeasonNavData>();
-    final List<Tab> seasonTabs = SeasonDetailsEnum.values
-        .map((e) => e.localizedTab(context))
-        .toList();
-    final expandedHeight = MediaQuery.heightOf(context) * 0.7;
-    final collapseThreshold = expandedHeight - kToolbarHeight;
-    final isCollapsedNotifier = useMemoized(() => ValueNotifier<bool>(false));
-
-    final sliverAppBar = useMemoized(
-      () => DetailsSliverAppBar(
-        expandedHeight: expandedHeight,
-        title: model.seasonName ?? 'Season ${model.seasonNumber}',
-        isCollapsedNotifier: isCollapsedNotifier,
-        favorite: FavoriteMapper.fromNavigationData(model),
-        backgroundWidget: StackedDetailsBackGorund(
-          backGroundImage: model.posterImage,
-          posterImage: model.posterImage,
-          title: model.seasonName ?? '_',
-          date: model.date ?? '_',
-          rating: model.rating ?? 0,
-          heroTag: '${model.tmdbId}',
-          imageSize: TmdbImageSize.w500,
-        ),
-      ),
-      [model, isCollapsedNotifier, expandedHeight],
-    );
-
-    return DefaultTabController(
-      length: seasonTabs.length,
-      child: CustomNotificationListener(
-        collapseThreshold: collapseThreshold,
-        isCollapsedNotifier: isCollapsedNotifier,
-        child: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            sliverAppBar,
-            CustomTabBar(tabs: seasonTabs),
+  Widget build(BuildContext context) => SliverMainAxisGroup(
+    slivers: [
+      SliverToBoxAdapter(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ScreenGutter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  DetailsTitleBlock(
+                    title: content.title,
+                    meta: content.meta,
+                    rating: content.rating,
+                  ),
+                  if (content.overview.isNotEmpty) ...[
+                    const SizedBox(height: Space.x2xl),
+                    StorylineSection(overview: content.overview),
+                  ],
+                ],
+              ),
+            ),
+            const SizedBox(height: Space.x2xl),
+            CastRow(
+              cast: content.cast,
+              onTap: (person) => context.openPerson(person.id),
+            ),
+            const SizedBox(height: Space.x3xl),
+            InformationSection(rows: content.info),
+            const SizedBox(height: Space.x3xl),
           ],
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            child: SeasonTabsBlocBuilder(seiresPosterPath: model.posterImage),
-          ),
         ),
       ),
-    );
-  }
+      EpisodesSliver(
+        episodes: content.episodes,
+        expanded: showAll,
+        onShowAll: onShowAll,
+        onTap: onEpisode,
+        today: DateTime.now(),
+        fallbackStillPath: fallbackStillPath,
+      ),
+      SliverToBoxAdapter(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: Space.x3xl),
+            if (content.videos.isNotEmpty) ...[
+              VideosSection(
+                videos: content.videos,
+                onPlay: (video) => showTrailerPlayer(context, video),
+              ),
+              const SizedBox(height: Space.x3xl),
+            ],
+            SizedBox(height: MediaQuery.paddingOf(context).bottom + Space.x3xl),
+          ],
+        ),
+      ),
+    ],
+  );
 }

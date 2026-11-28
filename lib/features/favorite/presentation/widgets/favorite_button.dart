@@ -13,6 +13,7 @@ class FavoriteButton extends StatelessWidget {
     required this.favoriteEntity,
     this.size = 32,
     this.shaded = true,
+    this.color,
   });
 
   final FavoriteEntity favoriteEntity;
@@ -21,6 +22,7 @@ class FavoriteButton extends StatelessWidget {
   /// Soft dark backing so the heart reads on a poster. Off when the heart sits
   /// on a button that already has its own background.
   final bool shaded;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +35,10 @@ class FavoriteButton extends StatelessWidget {
       builder: (context, isFavorited) {
         final heart = ParticleHeartButton(
           isFavorited: isFavorited,
+          color: color,
           size: size,
           onTap: () {
-            HapticFeedback.heavyImpact();
+            HapticFeedback.successNotification();
             cubit.toggleFavorite(favoriteEntity);
           },
         );

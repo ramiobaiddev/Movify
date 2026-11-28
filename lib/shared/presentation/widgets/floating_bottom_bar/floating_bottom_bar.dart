@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/shared/presentation/widgets/floating_bottom_bar/floating_nav_item.dart';
-import 'package:movify/shared/presentation/widgets/size_config.dart';
+import 'package:movify/shared/presentation/widgets/layout/size_config.dart';
 
 class FloatingBottomBarDestination {
   const FloatingBottomBarDestination({

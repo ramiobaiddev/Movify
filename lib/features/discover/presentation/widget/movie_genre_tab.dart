@@ -5,7 +5,7 @@ import 'package:movify/features/discover/presentation/core/collection_list_model
 import 'package:movify/features/discover/presentation/widget/collection_grid_builder.dart';
 import 'package:movify/features/discover/presentation/widget/genre_tab_section.dart';
 import 'package:movify/l10n/app_localizations.dart';
-import 'package:movify/shared/presentation/widgets/sub_bar.dart';
+import 'package:movify/shared/presentation/widgets/headers/sub_bar.dart';
 
 class MovieGenreTab extends StatelessWidget {
   const MovieGenreTab({super.key});

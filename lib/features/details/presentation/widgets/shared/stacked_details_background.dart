@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:movify/core/network/api/services/tmdb/tmdb_image_size.dart';
 import 'package:movify/core/utils/app_styles.dart';
 import 'package:movify/features/details/presentation/widgets/shared/meta_data.dart';
-import 'package:movify/features/details/presentation/widgets/shared/safe_hero_card.dart';
+import 'package:movify/shared/presentation/widgets/cards/safe_hero_card.dart';
 import 'package:movify/features/home/presentation/widgets/card_image.dart';
 import 'package:movify/features/home/presentation/widgets/opcaity_details_image.dart';
-import 'package:movify/shared/presentation/widgets/size_config.dart';
+import 'package:movify/shared/presentation/widgets/layout/size_config.dart';
 
 class StackedDetailsBackGorund extends StatelessWidget {
   final String? backGroundImage;

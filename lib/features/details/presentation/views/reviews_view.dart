@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
-import 'package:movify/features/details/presentation/widgets/sections/review_card.dart';
+import 'package:movify/features/details/presentation/widgets/details/review_card.dart';
 import 'package:movify/features/see_all/presentation/widgets/top_bar/see_all_top_bar.dart';
 
 /// Every review TMDB sent with the details, one card each.

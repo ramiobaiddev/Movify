@@ -13,7 +13,7 @@ import 'package:movify/features/see_all/presentation/widgets/grid/see_all_empty_
 import 'package:movify/features/see_all/presentation/widgets/grid/see_all_grid_skeleton.dart';
 import 'package:movify/shared/presentation/models/card_display_mappers.dart';
 import 'package:movify/shared/presentation/models/card_display_model.dart';
-import 'package:movify/shared/presentation/widgets/poster_grid_layout.dart';
+import 'package:movify/shared/presentation/widgets/layout/poster_grid_layout.dart';
 
 /// Responsive paginated poster grid powered by SliverPagedGrid and SeeAllCubit.
 class SeeAllPosterGrid extends StatelessWidget {

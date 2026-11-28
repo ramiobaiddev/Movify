@@ -14,7 +14,7 @@ import 'package:movify/features/profile/presentation/views/about_view.dart';
 import 'package:movify/features/profile/presentation/views/profile_view.dart';
 import 'package:movify/features/see_all/presentation/models/see_all_args.dart';
 import 'package:movify/features/see_all/presentation/views/see_all_view.dart';
-import 'package:movify/shared/presentation/widgets/navigation_views.dart';
+import 'package:movify/shared/presentation/widgets/navigation/navigation_views.dart';
 
 class MainRoutes {
   static List<RouteBase> get routes => [

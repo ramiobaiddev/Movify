@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/utils/app_styles.dart';
-import 'package:movify/shared/presentation/widgets/size_config.dart';
+import 'package:movify/shared/presentation/widgets/layout/size_config.dart';
 
 class CardTitle extends StatelessWidget {
   const CardTitle({super.key, required this.title});

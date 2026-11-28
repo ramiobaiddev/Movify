@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
-import 'package:movify/shared/presentation/widgets/section_title.dart';
+import 'package:movify/shared/presentation/widgets/common/section_title.dart';
 
 /// A section title over a wrapping row of chips. Used for genres and decades.
 class DiscoverChipsSection extends StatelessWidget {

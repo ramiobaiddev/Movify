@@ -3,8 +3,8 @@ import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/features/people/presentation/models/person_credits_args.dart';
 import 'package:movify/features/see_all/presentation/widgets/top_bar/see_all_top_bar.dart';
 import 'package:movify/shared/presentation/extensions/open_media_details.dart';
-import 'package:movify/shared/presentation/widgets/media_poster_card.dart';
-import 'package:movify/shared/presentation/widgets/poster_grid_layout.dart';
+import 'package:movify/shared/presentation/widgets/cards/media_poster_card.dart';
+import 'package:movify/shared/presentation/widgets/layout/poster_grid_layout.dart';
 
 /// Every movie or series of one person. The list is already in memory, so this
 /// is a plain grid.
