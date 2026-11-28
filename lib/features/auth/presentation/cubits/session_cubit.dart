@@ -78,17 +78,24 @@ class SessionCubit extends Cubit<SessionState> {
     emit(SessionGuest(user: UserEntity.guest()));
   }
 
-  Future<void> deleteAccount() async {
+  /// Deletes the account. Returns null on success, otherwise the failure
+  /// message to show the user.
+  Future<String?> deleteAccount() async {
     final result = await deleteUserAccountUseCase(NoParams());
-    result.fold(
-      (failure) =>
-          debugPrint('❌ Delete account error: ${failure.errorMessage}'),
-      (_) async {
-        await enableGuestModeUseCase(NoParams());
-        FirebaseCrashlytics.instance.setUserIdentifier('');
-        emit(SessionGuest(user: UserEntity.guest()));
-      },
+
+    final message = result.fold<String?>(
+      (failure) => failure.errorMessage,
+      (_) => null,
     );
+    if (message != null) {
+      return message;
+    }
+
+    await enableGuestModeUseCase(NoParams());
+    FirebaseCrashlytics.instance.setUserIdentifier('');
+    emit(SessionGuest(user: UserEntity.guest()));
+
+    return null;
   }
 
   Future<void> enableGuestMode() async {

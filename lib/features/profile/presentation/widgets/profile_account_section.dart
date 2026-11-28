@@ -10,7 +10,6 @@ import 'package:movify/features/profile/presentation/widgets/profile_section.dar
 import 'package:movify/features/profile/presentation/widgets/profile_setting_tile.dart';
 import 'package:movify/features/profile/presentation/widgets/sign_out_sheet.dart';
 import 'package:movify/l10n/app_localizations.dart';
-import 'package:movify/shared/presentation/utils/show_snack_bar.dart';
 
 /// Account section managing sign-out and account deletion bottom sheets for authenticated users or sign-in for guests.
 class ProfileAccountSection extends StatelessWidget {
@@ -48,12 +47,18 @@ class ProfileAccountSection extends StatelessWidget {
                 onTap: () {
                   DeleteAccountSheet.show(
                     context,
-                    onConfirmDelete: () {
-                      context.read<SessionCubit>().deleteAccount();
-                      showSnackBar(
-                        context,
-                        color: colors.surfaceError,
-                        text: l10n.accountDeleted,
+                    onConfirmDelete: () async {
+                      final messenger = ScaffoldMessenger.of(context);
+                      final error = await context
+                          .read<SessionCubit>()
+                          .deleteAccount();
+                      messenger.showSnackBar(
+                        SnackBar(
+                          backgroundColor: error == null
+                              ? colors.surfaceSuccess
+                              : colors.surfaceError,
+                          content: Text(error ?? l10n.accountDeleted),
+                        ),
                       );
                     },
                   );
