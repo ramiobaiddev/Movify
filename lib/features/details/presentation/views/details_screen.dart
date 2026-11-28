@@ -11,7 +11,9 @@ import 'package:movify/features/details/presentation/widgets/details_body.dart';
 import 'package:movify/features/details/presentation/widgets/content_error.dart';
 import 'package:movify/features/details/presentation/widgets/details_header.dart';
 import 'package:movify/features/details/presentation/widgets/details_loading.dart';
+import 'package:movify/features/details/presentation/widgets/pinned_details_bar.dart';
 import 'package:movify/features/details/presentation/widgets/trailer_player.dart';
+import 'package:movify/shared/presentation/widgets/pinned_bar_scroll.dart';
 
 /// Movie or series details (Figma "movie details" / "Series details").
 ///
@@ -59,28 +61,34 @@ class _DetailsScreenState extends State<DetailsScreen> {
             };
             final trailer = content?.trailer;
 
-            return ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                DetailsHeader(
-                  data: data,
-                  onPlayTrailer: trailer == null
-                      ? null
-                      : () => showTrailerPlayer(context, trailer),
+            return PinnedBarScroll(
+              bar: PinnedDetailsBar(
+                title: content?.title ?? data.barTitle,
+                data: data,
+              ),
+              slivers: [
+                SliverToBoxAdapter(
+                  child: DetailsHeader(
+                    data: data,
+                    onPlayTrailer: trailer == null
+                        ? null
+                        : () => showTrailerPlayer(context, trailer),
+                  ),
                 ),
-                const SizedBox(height: Space.md),
-                if (content != null)
-                  DetailsBody(content: content)
-                else if (state is DetailsError)
-                  ContentError(
-                    message: state.message,
-                    onRetry: () => context.read<DetailsCubit>().load(
-                      data.contentType,
-                      data.tmdbId,
-                    ),
-                  )
-                else
-                  DetailsSkeletonLoading(data: data),
+                const SliverToBoxAdapter(child: SizedBox(height: Space.md)),
+                SliverToBoxAdapter(
+                  child: content != null
+                      ? DetailsBody(content: content)
+                      : state is DetailsError
+                      ? ContentError(
+                          message: state.message,
+                          onRetry: () => context.read<DetailsCubit>().load(
+                            data.contentType,
+                            data.tmdbId,
+                          ),
+                        )
+                      : DetailsSkeletonLoading(data: data),
+                ),
               ],
             );
           },

@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/network/api/services/tmdb/tmdb_image_size.dart';
-import 'package:movify/core/routing/route_name.dart';
 import 'package:movify/features/details/presentation/core/details_data_navigation.dart';
-import 'package:movify/features/details/presentation/core/mappers/favorite_mappers.dart';
-import 'package:movify/features/favorite/presentation/widgets/favorite_button.dart';
+import 'package:movify/features/details/presentation/widgets/details_actions.dart';
 import 'package:movify/shared/presentation/widgets/photo_header.dart';
-import 'package:share_plus/share_plus.dart';
 
 /// Photo header of a movie or series, built from the navigation data so it is
 /// on screen before the details arrive.
@@ -38,39 +34,6 @@ class DetailsHeader extends StatelessWidget {
       actions: headerActions(context, data),
     );
   }
-}
-
-/// Heart, share and home buttons for a movie, series, season or episode.
-List<Widget> headerActions(BuildContext context, DetailsNavigationData data) {
-  final shareUrl = switch (data) {
-    EpisodeNavData(:final seasonNumber, :final episodeNumber) =>
-      'https://www.themoviedb.org/tv/${data.tmdbId}/season/$seasonNumber'
-          '/episode/$episodeNumber',
-    SeasonNavData(:final seasonNumber) =>
-      'https://www.themoviedb.org/tv/${data.tmdbId}/season/$seasonNumber',
-    SeriesNavData() => 'https://www.themoviedb.org/tv/${data.tmdbId}',
-    _ => 'https://www.themoviedb.org/movie/${data.tmdbId}',
-  };
-
-  return [
-    HeaderCircle(
-      child: FavoriteButton(
-        favoriteEntity: FavoriteMapper.fromNavigationData(data),
-        size: 18,
-        shaded: false,
-      ),
-    ),
-    HeaderCircleAction(
-      icon: Icons.ios_share_rounded,
-      label: 'Share',
-      onTap: () => SharePlus.instance.share(ShareParams(text: shareUrl)),
-    ),
-    HeaderCircleAction(
-      icon: Icons.home_rounded,
-      label: 'Home',
-      onTap: () => context.goNamed(RouteName.home),
-    ),
-  ];
 }
 
 class _PlayButton extends StatelessWidget {

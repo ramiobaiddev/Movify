@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/network/api/services/tmdb/tmdb_image_size.dart';
 import 'package:movify/features/details/presentation/core/details_data_navigation.dart';
-import 'package:movify/features/details/presentation/widgets/details_header.dart';
+import 'package:movify/features/details/presentation/widgets/details_actions.dart';
 import 'package:movify/shared/presentation/widgets/photo_header.dart';
 
 /// Wide still of the episode fading into the screen colour, with the back,

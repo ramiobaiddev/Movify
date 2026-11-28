@@ -13,6 +13,8 @@ import 'package:movify/features/details/presentation/widgets/content_error.dart'
 import 'package:movify/features/details/presentation/widgets/episode_bar.dart';
 import 'package:movify/features/details/presentation/widgets/episode_content_view.dart';
 import 'package:movify/features/details/presentation/widgets/episode_header.dart';
+import 'package:movify/features/details/presentation/widgets/pinned_details_bar.dart';
+import 'package:movify/shared/presentation/widgets/pinned_bar_scroll.dart';
 
 /// One episode: still, series link, title, facts, overview, guest stars, and
 /// a bar to step to the previous or next episode of the season.
@@ -66,31 +68,37 @@ class _EpisodeBodyState extends State<_EpisodeBody> {
                   onSelect: (episode) =>
                       setState(() => _number = episode.number),
                 ),
-          body: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              EpisodeHeader(
-                data: nav,
-                imagePath: current?.stillPath ?? data.posterImage,
+          body: PinnedBarScroll(
+            bar: PinnedDetailsBar(
+              title: current?.name ?? nav.barTitle,
+              data: nav,
+            ),
+            slivers: [
+              SliverToBoxAdapter(
+                child: EpisodeHeader(
+                  data: nav,
+                  imagePath: current?.stillPath ?? data.posterImage,
+                ),
               ),
-              if (current != null)
-                EpisodeContentView(
-                  episode: current,
-                  seriesTitle: data.seriesTitle,
-                  onSeries: () => context.openSeries(data),
-                )
-              else if (state is SeasonError)
-                ContentError(
-                  message: state.message,
-                  onRetry: () => context.read<SeasonCubit>().load(
-                    data.tmdbId,
-                    data.seasonNumber,
-                  ),
-                )
-              else if (state is SeasonLoaded)
-                const CenteredStatus(child: Text('Episode not available'))
-              else
-                const CenteredStatus(),
+              SliverToBoxAdapter(
+                child: current != null
+                    ? EpisodeContentView(
+                        episode: current,
+                        seriesTitle: data.seriesTitle,
+                        onSeries: () => context.openSeries(data),
+                      )
+                    : state is SeasonError
+                    ? ContentError(
+                        message: state.message,
+                        onRetry: () => context.read<SeasonCubit>().load(
+                          data.tmdbId,
+                          data.seasonNumber,
+                        ),
+                      )
+                    : state is SeasonLoaded
+                    ? const CenteredStatus(child: Text('Episode not available'))
+                    : const CenteredStatus(),
+              ),
             ],
           ),
         );

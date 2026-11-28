@@ -16,6 +16,9 @@ sealed class DetailsNavigationData {
     this.backdropImage,
     required this.specificId,
   });
+
+  /// Short name for the pinned app bar.
+  String get barTitle;
 }
 
 class MovieNavData extends DetailsNavigationData {
@@ -34,6 +37,9 @@ class MovieNavData extends DetailsNavigationData {
     this.genres,
     required super.specificId,
   }) : super(contentType: ContentType.movies);
+
+  @override
+  String get barTitle => title;
 }
 
 class SeriesNavData extends DetailsNavigationData {
@@ -52,6 +58,9 @@ class SeriesNavData extends DetailsNavigationData {
     this.genres,
     required super.specificId,
   }) : super(contentType: ContentType.series);
+
+  @override
+  String get barTitle => title;
 }
 
 class SeasonNavData extends DetailsNavigationData {
@@ -76,6 +85,9 @@ class SeasonNavData extends DetailsNavigationData {
     super.backdropImage,
     required super.specificId,
   }) : super(contentType: ContentType.seasons);
+
+  @override
+  String get barTitle => seasonName ?? 'Season $seasonNumber';
 
   factory SeasonNavData.fromItem(
     SeasonItem season, {
@@ -118,6 +130,9 @@ class EpisodeNavData extends DetailsNavigationData {
     super.backdropImage,
     required super.specificId,
   }) : super(contentType: ContentType.episodes);
+
+  @override
+  String get barTitle => 'Episode $episodeNumber';
 
   /// The same series and season, pointed at [episode].
   EpisodeNavData forEpisode(EpisodeItem episode) => EpisodeNavData(
