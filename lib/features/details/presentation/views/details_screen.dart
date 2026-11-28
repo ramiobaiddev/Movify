@@ -8,9 +8,9 @@ import 'package:movify/features/details/presentation/cubits/details_cubit/detail
 import 'package:movify/features/details/presentation/mappers/movie_content_mapper.dart';
 import 'package:movify/features/details/presentation/mappers/series_content_mapper.dart';
 import 'package:movify/features/details/presentation/widgets/details_body.dart';
-import 'package:movify/features/details/presentation/widgets/details_error.dart';
 import 'package:movify/features/details/presentation/widgets/details_header.dart';
 import 'package:movify/features/details/presentation/widgets/details_loading.dart';
+import 'package:movify/features/details/presentation/widgets/details_widget_error.dart';
 import 'package:movify/features/details/presentation/widgets/trailer_player.dart';
 
 /// Movie or series details (Figma "movie details" / "Series details").
@@ -72,9 +72,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 if (content != null)
                   DetailsBody(content: content)
                 else if (state is DetailsError)
-                  DetailsError(message: state.message, data: data)
+                  DetailsWidgetError(message: state.message, data: data)
                 else
-                  DetailsLoading(data: data),
+                  DetailsSkeletonLoading(data: data),
               ],
             );
           },

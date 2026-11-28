@@ -5,8 +5,12 @@ import 'package:movify/core/paging/widgets/paged_error_view.dart';
 import 'package:movify/features/details/presentation/core/details_data_navigation.dart';
 import 'package:movify/features/details/presentation/cubits/details_cubit/details_cubit.dart';
 
-class DetailsError extends StatelessWidget {
-  const DetailsError({super.key, required this.message, required this.data});
+class DetailsWidgetError extends StatelessWidget {
+  const DetailsWidgetError({
+    super.key,
+    required this.message,
+    required this.data,
+  });
 
   final String message;
   final DetailsNavigationData data;

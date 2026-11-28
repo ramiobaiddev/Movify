@@ -17,7 +17,6 @@ import 'package:movify/features/details/domain/value_objects/season.dart';
 import 'package:movify/features/details/domain/value_objects/videos.dart';
 import 'package:movify/features/details/presentation/mappers/movie_content_mapper.dart';
 import 'package:movify/features/details/presentation/mappers/series_content_mapper.dart';
-import 'package:movify/features/details/presentation/mappers/season_content_mapper.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
 
 MovieDetailsEntity _movie({
@@ -34,7 +33,10 @@ MovieDetailsEntity _movie({
   actorName: cast ?? const [],
   movieStatus: 'Released',
   movieTitle: 'Spider',
-  kGeners: [Genre(id: 28, name: 'Action'), Genre(id: 1)],
+  kGeners: [
+    Genre(id: 28, name: 'Action'),
+    Genre(id: 1),
+  ],
   overView: 'Story',
   kReviews: reviews,
   kVideos: videos,
@@ -98,9 +100,12 @@ void main() {
     test('upcoming depends on the release date', () {
       final content = _movie().toContent();
 
-      expect(content.isUpcoming(DateTime(2026, 11, 1)), isTrue);
+      expect(content.isUpcoming(DateTime(2026, 11)), isTrue);
       expect(content.isUpcoming(DateTime(2026, 11, 26)), isFalse);
-      expect(_movie(date: null).toContent().isUpcoming(DateTime(2020)), isFalse);
+      expect(
+        _movie(date: null).toContent().isUpcoming(DateTime(2020)),
+        isFalse,
+      );
     });
 
     test('cast keeps people with an id and name, capped at 20', () {
@@ -169,25 +174,24 @@ void main() {
       List<Season> seasons = const [],
       NextEpisodeToAir? next,
       LastEpisodeToAir? last,
-    }) =>
-        SeriesDetailsEntity(
-          numOfEpisoide: 48,
-          seiresId: 3,
-          numOfSeason: 1,
-          season: seasons,
-          nextEpisodeAir: next,
-          lastEpisodeAir: last,
-          rating: 0,
-          actorDetails: null,
-          videoKey: null,
-          firstDate: firstDate,
-          geners: null,
-          seriesTitle: 'Show',
-          overView: null,
-          backgroundImage: null,
-          seriesStatus: 'Returning Series',
-          kLastAirDate: '2024-07-15',
-        );
+    }) => SeriesDetailsEntity(
+      numOfEpisoide: 48,
+      seiresId: 3,
+      numOfSeason: 1,
+      season: seasons,
+      nextEpisodeAir: next,
+      lastEpisodeAir: last,
+      rating: 0,
+      actorDetails: null,
+      videoKey: null,
+      firstDate: firstDate,
+      geners: null,
+      seriesTitle: 'Show',
+      overView: null,
+      backgroundImage: null,
+      seriesStatus: 'Returning Series',
+      kLastAirDate: '2024-07-15',
+    );
 
     test('maps episodes and drops specials from seasons', () {
       final content = series(
@@ -195,14 +199,14 @@ void main() {
           Season(id: 1, seasonNumber: 0, name: 'Specials'),
           Season(id: 2, seasonNumber: 1, name: 'Season 1', episodeCount: 8),
         ],
-        next: NextEpisodeToAir(
+        next: const NextEpisodeToAir(
           id: 10,
           name: 'Peter',
           seasonNumber: 7,
           episodeNumber: 8,
           airDate: '2026-11-14',
         ),
-        last: LastEpisodeToAir(id: 9, seasonNumber: 7, episodeNumber: 7),
+        last: const LastEpisodeToAir(id: 9, seasonNumber: 7, episodeNumber: 7),
       ).toContent();
 
       expect(content.seasons.map((s) => s.number), [1]);
@@ -212,7 +216,9 @@ void main() {
     });
 
     test('episodes without ids are dropped', () {
-      final content = series(next: NextEpisodeToAir(name: 'x')).toContent();
+      final content = series(
+        next: const NextEpisodeToAir(name: 'x'),
+      ).toContent();
 
       expect(content.nextEpisode, isNull);
     });

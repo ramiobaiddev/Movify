@@ -7,8 +7,8 @@ import 'package:movify/features/details/presentation/widgets/sections/details_ti
 import 'package:movify/shared/presentation/widgets/screen_gutter.dart';
 
 /// Title from the navigation data plus grey blocks where the sections go.
-class DetailsLoading extends StatelessWidget {
-  const DetailsLoading({super.key, required this.data});
+class DetailsSkeletonLoading extends StatelessWidget {
+  const DetailsSkeletonLoading({super.key, required this.data});
 
   final DetailsNavigationData data;
 
