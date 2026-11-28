@@ -8,9 +8,9 @@ import 'package:movify/core/routing/transition/app_transition.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/details/presentation/core/details_data_navigation.dart';
 import 'package:movify/features/details/presentation/cubits/details_cubit/details_cubit.dart';
+import 'package:movify/features/details/presentation/models/details_content.dart';
 import 'package:movify/features/details/presentation/views/details_screen.dart';
 import 'package:movify/features/details/presentation/views/episode_screen.dart';
-import 'package:movify/features/details/presentation/models/details_content.dart';
 import 'package:movify/features/details/presentation/views/reviews_view.dart';
 import 'package:movify/features/details/presentation/views/season_screen.dart';
 

@@ -24,8 +24,8 @@ import 'package:movify/features/details/presentation/widgets/sections/genre_chip
 import 'package:movify/features/details/presentation/widgets/sections/information_section.dart';
 import 'package:movify/features/details/presentation/widgets/sections/last_aired_card.dart';
 import 'package:movify/features/details/presentation/widgets/sections/next_episode_card.dart';
-import 'package:movify/features/details/presentation/widgets/sections/seasons_row.dart';
 import 'package:movify/features/details/presentation/widgets/sections/reviews_section.dart';
+import 'package:movify/features/details/presentation/widgets/sections/seasons_row.dart';
 import 'package:movify/features/details/presentation/widgets/sections/section_title.dart';
 import 'package:movify/features/details/presentation/widgets/sections/videos_section.dart';
 import 'package:movify/features/details/presentation/widgets/trailer_player.dart';
