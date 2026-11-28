@@ -73,6 +73,7 @@ class EpisodeTile extends StatelessWidget {
                                 : CachedNetworkImage(
                                     imageUrl: tmdbImageSize(TmdbImageSize.w300, path),
                                     fit: BoxFit.cover,
+                                    memCacheWidth: (_stillWidth * MediaQuery.devicePixelRatioOf(context)).round(),
                                     errorWidget: (_, _, _) =>
                                         const SizedBox.shrink(),
                                   ),

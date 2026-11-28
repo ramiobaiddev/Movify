@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:movify/features/details/domain/entites/series_season_details_entitiy.dart';
+import 'package:movify/features/details/presentation/models/season_content.dart';
 
 sealed class SeasonState extends Equatable {
   const SeasonState();
@@ -13,12 +13,13 @@ final class SeasonLoading extends SeasonState {
 }
 
 final class SeasonLoaded extends SeasonState {
-  const SeasonLoaded(this.season);
+  const SeasonLoaded(this.content);
 
-  final SeriesSeasonDetailsEntity season;
+  /// Mapped once when the season arrives, not on every rebuild.
+  final SeasonContent content;
 
   @override
-  List<Object?> get props => [season];
+  List<Object?> get props => [content];
 }
 
 final class SeasonError extends SeasonState {

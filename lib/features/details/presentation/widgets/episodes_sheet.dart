@@ -15,6 +15,7 @@ Future<EpisodeItem?> showEpisodesSheet(
   context,
   title: 'All episodes',
   isScrollable: true,
+  lazyList: true,
   child: _EpisodesList(episodes: episodes, current: current, today: today),
 );
 
@@ -35,30 +36,44 @@ class _EpisodesList extends StatelessWidget {
     final text = Theme.of(context).textTheme;
     final number = current.seasonNumber.toString().padLeft(2, '0');
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Season $number',
-          style: text.titleSmall?.copyWith(color: colors.textPrimary),
-        ),
-        const SizedBox(height: Space.xsm),
-        Text(
-          'Watching episode ${current.number.toString().padLeft(2, '0')}',
-          style: text.bodyLarge?.copyWith(color: colors.textPrimary),
-        ),
-        const SizedBox(height: Space.lg),
-        for (final episode in episodes) ...[
-          EpisodeTile(
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const BouncingScrollPhysics(),
+      itemCount: episodes.length + 1,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: Space.lg),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Season $number',
+                  style: text.titleSmall?.copyWith(color: colors.textPrimary),
+                ),
+                const SizedBox(height: Space.xsm),
+                Text(
+                  'Watching episode ${current.number.toString().padLeft(2, '0')}',
+                  style: text.bodyLarge?.copyWith(color: colors.textPrimary),
+                ),
+              ],
+            ),
+          );
+        }
+        final episode = episodes[index - 1];
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: Space.md),
+          child: EpisodeTile(
             episode: episode,
             today: today,
             selected: episode.id == current.id,
             showDivider: false,
-            onTap: () => Navigator.of(context, rootNavigator: true).pop(episode),
+            onTap: () =>
+                Navigator.of(context, rootNavigator: true).pop(episode),
           ),
-          const SizedBox(height: Space.md),
-        ],
-      ],
+        );
+      },
     );
   }
 }

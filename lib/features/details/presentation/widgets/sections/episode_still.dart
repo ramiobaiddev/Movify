@@ -28,6 +28,7 @@ class EpisodeStill extends StatelessWidget {
               : CachedNetworkImage(
                   imageUrl: tmdbImageSize(TmdbImageSize.w300, path),
                   fit: BoxFit.cover,
+                  memCacheWidth: (width * MediaQuery.devicePixelRatioOf(context)).round(),
                   errorWidget: (_, _, _) => const SizedBox.shrink(),
                 ),
         ),

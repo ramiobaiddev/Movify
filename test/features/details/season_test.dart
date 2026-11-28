@@ -8,7 +8,7 @@ import 'package:movify/features/details/presentation/mappers/season_content_mapp
 import 'package:movify/features/details/presentation/models/season_content.dart';
 import 'package:movify/features/details/presentation/widgets/sections/episode_tile.dart';
 import 'package:movify/features/details/presentation/widgets/episodes_sheet.dart';
-import 'package:movify/features/details/presentation/widgets/sections/episodes_section.dart';
+import 'package:movify/features/details/presentation/widgets/sections/episodes_sliver.dart';
 import 'package:movify/shared/presentation/widgets/sequence_nav_bar.dart';
 
 Widget _wrap(Widget child, {Widget? bar}) => MaterialApp(
@@ -129,20 +129,30 @@ void main() {
     expect(find.text('in 3 days'), findsOneWidget);
   });
 
-  group('EpisodesSection', () {
-    Widget section({required bool expanded, VoidCallback? onShowAll}) => _wrap(
-      EpisodesSection(
-        episodes: _episodes(8),
-        expanded: expanded,
-        onShowAll: onShowAll ?? () {},
-        onTap: (_) {},
-        today: DateTime(2026, 11, 28),
-      ),
-    );
+  group('EpisodesSliver', () {
+    Widget section({required bool expanded, VoidCallback? onShowAll}) =>
+        MaterialApp(
+          theme: MovifyTheme.dark(),
+          home: Scaffold(
+            body: CustomScrollView(
+              slivers: [
+                EpisodesSliver(
+                  episodes: _episodes(8),
+                  expanded: expanded,
+                  onShowAll: onShowAll ?? () {},
+                  onTap: (_) {},
+                  today: DateTime(2026, 11, 28),
+                ),
+              ],
+            ),
+          ),
+        );
 
     testWidgets('collapsed: five newest and the show all button', (
       tester,
     ) async {
+      await tester.binding.setSurfaceSize(const Size(400, 1600));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
       var tapped = false;
       await tester.pumpWidget(
         section(expanded: false, onShowAll: () => tapped = true),
@@ -158,6 +168,8 @@ void main() {
     });
 
     testWidgets('expanded: every episode and no button', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(400, 1600));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
       await tester.pumpWidget(section(expanded: true));
 
       expect(find.byType(EpisodeTile), findsNWidgets(8));
@@ -165,6 +177,8 @@ void main() {
     });
 
     testWidgets('the toggle flips the order', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(400, 1600));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
       await tester.pumpWidget(section(expanded: false));
 
       expect(find.text('Newest'), findsOneWidget);

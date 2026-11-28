@@ -12,6 +12,7 @@ class AppBottomSheet extends StatelessWidget {
     this.action,
     this.bottomBar,
     this.isScrollable = false,
+    this.lazyList = false,
     this.maxHeightFactor = 0.85,
     this.onClose,
   });
@@ -21,6 +22,10 @@ class AppBottomSheet extends StatelessWidget {
   final Widget? action;
   final Widget? bottomBar;
   final bool isScrollable;
+
+  /// With [isScrollable]: [child] scrolls itself (a shrink-wrapped
+  /// `ListView.builder`), so long lists build only the rows on screen.
+  final bool lazyList;
   final double maxHeightFactor;
   final VoidCallback? onClose;
 
@@ -32,6 +37,7 @@ class AppBottomSheet extends StatelessWidget {
     Widget? action,
     Widget? bottomBar,
     bool isScrollable = false,
+    bool lazyList = false,
     double maxHeightFactor = 0.85,
     VoidCallback? onClose,
   }) {
@@ -53,6 +59,7 @@ class AppBottomSheet extends StatelessWidget {
         action: action,
         bottomBar: bottomBar,
         isScrollable: isScrollable,
+        lazyList: lazyList,
         maxHeightFactor: maxHeightFactor,
         onClose: onClose,
         child: child,
@@ -87,10 +94,12 @@ class AppBottomSheet extends StatelessWidget {
               ),
               const SizedBox(height: Space.md),
               Flexible(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: child,
-                ),
+                child: lazyList
+                    ? child
+                    : SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: child,
+                      ),
               ),
               if (bottomBar != null) ...[
                 const SizedBox(height: Space.md),

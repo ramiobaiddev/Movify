@@ -7,7 +7,6 @@ import 'package:movify/features/details/presentation/core/details_links.dart';
 import 'package:movify/features/details/presentation/core/episode_position.dart';
 import 'package:movify/features/details/presentation/cubits/season_cubit/season_cubit.dart';
 import 'package:movify/features/details/presentation/cubits/season_cubit/season_state.dart';
-import 'package:movify/features/details/presentation/mappers/season_content_mapper.dart';
 import 'package:movify/features/details/presentation/models/season_content.dart';
 import 'package:movify/features/details/presentation/widgets/centered_status.dart';
 import 'package:movify/features/details/presentation/widgets/content_error.dart';
@@ -50,7 +49,7 @@ class _EpisodeBodyState extends State<_EpisodeBody> {
     return BlocBuilder<SeasonCubit, SeasonState>(
       builder: (context, state) {
         final episodes = state is SeasonLoaded
-            ? state.season.toSeasonContent().episodes
+            ? state.content.episodes
             : const <EpisodeItem>[];
         final position = EpisodePosition(episodes, _number);
         final current = position.current;

@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movify/features/details/domain/use_cases/tv/fetch_series_season_details.dart';
 import 'package:movify/features/details/presentation/cubits/season_cubit/season_state.dart';
+import 'package:movify/features/details/presentation/mappers/season_content_mapper.dart';
 
 /// Loads one season of a series. Call [load] again to retry.
 class SeasonCubit extends Cubit<SeasonState> {
@@ -16,7 +17,7 @@ class SeasonCubit extends Cubit<SeasonState> {
     }
     result.fold(
       (failure) => emit(SeasonError(failure.errorMessage)),
-      (season) => emit(SeasonLoaded(season)),
+      (season) => emit(SeasonLoaded(season.toSeasonContent())),
     );
   }
 }

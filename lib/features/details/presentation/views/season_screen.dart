@@ -7,11 +7,10 @@ import 'package:movify/features/details/presentation/core/details_links.dart';
 import 'package:movify/features/details/presentation/core/season_neighbours.dart';
 import 'package:movify/features/details/presentation/cubits/season_cubit/season_cubit.dart';
 import 'package:movify/features/details/presentation/cubits/season_cubit/season_state.dart';
-import 'package:movify/features/details/presentation/mappers/season_content_mapper.dart';
 import 'package:movify/features/details/presentation/widgets/content_error.dart';
 import 'package:movify/features/details/presentation/widgets/details_header.dart';
 import 'package:movify/features/details/presentation/widgets/season_bar.dart';
-import 'package:movify/features/details/presentation/widgets/season_content_view.dart';
+import 'package:movify/features/details/presentation/widgets/season_slivers.dart';
 import 'package:movify/features/details/presentation/widgets/season_loading.dart';
 import 'package:movify/features/details/presentation/widgets/trailer_player.dart';
 
@@ -39,7 +38,7 @@ class _SeasonBody extends StatefulWidget {
 }
 
 class _SeasonBodyState extends State<_SeasonBody> {
-  /// The Previous / Seasons / Next bar appears once all episodes are shown.
+  /// Episodes beyond the first few appear once the person asks for them.
   bool _showAll = false;
 
   @override
@@ -49,7 +48,7 @@ class _SeasonBodyState extends State<_SeasonBody> {
 
     return Scaffold(
       backgroundColor: context.colors.surfacePrimary,
-      bottomNavigationBar: _showAll && neighbours.hasSeveral
+      bottomNavigationBar: neighbours.hasSeveral
           ? SeasonBar(
               neighbours: neighbours,
               currentNumber: data.seasonNumber,
@@ -58,23 +57,22 @@ class _SeasonBodyState extends State<_SeasonBody> {
           : null,
       body: BlocBuilder<SeasonCubit, SeasonState>(
         builder: (context, state) {
-          final content = state is SeasonLoaded
-              ? state.season.toSeasonContent()
-              : null;
+          final content = state is SeasonLoaded ? state.content : null;
           final trailer = content?.trailer;
 
-          return ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              DetailsHeader(
-                data: data,
-                onPlayTrailer: trailer == null
-                    ? null
-                    : () => showTrailerPlayer(context, trailer),
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: DetailsHeader(
+                  data: data,
+                  onPlayTrailer: trailer == null
+                      ? null
+                      : () => showTrailerPlayer(context, trailer),
+                ),
               ),
-              const SizedBox(height: Space.md),
+              const SliverToBoxAdapter(child: SizedBox(height: Space.md)),
               if (content != null)
-                SeasonContentView(
+                SeasonSlivers(
                   content: content,
                   showAll: _showAll,
                   onShowAll: () => setState(() => _showAll = true),
@@ -82,15 +80,17 @@ class _SeasonBodyState extends State<_SeasonBody> {
                       context.openSeasonEpisode(data, episode),
                 )
               else if (state is SeasonError)
-                ContentError(
-                  message: state.message,
-                  onRetry: () => context.read<SeasonCubit>().load(
-                    data.tmdbId,
-                    data.seasonNumber,
+                SliverToBoxAdapter(
+                  child: ContentError(
+                    message: state.message,
+                    onRetry: () => context.read<SeasonCubit>().load(
+                      data.tmdbId,
+                      data.seasonNumber,
+                    ),
                   ),
                 )
               else
-                SeasonLoading(data: data),
+                SliverToBoxAdapter(child: SeasonLoading(data: data)),
             ],
           );
         },
