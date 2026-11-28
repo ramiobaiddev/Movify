@@ -17,6 +17,7 @@ class RoutePaths {
   static const String series = '/app/series';
   static const String favorite = '/app/favorite';
   static const String seeAll = '/app/seeAll';
+  static const String genres = '/app/genres';
   static const String person = '/person/:id';
   static const String popularPeople = '/popularPeople';
   static const String personCredits = '/personCredits';

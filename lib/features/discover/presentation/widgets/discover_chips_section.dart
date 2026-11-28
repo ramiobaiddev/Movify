@@ -9,17 +9,39 @@ class DiscoverChipsSection extends StatelessWidget {
     required this.title,
     required this.labels,
     required this.onTap,
+    this.onTitleTap,
   });
 
   final String title;
   final List<String> labels;
   final ValueChanged<int> onTap;
 
+  /// When set, the title shows an arrow and opens the full list.
+  final VoidCallback? onTitleTap;
+
   @override
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      SectionTitle(title),
+      if (onTitleTap == null)
+        SectionTitle(title)
+      else
+        GestureDetector(
+          onTap: onTitleTap,
+          behavior: HitTestBehavior.opaque,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SectionTitle(title),
+              const SizedBox(width: Space.xsm),
+              Icon(
+                Icons.chevron_right_rounded,
+                size: 24,
+                color: context.colors.textPrimary,
+              ),
+            ],
+          ),
+        ),
       const SizedBox(height: Space.lg),
       Wrap(
         spacing: Space.sm,

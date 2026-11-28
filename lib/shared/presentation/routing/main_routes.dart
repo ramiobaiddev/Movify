@@ -7,6 +7,7 @@ import 'package:movify/core/routing/screens/maintenance_screen.dart';
 import 'package:movify/core/routing/transition/app_transition.dart';
 import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/discover/presentation/views/discover_screen.dart';
+import 'package:movify/features/discover/presentation/views/genres_screen.dart';
 import 'package:movify/features/favorite/presentation/views/favorite_view.dart';
 import 'package:movify/features/home/presentation/views/home_feed_view.dart';
 import 'package:movify/features/profile/presentation/views/about_view.dart';
@@ -40,6 +41,16 @@ class MainRoutes {
         child: SeeAllView(
           args: state.extra as SeeAllArgs? ??
               const SeeAllArgs.discover(kind: ContentType.movies),
+        ),
+        state: state,
+      ),
+    ),
+    GoRoute(
+      path: RoutePaths.genres,
+      name: RouteName.genres,
+      pageBuilder: (context, state) => AppTransitions.cupertino(
+        child: GenresScreen(
+          kind: state.extra as ContentType? ?? ContentType.movies,
         ),
         state: state,
       ),

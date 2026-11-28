@@ -34,7 +34,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     return Scaffold(
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(Space.lg, Space.lg, Space.lg, 120),
+          padding: const EdgeInsets.fromLTRB(Space.xl, Space.lg, Space.xl, 120),
           children: [
             Text(
               'Discover',
@@ -54,6 +54,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             const SizedBox(height: Space.x2xl),
             DiscoverChipsSection(
               title: 'Genres',
+              onTitleTap: () =>
+                  context.pushNamed(RouteName.genres, extra: _kind),
               labels: [for (final g in genres) g.name],
               onTap: (i) => context.openGenre(
                 _kind,
@@ -61,15 +63,15 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                 genres[i].name,
               ),
             ),
-            const SizedBox(height: Space.x3xl),
+            const SizedBox(height: Space.x2xl),
             CollectionsSection(
               kind: _kind,
               collections: DiscoverCollection.all,
               onTap: (c) => context.openCollection(_kind, c),
             ),
-            const SizedBox(height: Space.x3xl),
+            const SizedBox(height: Space.x2xl),
             MoodSection(onTap: (mood) => context.openMood(_kind, mood)),
-            const SizedBox(height: Space.x3xl),
+            const SizedBox(height: Space.x2xl),
             DiscoverChipsSection(
               title: 'Travel through time',
               labels: [for (final d in DiscoverScreen.decades) '${d}s'],

@@ -49,6 +49,13 @@ void main() {
     expect(action.idFor(ContentType.series), 10759);
   });
 
+  test('genre directory has unique ids per kind', () {
+    for (final kind in ContentType.values) {
+      final ids = GenreOption.forKind(kind).map((g) => g.id).toList();
+      expect(ids.toSet().length, ids.length);
+    }
+  });
+
   testWidgets('kind tabs report the tapped kind', (tester) async {
     ContentType? picked;
     await tester.pumpWidget(

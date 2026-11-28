@@ -12,6 +12,7 @@ class RouteName {
   static const String series = 'series';
   static const String favorite = 'favorite';
   static const String seeAll = 'seeAll';
+  static const String genres = 'genres';
   static const String person = 'person';
   static const String popularPeople = 'popularPeople';
   static const String personCredits = 'personCredits';
