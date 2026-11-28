@@ -47,6 +47,7 @@ class FloatingBottomBar extends StatelessWidget {
         ),
         child: Align(
           alignment: Alignment.bottomCenter,
+          heightFactor: 1.0,
           child: Container(
             width: isTablet ? (screenWidth * 0.58).clamp(500.0, 640.0) : null,
             padding: EdgeInsets.symmetric(

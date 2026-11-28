@@ -13,16 +13,14 @@ class AboutTopBar extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: Space.lg,
-        vertical: Space.md,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: Space.md),
       child: Row(
         children: [
           InkWell(
             onTap: () => Navigator.of(context).maybePop(),
             borderRadius: BorderRadius.circular(Radii.lg),
             child: Ink(
+              padding: EdgeInsets.zero,
               width: 44,
               height: 44,
               decoration: BoxDecoration(
@@ -38,10 +36,7 @@ class AboutTopBar extends StatelessWidget {
             ),
           ),
           const SizedBox(width: Space.md),
-          Text(
-            l10n?.about ?? 'About',
-            style: textTheme.titleLarge,
-          ),
+          Text(l10n?.about ?? 'About', style: textTheme.titleLarge),
         ],
       ),
     );

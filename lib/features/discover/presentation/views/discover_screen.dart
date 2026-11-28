@@ -33,52 +33,58 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(Space.xl, Space.lg, Space.xl, 120),
-          children: [
-            Text(
-              'Discover',
-              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                color: context.colors.textPrimary,
+        bottom: false,
+
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: Space.lg),
+          child: ListView(
+            children: [
+              const SizedBox(height: Space.xl),
+              Text(
+                'Discover',
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  color: context.colors.textPrimary,
+                ),
               ),
-            ),
-            const SizedBox(height: Space.lg),
-            DiscoverSearchField(
-              onTap: () => context.pushNamed(RouteName.search),
-            ),
-            const SizedBox(height: Space.x2xl),
-            KindTabs(
-              kind: _kind,
-              onChanged: (kind) => setState(() => _kind = kind),
-            ),
-            const SizedBox(height: Space.x2xl),
-            DiscoverChipsSection(
-              title: 'Genres',
-              onTitleTap: () =>
-                  context.pushNamed(RouteName.genres, extra: _kind),
-              labels: [for (final g in genres) g.name],
-              onTap: (i) => context.openGenre(
-                _kind,
-                genres[i].idFor(_kind),
-                genres[i].name,
+              const SizedBox(height: Space.lg),
+              DiscoverSearchField(
+                onTap: () => context.pushNamed(RouteName.search),
               ),
-            ),
-            const SizedBox(height: Space.x2xl),
-            CollectionsSection(
-              kind: _kind,
-              collections: DiscoverCollection.all,
-              onTap: (c) => context.openCollection(_kind, c),
-            ),
-            const SizedBox(height: Space.x2xl),
-            MoodSection(onTap: (mood) => context.openMood(_kind, mood)),
-            const SizedBox(height: Space.x2xl),
-            DiscoverChipsSection(
-              title: 'Travel through time',
-              labels: [for (final d in DiscoverScreen.decades) '${d}s'],
-              onTap: (i) =>
-                  context.openDecade(_kind, DiscoverScreen.decades[i]),
-            ),
-          ],
+              const SizedBox(height: Space.x2xl),
+              KindTabs(
+                kind: _kind,
+                onChanged: (kind) => setState(() => _kind = kind),
+              ),
+              const SizedBox(height: Space.x2xl),
+              DiscoverChipsSection(
+                title: 'Genres',
+                onTitleTap: () =>
+                    context.pushNamed(RouteName.genres, extra: _kind),
+                labels: [for (final g in genres) g.name],
+                onTap: (i) => context.openGenre(
+                  _kind,
+                  genres[i].idFor(_kind),
+                  genres[i].name,
+                ),
+              ),
+              const SizedBox(height: Space.x2xl),
+              CollectionsSection(
+                kind: _kind,
+                collections: DiscoverCollection.all,
+                onTap: (c) => context.openCollection(_kind, c),
+              ),
+              const SizedBox(height: Space.x2xl),
+              MoodSection(onTap: (mood) => context.openMood(_kind, mood)),
+              const SizedBox(height: Space.x2xl),
+              DiscoverChipsSection(
+                title: 'Travel through time',
+                labels: [for (final d in DiscoverScreen.decades) '${d}s'],
+                onTap: (i) =>
+                    context.openDecade(_kind, DiscoverScreen.decades[i]),
+              ),
+              const SizedBox(height: Space.lg),
+            ],
+          ),
         ),
       ),
     );

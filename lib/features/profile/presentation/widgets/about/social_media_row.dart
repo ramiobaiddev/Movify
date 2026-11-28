@@ -17,13 +17,13 @@ class SocialMediaRow extends StatelessWidget {
         url: Constants.developerLinkedIn,
         tooltip: 'LinkedIn',
       ),
-      SizedBox(width: 40),
+
       SocialIconButton(
         icon: FontAwesomeIcons.xTwitter,
         url: Constants.developerTwitter,
         tooltip: 'X (Twitter)',
       ),
-      SizedBox(width: 40),
+
       SocialIconButton(
         icon: FontAwesomeIcons.instagram,
         url: Constants.developerInstagram,

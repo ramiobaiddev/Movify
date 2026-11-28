@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:movify/core/design_system/design_system.dart';
-import 'package:movify/core/routing/route_name.dart';
 
 /// Top bar matching Figma node 822:7652:
 /// - "Movify" branding on the left (24px bold Montserrat)
@@ -35,10 +33,6 @@ class HomeTopBar extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _ActionSquircleButton(
-                icon: Icons.search_rounded,
-                onTap: onSearchTap ?? () => context.pushNamed(RouteName.search),
-              ),
               const SizedBox(width: Space.sm),
               _NotificationSquircleButton(
                 onTap: onNotificationTap,
@@ -53,10 +47,7 @@ class HomeTopBar extends StatelessWidget {
 }
 
 class _ActionSquircleButton extends StatelessWidget {
-  const _ActionSquircleButton({
-    required this.icon,
-    required this.onTap,
-  });
+  const _ActionSquircleButton({required this.icon, required this.onTap});
 
   final IconData icon;
   final VoidCallback onTap;
@@ -80,13 +71,7 @@ class _ActionSquircleButton extends StatelessWidget {
               color: colors.surfaceDivider.withValues(alpha: 0.5),
             ),
           ),
-          child: Center(
-            child: Icon(
-              icon,
-              color: colors.iconPrimary,
-              size: 24,
-            ),
-          ),
+          child: Center(child: Icon(icon, color: colors.iconPrimary, size: 24)),
         ),
       ),
     );

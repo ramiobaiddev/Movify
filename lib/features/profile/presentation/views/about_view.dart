@@ -13,7 +13,10 @@ class AboutView extends StatelessWidget {
     return Scaffold(
       backgroundColor: colors.surfacePrimary,
       body: const SafeArea(
-        child: AboutViewBody(),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: Space.lg),
+          child: AboutViewBody(),
+        ),
       ),
     );
   }

@@ -171,10 +171,14 @@ class HomeFeedViewBody extends StatelessWidget {
                 ),
               ),
             ),
-
-            // Space for floating bottom navigation bar
-            const SizedBox(height: 120),
           ],
+        ),
+
+        const SliverSafeArea(
+          top: false,
+          sliver: SliverToBoxAdapter(
+            child: SizedBox(height: Space.lg),
+          ),
         ),
       ],
     );

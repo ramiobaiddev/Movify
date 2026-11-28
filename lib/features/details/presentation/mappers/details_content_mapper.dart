@@ -10,8 +10,8 @@ import 'package:movify/features/details/domain/value_objects/next_episode_to_air
 import 'package:movify/features/details/domain/value_objects/production_company.dart';
 import 'package:movify/features/details/domain/value_objects/production_country.dart';
 import 'package:movify/features/details/domain/value_objects/result.dart';
-import 'package:movify/features/details/domain/value_objects/season.dart';
 import 'package:movify/features/details/domain/value_objects/review_results.dart';
+import 'package:movify/features/details/domain/value_objects/season.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
 import 'package:movify/features/details/presentation/models/season_content.dart';
 
@@ -89,8 +89,7 @@ extension SeriesDetailsContent on SeriesDetailsEntity {
         if (_nonEmpty(seriesStatus) case final status?)
           InfoRow(label: 'Status', value: status),
         ..._countryCompanyLanguage(countries, companies, kLanguages),
-        if (numOfSeason > 0)
-          InfoRow(label: 'Seasons', value: '$numOfSeason'),
+        if (numOfSeason > 0) InfoRow(label: 'Seasons', value: '$numOfSeason'),
         if (numOfEpisoide > 0)
           InfoRow(label: 'Episodes', value: '$numOfEpisoide'),
         if (first != null)
@@ -183,7 +182,10 @@ extension SeasonDetailsContent on SeriesSeasonDetailsEntity {
             guestStars: _cast(episode.guestStars ?? const []),
           ),
     ]..sort((a, b) => a.number.compareTo(b.number));
-    final totalMinutes = episodes.fold<int>(0, (sum, e) => sum + (e.runtime ?? 0));
+    final totalMinutes = episodes.fold<int>(
+      0,
+      (sum, e) => sum + (e.runtime ?? 0),
+    );
 
     return SeasonContent(
       id: seasonId,
@@ -293,10 +295,7 @@ List<VideoItem> _videos(List<Result>? videos) {
   youtube.sort((a, b) => rank(a).compareTo(rank(b)));
   return [
     for (final video in youtube)
-      VideoItem(
-        youtubeKey: video.key!,
-        name: _nonEmpty(video.name) ?? 'Video',
-      ),
+      VideoItem(youtubeKey: video.key!, name: _nonEmpty(video.name) ?? 'Video'),
   ];
 }
 

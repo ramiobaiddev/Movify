@@ -19,26 +19,29 @@ class ProfileViewBody extends StatelessWidget {
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: Space.lg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: Space.md),
-          Text(
-            l10n.profile,
-            style: textTheme.titleLarge?.copyWith(color: colors.textPrimary),
-          ),
-          const SizedBox(height: Space.lg),
-          const ProfileUserCard(),
-          const SizedBox(height: Space.xl),
-          const ProfilePreferencesSection(),
-          const SizedBox(height: Space.xl),
-          const ProfileDataSection(),
-          const SizedBox(height: Space.xl),
-          const ProfileSupportSection(),
-          const SizedBox(height: Space.xl),
-          const ProfileAccountSection(),
-          const SizedBox(height: Space.x10xl),
-        ],
+      child: SafeArea(
+        top: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: Space.md),
+            Text(
+              l10n.profile,
+              style: textTheme.titleLarge?.copyWith(color: colors.textPrimary),
+            ),
+            const SizedBox(height: Space.lg),
+            const ProfileUserCard(),
+            const SizedBox(height: Space.xl),
+            const ProfilePreferencesSection(),
+            const SizedBox(height: Space.xl),
+            const ProfileDataSection(),
+            const SizedBox(height: Space.xl),
+            const ProfileSupportSection(),
+            const SizedBox(height: Space.xl),
+            const ProfileAccountSection(),
+            const SizedBox(height: Space.lg),
+          ],
+        ),
       ),
     );
   }

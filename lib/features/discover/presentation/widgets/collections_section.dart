@@ -28,6 +28,7 @@ class CollectionsSection extends StatelessWidget {
       GridView.count(
         crossAxisCount: 2,
         shrinkWrap: true,
+        padding: EdgeInsets.zero,
         physics: const NeverScrollableScrollPhysics(),
         mainAxisSpacing: Space.lg,
         crossAxisSpacing: Space.sm,

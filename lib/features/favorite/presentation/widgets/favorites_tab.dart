@@ -118,14 +118,16 @@ class _FavoritesTabState extends State<FavoritesTab> {
               onSortTap: _pickSort,
             ),
           ),
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(
-              Space.lg,
-              0,
-              Space.lg,
-              Space.x3xl,
-            ),
-            sliver: SliverGrid.builder(
+          SliverSafeArea(
+            top: false,
+            sliver: SliverPadding(
+              padding: const EdgeInsets.fromLTRB(
+                Space.lg,
+                0,
+                Space.lg,
+                Space.lg,
+              ),
+              sliver: SliverGrid.builder(
               gridDelegate: layout.delegate,
               itemCount: items.length,
               itemBuilder: (context, index) {
@@ -140,6 +142,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
                   onLongPress: () => FavoriteActionsSheet.show(context, item),
                 );
               },
+            ),
             ),
           ),
         ],

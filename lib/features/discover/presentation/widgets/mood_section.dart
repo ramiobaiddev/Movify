@@ -18,6 +18,7 @@ class MoodSection extends StatelessWidget {
       GridView.count(
         crossAxisCount: 2,
         shrinkWrap: true,
+        padding: EdgeInsets.zero,
         physics: const NeverScrollableScrollPhysics(),
         mainAxisSpacing: Space.md,
         crossAxisSpacing: Space.md,
