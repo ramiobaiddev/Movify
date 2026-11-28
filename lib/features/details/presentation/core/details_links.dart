@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:movify/core/routing/route_name.dart';
 import 'package:movify/features/details/presentation/core/details_data_navigation.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
+import 'package:movify/features/details/presentation/models/related_args.dart';
 import 'package:movify/features/details/presentation/models/season_content.dart';
 
 /// Where a tap on the details screen goes. Keeps route names and the
@@ -13,6 +14,17 @@ extension DetailsLinks on BuildContext {
 
   void openReviews(List<ReviewItem> reviews) =>
       pushNamed(RouteName.reviews, extra: reviews);
+
+  void openCastCrew(List<CastMember> cast) =>
+      pushNamed(RouteName.castCrew, extra: cast);
+
+  void openAllSeasons(DetailsContent series) =>
+      pushNamed(RouteName.allSeasons, extra: series);
+
+  void openRelated(DetailsContent title, RelatedList list) => pushNamed(
+    RouteName.related,
+    extra: RelatedArgs(kind: title.kind, id: title.id, list: list),
+  );
 
   void openSeason(DetailsContent series, SeasonItem season) => pushNamed(
     RouteName.season,

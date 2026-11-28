@@ -24,6 +24,9 @@ class RouteName {
   static const String tvDetail = 'tvDetail';
   static const String season = 'season';
   static const String reviews = 'reviews';
+  static const String castCrew = 'castCrew';
+  static const String allSeasons = 'allSeasons';
+  static const String related = 'related';
   static const String episode = 'episode';
   static const String splash = 'splash';
   static const String youtubePlayer = 'youtubePlayer';

@@ -13,12 +13,16 @@ class SeeAllTopBar extends StatelessWidget {
     this.showResetButton = true,
     this.onBackTap,
     this.onResetTap,
+    this.trailing,
   });
 
   final String title;
   final bool showResetButton;
   final VoidCallback? onBackTap;
   final VoidCallback? onResetTap;
+
+  /// Replaces the Reset button, e.g. a sort toggle.
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -34,7 +38,9 @@ class SeeAllTopBar extends StatelessWidget {
             SeeAllCategoryTitle(title: title),
           ],
         ),
-        if (showResetButton && onResetTap != null)
+        if (trailing != null)
+          trailing!
+        else if (showResetButton && onResetTap != null)
           SeeAllResetButton(onReset: onResetTap!),
       ],
     ),

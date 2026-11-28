@@ -35,6 +35,7 @@ class SeriesEpisodeSections extends StatelessWidget {
             seasons: content.seasons,
             fallbackPosterPath: content.posterPath,
             onTap: (season) => context.openSeason(content, season),
+            onTitleTap: () => context.openAllSeasons(content),
           ),
         ],
       ],

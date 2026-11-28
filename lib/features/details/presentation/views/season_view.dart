@@ -9,10 +9,12 @@ import 'package:movify/features/details/presentation/cubits/season_cubit/season_
 import 'package:movify/features/details/presentation/cubits/season_cubit/season_state.dart';
 import 'package:movify/features/details/presentation/widgets/common/content_error.dart';
 import 'package:movify/features/details/presentation/widgets/common/details_header.dart';
+import 'package:movify/features/details/presentation/widgets/common/pinned_details_bar.dart';
 import 'package:movify/features/details/presentation/widgets/common/trailer_player.dart';
 import 'package:movify/features/details/presentation/widgets/seasons/season_bar.dart';
 import 'package:movify/features/details/presentation/widgets/seasons/season_loading.dart';
 import 'package:movify/features/details/presentation/views/season_view_body.dart';
+import 'package:movify/shared/presentation/widgets/headers/pinned_bar_scroll.dart';
 
 /// One season of a series: header, story, cast, information, episodes, videos.
 class SeasonView extends StatelessWidget {
@@ -60,7 +62,11 @@ class _SeasonBodyState extends State<_SeasonBody> {
           final content = state is SeasonLoaded ? state.content : null;
           final trailer = content?.trailer;
 
-          return CustomScrollView(
+          return PinnedBarScroll(
+            bar: PinnedDetailsBar(
+              title: content?.title ?? data.barTitle,
+              data: data,
+            ),
             slivers: [
               SliverToBoxAdapter(
                 child: DetailsHeader(

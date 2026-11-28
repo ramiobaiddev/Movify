@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/di/service_locator.dart';
+import 'package:movify/features/details/presentation/core/details_links.dart';
 import 'package:movify/features/details/presentation/feeds/related_fetchers.dart';
+import 'package:movify/features/details/presentation/models/related_args.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
 import 'package:movify/features/details/presentation/widgets/details/related_row.dart';
 
@@ -23,12 +25,14 @@ class RelatedSections extends StatelessWidget {
           title: 'Recommended',
           queryKey: 'recommended-$kind-$id',
           fetcher: fetchers.recommended(kind, id),
+          onTitleTap: () => context.openRelated(content, RelatedList.recommended),
         ),
         const SizedBox(height: Space.x3xl),
         RelatedRow(
           title: 'Similar',
           queryKey: 'similar-$kind-$id',
           fetcher: fetchers.similar(kind, id),
+          onTitleTap: () => context.openRelated(content, RelatedList.similar),
         ),
       ],
     );

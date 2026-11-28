@@ -9,7 +9,11 @@ import 'package:movify/core/utils/enums/content_type.dart';
 import 'package:movify/features/details/presentation/core/details_data_navigation.dart';
 import 'package:movify/features/details/presentation/cubits/details_cubit/details_cubit.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
+import 'package:movify/features/details/presentation/models/related_args.dart';
+import 'package:movify/features/details/presentation/views/all_seasons_view.dart';
+import 'package:movify/features/details/presentation/views/cast_crew_view.dart';
 import 'package:movify/features/details/presentation/views/details_screen.dart';
+import 'package:movify/features/details/presentation/views/related_view.dart';
 import 'package:movify/features/details/presentation/views/episode_screen.dart';
 import 'package:movify/features/details/presentation/views/reviews_view.dart';
 import 'package:movify/features/details/presentation/views/season_view.dart';
@@ -29,6 +33,30 @@ class DetailsRoutes {
       name: RouteName.reviews,
       pageBuilder: (context, state) => AppTransitions.cupertino(
         child: ReviewsView(reviews: state.extra! as List<ReviewItem>),
+        state: state,
+      ),
+    ),
+    GoRoute(
+      path: RoutePaths.castCrew,
+      name: RouteName.castCrew,
+      pageBuilder: (context, state) => AppTransitions.cupertino(
+        child: CastCrewView(cast: state.extra! as List<CastMember>),
+        state: state,
+      ),
+    ),
+    GoRoute(
+      path: RoutePaths.allSeasons,
+      name: RouteName.allSeasons,
+      pageBuilder: (context, state) => AppTransitions.cupertino(
+        child: AllSeasonsView(series: state.extra! as DetailsContent),
+        state: state,
+      ),
+    ),
+    GoRoute(
+      path: RoutePaths.related,
+      name: RouteName.related,
+      pageBuilder: (context, state) => AppTransitions.cupertino(
+        child: RelatedView(args: state.extra! as RelatedArgs),
         state: state,
       ),
     ),

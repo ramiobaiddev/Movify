@@ -30,6 +30,9 @@ class RoutePaths {
   static const String tvDetail = '/tv/:id';
   static const String season = '/tv/season';
   static const String reviews = '/reviews';
+  static const String castCrew = '/castCrew';
+  static const String allSeasons = '/tv/seasons';
+  static const String related = '/related';
   static const String episode = '/tv/episode';
   // Onboarding Routes
 

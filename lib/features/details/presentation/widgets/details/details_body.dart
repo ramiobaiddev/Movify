@@ -30,6 +30,7 @@ class DetailsBody extends StatelessWidget {
         CastRow(
           cast: content.cast,
           onTap: (person) => context.openPerson(person.id),
+          onTitleTap: () => context.openCastCrew(content.cast),
         ),
         SeriesEpisodeSections(content: content),
         const SizedBox(height: Space.x3xl),

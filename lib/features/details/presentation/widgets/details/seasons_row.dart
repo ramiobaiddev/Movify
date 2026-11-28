@@ -12,6 +12,7 @@ class SeasonsRow extends StatelessWidget {
     required this.seasons,
     required this.fallbackPosterPath,
     required this.onTap,
+    this.onTitleTap,
   });
 
   static const double posterWidth = 95;
@@ -21,32 +22,19 @@ class SeasonsRow extends StatelessWidget {
   /// Series poster, for seasons that have none of their own.
   final String? fallbackPosterPath;
   final ValueChanged<SeasonItem> onTap;
+  final VoidCallback? onTitleTap;
 
   @override
   Widget build(BuildContext context) {
     if (seasons.isEmpty) {
       return const SizedBox.shrink();
     }
-    final count = seasons.length;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: Space.lg),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              const SectionTitle('Seasons'),
-              Text(
-                '$count ${count == 1 ? 'season' : 'seasons'}',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: context.colors.textContrast,
-                ),
-              ),
-            ],
-          ),
+          child: SectionTitle('Seasons', onTap: onTitleTap),
         ),
         const SizedBox(height: Space.lg),
         SizedBox(
@@ -66,7 +54,7 @@ class SeasonsRow extends StatelessWidget {
                   season.posterPath ?? fallbackPosterPath ?? '',
                 ),
                 title: season.name,
-                subtitle: _episodes(season.episodeCount),
+                subtitle: season.episodesLabel,
                 rating: season.rating,
                 onTap: () => onTap(season),
               );
@@ -77,7 +65,4 @@ class SeasonsRow extends StatelessWidget {
     );
   }
 
-  static String? _episodes(int? count) => count == null || count <= 0
-      ? null
-      : '$count ${count == 1 ? 'episode' : 'episodes'}';
 }

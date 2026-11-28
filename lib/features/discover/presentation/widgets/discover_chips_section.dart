@@ -23,25 +23,7 @@ class DiscoverChipsSection extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      if (onTitleTap == null)
-        SectionTitle(title)
-      else
-        GestureDetector(
-          onTap: onTitleTap,
-          behavior: HitTestBehavior.opaque,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SectionTitle(title),
-              const SizedBox(width: Space.xsm),
-              Icon(
-                Icons.chevron_right_rounded,
-                size: 24,
-                color: context.colors.textPrimary,
-              ),
-            ],
-          ),
-        ),
+      SectionTitle(title, onTap: onTitleTap),
       const SizedBox(height: Space.lg),
       Wrap(
         spacing: Space.sm,

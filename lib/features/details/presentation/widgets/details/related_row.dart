@@ -7,6 +7,7 @@ import 'package:movify/features/home/presentation/widgets/rows/poster_row_metric
 import 'package:movify/features/home/presentation/widgets/rows/poster_row_skeleton.dart';
 import 'package:movify/shared/presentation/extensions/open_media_details.dart';
 import 'package:movify/shared/presentation/models/card_display_model.dart';
+import 'package:movify/shared/presentation/widgets/common/section_title.dart';
 import 'package:movify/shared/presentation/widgets/layout/keep_alive_wrapper.dart';
 import 'package:movify/shared/presentation/widgets/cards/media_poster_card.dart';
 
@@ -21,6 +22,7 @@ class RelatedRow extends StatelessWidget {
     required this.title,
     required this.fetcher,
     required this.queryKey,
+    this.onTitleTap,
   });
 
   static const double posterWidth = 95;
@@ -29,20 +31,24 @@ class RelatedRow extends StatelessWidget {
   final PageFetcher<CardDisplayModel> fetcher;
   final Object queryKey;
 
+  /// Opens the full list. Adds a chevron to the title.
+  final VoidCallback? onTitleTap;
+
   @override
   Widget build(BuildContext context) => KeepAliveWrapper(
     child: BlocProvider<PagedCubit<CardDisplayModel>>(
       key: ValueKey(queryKey),
       create: (_) => PagedCubit<CardDisplayModel>(fetcher)..load(),
-      child: _RelatedRowBody(title: title),
+      child: _RelatedRowBody(title: title, onTitleTap: onTitleTap),
     ),
   );
 }
 
 class _RelatedRowBody extends StatelessWidget {
-  const _RelatedRowBody({required this.title});
+  const _RelatedRowBody({required this.title, required this.onTitleTap});
 
   final String title;
+  final VoidCallback? onTitleTap;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -50,12 +56,7 @@ class _RelatedRowBody extends StatelessWidget {
     children: [
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: Space.lg),
-        child: Text(
-          title,
-          style: Theme.of(
-            context,
-          ).textTheme.headlineMedium?.copyWith(color: context.colors.textPrimary),
-        ),
+        child: SectionTitle(title, onTap: onTitleTap),
       ),
       const SizedBox(height: Space.lg),
       PagedHorizontalList<CardDisplayModel>(

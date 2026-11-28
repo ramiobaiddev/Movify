@@ -208,6 +208,15 @@ class SeasonItem extends Equatable {
   final String? airDate;
   final int? episodeCount;
 
+  /// `8 episodes`, or null when TMDB has no count.
+  String? get episodesLabel {
+    final count = episodeCount;
+
+    return count == null || count <= 0
+        ? null
+        : '$count ${count == 1 ? 'episode' : 'episodes'}';
+  }
+
   @override
   List<Object?> get props => [
     id,

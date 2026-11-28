@@ -12,9 +12,13 @@ class CastRow extends StatelessWidget {
     required this.onTap,
     this.title = 'Cast & crew',
     this.dense = false,
+    this.onTitleTap,
   });
 
   static const double _avatarSize = 80;
+
+  /// People shown in the row; the full list opens from the title.
+  static const int previewCount = 20;
 
   final List<CastMember> cast;
   final ValueChanged<CastMember> onTap;
@@ -22,6 +26,9 @@ class CastRow extends StatelessWidget {
 
   /// Smaller 18/24 title and tighter gaps (episode screen).
   final bool dense;
+
+  /// Opens the full Cast & crew list. Adds a chevron to the title.
+  final VoidCallback? onTitleTap;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +48,7 @@ class CastRow extends StatelessWidget {
                     color: context.colors.textPrimary,
                   ),
                 )
-              : SectionTitle(title),
+              : SectionTitle(title, onTap: onTitleTap),
         ),
         const SizedBox(height: Space.lg),
         SizedBox(
@@ -49,7 +56,7 @@ class CastRow extends StatelessWidget {
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: Space.lg),
-            itemCount: cast.length,
+            itemCount: cast.length > previewCount ? previewCount : cast.length,
             separatorBuilder: (_, _) => SizedBox(width: dense ? Space.sm : Space.md),
             itemBuilder: (context, index) {
               final person = cast[index];

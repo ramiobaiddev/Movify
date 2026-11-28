@@ -9,7 +9,7 @@ import 'package:movify/features/details/presentation/models/details_content.dart
 
 /// Parts that movies, series and seasons all have.
 
-const int _maxCast = 20;
+const int _maxCast = 100;
 const int _maxReviews = 20;
 
 List<DetailsGenre> genresOf(List<Genre> genres) => [
