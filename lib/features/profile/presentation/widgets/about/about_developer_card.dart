@@ -23,7 +23,7 @@ class AboutDeveloperCard extends StatelessWidget {
           CircleAvatar(
             radius: 32,
             backgroundColor: colors.surfaceDivider,
-            backgroundImage: const AssetImage(Assets.imagesProfileAvatar),
+            backgroundImage: const AssetImage(Assets.imagesDeveloperAvatar),
           ),
           const SizedBox(height: Space.md),
           Text(

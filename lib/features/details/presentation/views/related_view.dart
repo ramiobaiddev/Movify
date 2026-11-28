@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movify/core/di/service_locator.dart';
 import 'package:movify/core/design_system/design_system.dart';
+import 'package:movify/core/di/service_locator.dart';
 import 'package:movify/core/paging/paged_cubit.dart';
 import 'package:movify/core/paging/widgets/sliver_paged_grid.dart';
 import 'package:movify/features/details/presentation/feeds/related_fetchers.dart';

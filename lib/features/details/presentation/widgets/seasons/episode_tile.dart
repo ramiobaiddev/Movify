@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/network/api/services/tmdb/tmdb_image_size.dart';
+import 'package:movify/core/utils/extensions/nullable_string_extension.dart';
 import 'package:movify/features/details/presentation/mappers/release_countdown.dart';
 import 'package:movify/features/details/presentation/models/season_content.dart';
 
@@ -41,11 +42,8 @@ class EpisodeTile extends StatelessWidget {
       if (date != null) DateFormat('d MMM y').format(date),
       if (runtime != null) '${runtime}min',
     ].join(' · ');
-    final path = (episode.stillPath?.isNotEmpty ?? false)
-        ? episode.stillPath
-        : (fallbackStillPath?.isNotEmpty ?? false)
-        ? fallbackStillPath
-        : null;
+    final path =
+        episode.stillPath.nonEmptyOrNull ?? fallbackStillPath.nonEmptyOrNull;
     final fallbackIcon = Center(
       child: Icon(
         Icons.movie_outlined,

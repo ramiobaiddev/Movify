@@ -26,9 +26,10 @@ class Assets {
   static const String imagesNoResults1 = "assets/images/no-results1.svg";
 
   static const String iconsGoogle = "assets/images/two.svg";
-  static const String imagesProfileAvatar = "assets/images/rami-portrait.png";
+  static const String imagesDeveloperAvatar = "assets/images/rami-portrait.png";
   static const String theaterIcon = "assets/images/theater.svg";
   static const String popcornIcon = "assets/images/popcorn-icon.svg";
   static const String manSitIcon = "assets/images/man-sit-drink-icon.svg";
   static const String tmdbIcon = "assets/icons/tmdb_logo.svg";
+  static const String guestAvatar = "assets/images/guest_icon.png";
 }

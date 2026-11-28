@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:movify/core/routing/route_name.dart';
+import 'package:movify/core/utils/extensions/nullable_string_extension.dart';
 import 'package:movify/features/details/presentation/core/details_data_navigation.dart';
 import 'package:movify/features/details/presentation/models/details_content.dart';
 import 'package:movify/features/details/presentation/models/related_args.dart';
@@ -74,11 +75,10 @@ extension DetailsLinks on BuildContext {
           seasonNumber: episode.seasonNumber,
           episodeNumber: episode.number,
           rating: episode.rating,
-          posterImage: (episode.stillPath?.isNotEmpty ?? false)
-              ? episode.stillPath!
-              : (season.backdropImage?.isNotEmpty ?? false)
-              ? season.backdropImage!
-              : season.posterImage,
+          posterImage:
+              episode.stillPath.nonEmptyOrNull ??
+              season.backdropImage.nonEmptyOrNull ??
+              season.posterImage,
           seriesPosterPath: season.posterImage,
           seriesTitle: season.seriesTitle,
           specificId: episode.id,

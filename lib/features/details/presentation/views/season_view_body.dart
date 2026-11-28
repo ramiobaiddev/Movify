@@ -34,7 +34,6 @@ class SeasonViewBody extends StatelessWidget {
     slivers: [
       SliverToBoxAdapter(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ScreenGutter(
               child: Column(

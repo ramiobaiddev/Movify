@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/network/api/services/tmdb/tmdb_image_size.dart';
+import 'package:movify/core/utils/extensions/nullable_string_extension.dart';
 
 /// 120x67 episode thumbnail used by the Next episode and Last aired cards.
 class EpisodeStill extends StatelessWidget {
@@ -16,11 +17,7 @@ class EpisodeStill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
-    final effectivePath = (path != null && path!.isNotEmpty)
-        ? path
-        : (fallbackPath != null && fallbackPath!.isNotEmpty)
-        ? fallbackPath
-        : null;
+    final effectivePath = path.nonEmptyOrNull ?? fallbackPath.nonEmptyOrNull;
     final placeholder = Center(
       child: Icon(Icons.movie_outlined, size: 24, color: colors.iconSecondary),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movify/core/network/api/services/tmdb/tmdb_image_size.dart';
+import 'package:movify/core/utils/extensions/nullable_string_extension.dart';
 import 'package:movify/features/details/presentation/core/details_data_navigation.dart';
 import 'package:movify/features/details/presentation/widgets/common/details_actions.dart';
 import 'package:movify/features/details/presentation/widgets/common/play_button.dart';
@@ -18,9 +19,7 @@ class DetailsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final backdrop = (data.backdropImage?.isNotEmpty ?? false)
-        ? data.backdropImage!
-        : data.posterImage;
+    final backdrop = data.backdropImage.nonEmptyOrNull ?? data.posterImage;
 
     return PhotoHeader(
       backdropUrl: backdrop.isEmpty

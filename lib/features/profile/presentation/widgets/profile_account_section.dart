@@ -44,7 +44,7 @@ class ProfileAccountSection extends StatelessWidget {
               ProfileSettingTile(
                 icon: Icons.delete_forever_rounded,
                 title: l10n.deleteAccount,
-                isDestructive: true,
+
                 onTap: () {
                   DeleteAccountSheet.show(
                     context,

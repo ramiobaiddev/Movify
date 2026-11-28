@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movify/core/design_system/design_system.dart';
 import 'package:movify/core/di/service_locator.dart';
+import 'package:movify/core/utils/extensions/nullable_string_extension.dart';
 import 'package:movify/features/details/presentation/core/details_data_navigation.dart';
 import 'package:movify/features/details/presentation/core/details_links.dart';
 import 'package:movify/features/details/presentation/core/episode_position.dart';
@@ -57,14 +58,12 @@ class _EpisodeBodyState extends State<_EpisodeBody> {
         final current = position.current;
         final nav = current == null ? data : data.forEpisode(current);
 
-        final fallbackImage = (data.backdropImage?.isNotEmpty ?? false)
-            ? data.backdropImage
-            : data.seriesPosterPath;
-        final headerImage = (current?.stillPath?.isNotEmpty ?? false)
-            ? current!.stillPath
-            : data.posterImage.isNotEmpty
-            ? data.posterImage
-            : fallbackImage;
+        final fallbackImage =
+            data.backdropImage.nonEmptyOrNull ?? data.seriesPosterPath;
+        final headerImage =
+            current?.stillPath.nonEmptyOrNull ??
+            data.posterImage.nonEmptyOrNull ??
+            fallbackImage;
 
         return Scaffold(
           backgroundColor: context.colors.surfacePrimary,

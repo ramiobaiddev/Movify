@@ -9,7 +9,6 @@ class ProfileSettingTile extends StatelessWidget {
     required this.title,
     this.value,
     this.trailing,
-    this.isDestructive = false,
     this.onTap,
   });
 
@@ -17,7 +16,6 @@ class ProfileSettingTile extends StatelessWidget {
   final String title;
   final String? value;
   final Widget? trailing;
-  final bool isDestructive;
   final VoidCallback? onTap;
 
   @override
